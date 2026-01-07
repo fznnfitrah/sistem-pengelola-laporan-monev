@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: ci_app
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src/codeigniter:/var/www/codeigniter
+    working_dir: /var/www/codeigniter
+    depends_on:
+      - db
+    networks:
+      - ci_network
+
+  db:
+    image: mysql:8.0
+    container_name: ci_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ci_db
+      MYSQL_USER: ci_user
+      MYSQL_PASSWORD: ci_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - ci_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: ci_phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: ci_user
+      PMA_PASSWORD: ci_pass
+    depends_on:
+      - db
+    networks:
+      - ci_network
+
+volumes:
+  db_data:
+
+networks:
+  ci_network:
