@@ -18,11 +18,11 @@ services:
 
   db:
     image: mysql:8.0
-    container_name: ci_db
+    container_name: ci_db_test
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: ci_db
+      MYSQL_DATABASE: ci_db_test
       MYSQL_USER: ci_user
       MYSQL_PASSWORD: ci_pass
     ports:
