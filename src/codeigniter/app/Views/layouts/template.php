@@ -15,13 +15,13 @@
 
   <div class="main-wrapper">
     <?= $this->include('layouts/sidebar') ?>
-    
+
     <div id="content-wrapper">
-        <?= $this->include('layouts/topbar') ?> <main class="flex-grow-1 p-4">
-            <?= $this->renderSection('content') ?>
-        </main>
+      <?= $this->include('layouts/topbar') ?> <main class="flex-grow-1 p-4">
+        <?= $this->renderSection('content') ?>
+      </main>
     </div>
-</div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

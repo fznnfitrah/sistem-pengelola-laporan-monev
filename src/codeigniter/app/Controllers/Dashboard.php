@@ -12,13 +12,14 @@ class Dashboard extends BaseController
         }
 
         $roleId = session()->get('fk_roles');
+        $username = session()->get('username');
 
-        if ($roleId == 1) {
-            return view('dashboard/admin_view');
-        } elseif ($roleId == 2) {
-            return view('dashboard/fakultas_view');
-        } elseif ($roleId == 3) {
-            return view('dashboard/prodi_view');
-        }
+        $data = [
+            'title' => 'Dashboard',
+            'roleId' => $roleId,
+            'username' => $username
+        ];
+
+        return view('dashboard/dashboard_view', $data);
     }
 }
