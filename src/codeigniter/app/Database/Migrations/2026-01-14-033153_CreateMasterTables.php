@@ -12,35 +12,82 @@ class CreateMasterTables extends Migration
     {
         // 1. Tabel roles
         $this->forge->addField([
-            'id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
-            'nama_roles' => ['type' => 'VARCHAR', 'constraint' => 100],
-            'deskripsi' => ['type' => 'TEXT', 'null' => true],
+            'id' => [
+                'type' => 'INT', 
+                'constraint' => 11, 
+                'unsigned' => true, 
+                'auto_increment' => true
+            ],
+            'nama_roles' => [
+                'type' => 'VARCHAR', 
+                'constraint' => 100
+            ],
+            'deskripsi' => [
+                'type' => 'TEXT',
+                'null' => true
+            ],
         ]);
         $this->forge->addKey('id', true);
         $this->forge->createTable('roles');
 
         // 2. Tabel mUnit
         $this->forge->addField([
-            'id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
-            'nama_unit' => ['type' => 'VARCHAR', 'constraint' => 100],
+            'id' => [
+                'type' => 'INT',
+                'constraint' => 11, 
+                'unsigned' => true, 
+                'auto_increment' => true
+            ],
+            'nama_unit' => [
+                'type' => 'VARCHAR', 
+                'constraint' => 100
+            ],
         ]);
         $this->forge->addKey('id', true);
         $this->forge->createTable('mUnit');
 
         // 3. Tabel mFakultas
         $this->forge->addField([
-            'id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
-            'nama_fakultas' => ['type' => 'VARCHAR', 'constraint' => 100],
+            'id' => [
+                'type' => 'INT',
+                'constraint' => 11,
+                'unsigned' => true, 
+                'auto_increment' => true
+            ],
+            'nama_fakultas' => [
+                'type' => 'VARCHAR',
+                'constraint' => 100
+            ],
         ]);
         $this->forge->addKey('id', true);
         $this->forge->createTable('mFakultas');
 
         // 4. Tabel mKinerja
         $this->forge->addField([
-            'id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
-            'total_dosen' => ['type' => 'INT', 'constraint' => 11, 'default' => 0],
-            'guru_besar' => ['type' => 'INT', 'constraint' => 11, 'default' => 0],
-            'profesor' => ['type' => 'INT', 'constraint' => 11, 'default' => 0],
+            'id' => [
+                'type'           => 'INT',
+                'constraint'     => 11,
+                'unsigned'       => true,
+                'auto_increment' => true,
+                'comment'        => 'Primary Key: ID unik indikator',
+            ],
+            'nama_kinerja' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 255,
+                'comment'    => 'Nama/Judul Indikator Kinerja',
+            ],
+            'jenis' => [
+                'type'       => 'ENUM',
+                'constraint' => ['prodi', 'unit'],
+                'default'    => 'prodi',
+                'comment'    => 'Scope indikator: milik prodi atau unit',
+            ],
+            'satuan' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 50,
+                'null'       => true,
+                'comment'    => 'Satuan (Orang, %, Dokumen, dll)',
+            ],
         ]);
         $this->forge->addKey('id', true);
         $this->forge->createTable('mKinerja');
