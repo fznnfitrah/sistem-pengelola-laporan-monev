@@ -1,33 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Login - Sistem Monev</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk - Sistem Pengelola Laporan Monev</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= base_url('css/custom.css') ?>">
 </head>
 <body class="bg-light">
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <div class="card shadow">
-                    <div class="card-body">
-                        <h4 class="text-center">Login Sistem Monev</h4>
-                        <hr>
-                        <form action="<?= base_url('auth/login') ?>" method="post">
-                            <div class="mb-3">
-                                <label>Username</label>
-                                <input type="text" name="username" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label>Password</label>
-                                <input type="password" name="password" class="form-control" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Login</button>
-                        </form>
-                    </div>
+
+<div class="container vh-100 d-flex align-items-center justify-content-center">
+    <div class="row w-100 align-items-center">
+        <div class="col-md-6 mb-5 mb-md-0 text-center text-md-start">
+            <h1 class="fw-bold display-5 text-dark">SISTEM PENGELOLA</h1>
+            <h1 class="fw-bold display-5 text-dark mb-4">LAPORAN MONEV</h1>
+            <p class="text-secondary lead">
+                Aplikasi untuk mengelola laporan monitoring dan evaluasi prodi <br>
+                Universitas Trunodjoyo Madura
+            </p>
+        </div>
+
+        <div class="col-md-5 offset-md-1" style="margin-left: 0px;">
+            <div class="card border-0 shadow-lg p-4" style="background-color: #005d66; border-radius: 20px;">
+                <div class="card-body text-white">
+                    <h2 class="text-center fw-bold mb-2">Masuk</h2>
+                    <p class="text-center small mb-4">Untuk memulai sesi !</p>
+
+                    <?php if (session()->getFlashdata('error')) : ?>
+                        <div class="alert alert-danger py-2 small">
+                            <?= session()->getFlashdata('error') ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <form action="<?= base_url('auth/login') ?>" method="post">
+                        <div class="mb-3">
+                            <input type="text" name="username" class="form-control py-2 rounded-pill" placeholder="Masukkan username" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" name="password" class="form-control py-2 rounded-pill" placeholder="Masukkan password" required>
+                        </div>
+                        <div class="text-end mb-3">
+                            <a href="#" class="text-white text-decoration-none small">Lupa password?</a>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 py-2 rounded-pill fw-bold" style="background-color: #00d285; border: none;">
+                            Masuk
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
 </body>
 </html>
