@@ -24,13 +24,13 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle d-flex align-items-center text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle me-2 border border-secondary">
-                    <span class="d-none d-sm-inline small fw-bold">Tom Cook</span>
+                    <span class="d-none d-sm-inline small fw-bold"><?= session()->get('username') ?? 'User' ?></span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="#">Profile</a></li>
                     <li><a class="dropdown-item" href="#">Settings</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Sign out</a></li>
+                    <li><a class="dropdown-item" href="<?= base_url('auth/logout') ?>">Log Out</a></li>
                 </ul>
             </li>
 

@@ -6,20 +6,19 @@ class Dashboard extends BaseController
 {
     public function index()
     {
-       
-        // Ambil role dari session
+        // Cek apakah user sudah login atau belum
+        if (!session()->get('isLoggedIn')) {
+            return redirect()->to('/login');
+        }
+
         $roleId = session()->get('fk_roles');
 
-        // Logika pengalihan view sesuai role
         if ($roleId == 1) {
             return view('dashboard/admin_view');
         } elseif ($roleId == 2) {
             return view('dashboard/fakultas_view');
         } elseif ($roleId == 3) {
-            return view('dashboard/prodi_view'); // Memanggil file yang berisi 3 card tadi
+            return view('dashboard/prodi_view');
         }
-
-        // Jika tidak ada session, lempar ke login
-        return redirect()->to('/login');
     }
 }

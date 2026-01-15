@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Masuk - Sistem Pengelola Laporan Monev</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="<?= base_url('css/custom.css') ?>">
 </head>
 <body class="bg-light">
@@ -37,7 +38,12 @@
                             <input type="text" name="username" class="form-control py-2 rounded-pill" placeholder="Masukkan username" required>
                         </div>
                         <div class="mb-3">
-                            <input type="password" name="password" class="form-control py-2 rounded-pill" placeholder="Masukkan password" required>
+                            <div class="input-group">
+                                <input type="password" name="password" id="password" class="form-control py-2 rounded-start-pill" placeholder="Masukkan password" required style="border-right: none;">
+                                <span class="input-group-text bg-white border-start-0 rounded-end-pill" style="cursor: pointer;" onclick="togglePassword()">
+                                    <i class="bi bi-eye-slash" id="toggleIcon"></i>
+                                </span>
+                            </div>
                         </div>
                         <div class="text-end mb-3">
                             <a href="#" class="text-white text-decoration-none small">Lupa password?</a>
@@ -51,6 +57,23 @@
         </div>
     </div>
 </div>
-
+<script>
+function togglePassword() {
+    const passwordField = document.getElementById("password");
+    const toggleIcon = document.getElementById("toggleIcon");
+    
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        // Ubah ikon jadi mata terbuka
+        toggleIcon.classList.remove("bi-eye-slash");
+        toggleIcon.classList.add("bi-eye");
+    } else {
+        passwordField.type = "password";
+        // Ubah ikon jadi mata tertutup
+        toggleIcon.classList.remove("bi-eye");
+        toggleIcon.classList.add("bi-eye-slash");
+    }
+}
+</script>
 </body>
 </html>
