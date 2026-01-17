@@ -3,9 +3,6 @@
 <?= $this->section('content') ?>
 
 <div class="container-fluid py-4">
-    
-    <h2 class="mb-4 fw-bold" style="color: #111827;">Selamat Datang, <?= esc(session()->get('username')) ?>!</h2>
-
     <div class="row">
         <?php if ($roleId == 1) : ?>
             <div class="col-md-4 mb-4">
@@ -13,14 +10,14 @@
                     <div class="mb-3">
                         <i class="bi bi-people fs-1 text-success"></i>
                     </div>
-                    <h5 class="mb-2">Total User</h5>
-                    <p class="mb-4">Kelola dan atur hak akses pengguna sistem.</p>
+                    <h5 class="mb-2">Input Menu</h5>
+                    <p class="mb-4">Kelola dan atur hak akses Menu.</p>
                     <a href="<?= base_url('users') ?>" class="btn btn-custom w-100">Kelola</a>
                 </div>
             </div>
         <?php endif; ?>
 
-        <?php if ($roleId == 3) : ?>
+        <?php if ($roleId == 2) : ?>
             <div class="col-md-4 mb-4">
                 <div class="card dashboard-card shadow-sm text-center p-4">
                     <div class="mb-3">
@@ -33,7 +30,7 @@
             </div>
         <?php endif; ?>
 
-        <?php if ($roleId == 4) : ?>
+        <?php if ($roleId == 3) : ?>
             <div class="col-md-4 mb-4">
                 <div class="card dashboard-card shadow-sm text-center p-4">
                     <div class="mb-3">
@@ -52,6 +49,19 @@
                     <h5 class="mb-2">History</h5>
                     <p class="mb-4">Lihat kembali riwayat laporan yang telah diunggah.</p>
                     <a href="<?= base_url('laporan/history') ?>" class="btn btn-custom w-100">Buka History</a>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($roleId == 5) : ?>
+            <div class="col-md-4 mb-4">
+                <div class="card dashboard-card shadow-sm text-center p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-graph-up-arrow fs-1 text-success"></i>
+                    </div>
+                    <h5 class="mb-2">Input User</h5>
+                    <p class="mb-4">Tambahkan pengguna baru ke sistem.</p>
+                    <a href="<?= base_url('monitoring') ?>" class="btn btn-custom w-100">Lihat Status</a>
                 </div>
             </div>
         <?php endif; ?>

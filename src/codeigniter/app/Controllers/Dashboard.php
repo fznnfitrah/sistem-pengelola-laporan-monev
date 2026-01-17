@@ -15,9 +15,11 @@ class Dashboard extends BaseController
         $username = session()->get('username');
 
         $data = [
-            'title' => 'Dashboard',
-            'roleId' => $roleId,
-            'username' => $username
+            'title'    => 'Dashboard',
+            'roleId'   => $roleId,
+            'username' => $username,
+            // Tambahkan ini agar bisa dipanggil di view
+            'unitCode' => ($roleId == 2) ? session()->get('fk_fakultas') : session()->get('fk_prodi')
         ];
 
         return view('dashboard/dashboard_view', $data);

@@ -21,9 +21,15 @@
                         <div class="text-muted" style="font-size: 0.65rem;">
                             <?php 
                                 $role = session()->get('fk_roles');
-                                if($role == 1) echo 'Administrator';
-                                elseif($role == 3) echo 'Fakultas';
-                                elseif($role == 4) echo 'Prodi';
+                                // Menggunakan switch agar dinamis untuk 5 role atau lebih
+                                switch($role) {
+                                    case 1: echo 'Administrator'; break;
+                                    case 2: echo 'Fakultas'; break;
+                                    case 3: echo 'Prodi'; break;
+                                    case 4: echo 'Unit Kerja'; break; // Tambahan role 4
+                                    case 5: echo 'Universitas'; break; // Role ke-5 sesuai permintaanmu
+                                    default: echo 'User';
+                                }
                             ?>
                         </div>
                     </div>
@@ -35,6 +41,47 @@
                         <p class="small fw-bold mb-0 text-dark"><?= esc(session()->get('username')) ?></p>
                     </div>
                     <li><a class="dropdown-item py-2" href="#"><i class="bi bi-person me-2"></i> Profile</a></li>
+
+                    <?php 
+                        $availableRoles = session()->get('available_roles');
+                        $currentId = session()->get('current_user_id');
+                        $currentEmail = session()->get('email');
+
+                        // Filter: Hanya jika punya banyak role DAN email tidak NULL
+                        if ($availableRoles && count($availableRoles) > 1 && !empty($currentEmail)): 
+                    ?>
+                        <li><hr class="dropdown-divider"></li>
+                        <li class="dropdown-header text-dark fw-bold small">Pindah Akses:</li>
+                        <?php foreach ($availableRoles as $acc): ?>
+                            <?php 
+                                // Syarat 1: Bukan akun yang sekarang aktif
+                                // Syarat 2: Email harus sama persis (mencegah Admin NULL nyasar)
+                                if ($acc['id'] != $currentId && $acc['email'] === $currentEmail): 
+                            ?>
+                                <li>
+                                    <a class="dropdown-item py-2 small" href="<?= base_url('auth/switch/' . $acc['id']) ?>">
+                                        <i class="bi bi-arrow-left-right me-2 text-success"></i>
+                                        Masuk sebagai 
+                                        <strong>
+                                            <?php 
+                                                // Logika dinamis untuk menampilkan nama unit berdasarkan role
+                                                switch($acc['fk_roles']) {
+                                                    case 1: echo 'Admin'; break;
+                                                    case 2: echo 'Fakultas ' . $acc['fk_fakultas']; break;
+                                                    case 3: echo 'Prodi ' . $acc['fk_prodi']; break;
+                                                    case 4: echo 'Unit ' . $acc['fk_unit']; break;
+                                                    case 5: echo 'Universitas'; break;
+                                                    default: echo 'User';
+                                                }
+                                            ?>
+                                        </strong>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+
+                    <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item py-2 text-danger" href="<?= base_url('auth/logout') ?>"><i class="bi bi-box-arrow-right me-2"></i> Log Out</a></li>
                 </ul>
             </li>

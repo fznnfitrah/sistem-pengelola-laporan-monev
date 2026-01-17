@@ -17,15 +17,31 @@
         <?php if (session()->get('fk_roles') == 1) : ?>
             <li class="nav-item mt-2">
                 <a href="/users" class="nav-link <?= (uri_string() == 'users') ? 'active' : 'text-dark' ?>">
-                    <i class="bi bi-person-gear me-2"></i> Kelola User
+                    <i class="bi bi-person-gear me-2"></i> Input Menu
                 </a>
             </li>
         <?php endif; ?>
 
-        <?php if (session()->get('fk_roles') == 3 || session()->get('fk_roles') == 4) : ?>
+        <?php if (session()->get('fk_roles') == 2 || session()->get('fk_roles') == 3) : ?>
             <li class="nav-item mt-2">
                 <a href="/laporan/input" class="nav-link <?= (uri_string() == 'laporan/input') ? 'active' : 'text-dark' ?>">
                     <i class="bi bi-pencil-square me-2"></i> Input Laporan
+                </a>
+            </li>
+        <?php endif; ?>
+
+        <?php if (session()->get('fk_roles') == 2) : ?>
+            <li class="nav-item mt-2">
+                <a href="/laporan/input" class="nav-link <?= (uri_string() == 'laporan/input') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-pencil-square me-2"></i> Lihat Status Monev
+                </a>
+            </li>
+        <?php endif; ?>
+
+        <?php if (session()->get('fk_roles') == 5) : ?>
+            <li class="nav-item mt-2">
+                <a href="/laporan/input" class="nav-link <?= (uri_string() == 'laporan/input') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-pencil-square me-2"></i> Input User
                 </a>
             </li>
         <?php endif; ?>

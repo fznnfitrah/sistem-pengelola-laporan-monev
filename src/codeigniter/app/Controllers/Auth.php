@@ -13,35 +13,62 @@ class Auth extends BaseController
 
     public function login()
     {
-        $userModel = new UserModel();
-        
         $username = $this->request->getPost('username');
         $password = $this->request->getPost('password');
+        $email    = $this->request->getPost('email');
 
-        // Cari user berdasarkan username
-        $user = $userModel->where('username', $username)->first();
+        $userModel = new \App\Models\UserModel();
 
-        if ($user) {
-            // Cek password (karena di database kamu isi teks biasa, kita cek langsung)
-            if ($password == $user['password']) {
-                
-                // Simpan data user ke Session
-                session()->set([
-                    'id_user'     => $user['id'],
-                    'username'    => $user['username'],
-                    'fk_roles'    => $user['fk_roles'], // Ini yang menentukan tampilan dashboard
-                    'fk_fakultas' => $user['fk_fakultas'],
-                    'fk_prodi'    => $user['fk_prodi'],
-                    'isLoggedIn'  => true
-                ]);
-
-                return redirect()->to('/'); // Lempar ke Dashboard
-            } else {
-                return redirect()->to('/login')->with('error', 'Password Salah');
+        // JALUR 1: Jika User mengisi Email (Multi-Role)
+        if (!empty($email)) {
+            $users = $userModel->where('email', $email)->findAll();
+            if ($users) {
+                $user = $users[0]; // Ambil akun pertama sebagai default
+                $this->setSession($user, $users);
+                return redirect()->to('/dashboard');
             }
-        } else {
-            return redirect()->to('/login')->with('error', 'Username Tidak Ditemukan');
+        } 
+        // JALUR 2: Jika User mengisi Username & Password (Single Role)
+        else {
+            $user = $userModel->where('username', $username)->first();
+            if ($user && $password == $user['password']) {
+                $this->setSession($user, [$user]);
+                return redirect()->to('/dashboard');
+            }
         }
+
+        return redirect()->back()->with('error', 'Kombinasi login salah!');
+    }
+
+    private function setSession($user, $allRoles)
+    {
+        session()->set([
+            'isLoggedIn'      => true,
+            'current_user_id' => $user['id'],
+            'username'        => $user['username'],
+            'email'           => $user['email'],
+            'fk_roles'        => $user['fk_roles'],
+            'fk_fakultas'     => $user['fk_fakultas'], // varchar
+            'fk_prodi'        => $user['fk_prodi'],    // varchar
+            'available_roles' => $allRoles            // Untuk Switch Role di Topbar
+        ]);
+    }
+    public function switch($id)
+    {
+        $userModel = new \App\Models\UserModel();
+        $targetUser = $userModel->find($id);
+
+        // Pastikan user yang dipilih punya email yang sama dengan session aktif
+        if ($targetUser && $targetUser['email'] == session()->get('email')) {
+            session()->set([
+                'current_user_id' => $targetUser['id'],
+                'fk_roles'        => $targetUser['fk_roles'],
+                'fk_fakultas'     => $targetUser['fk_fakultas'],
+                'fk_prodi'        => $targetUser['fk_prodi'],
+            ]);
+        }
+
+        return redirect()->to('/dashboard');
     }
 
     public function logout()

@@ -21,11 +21,11 @@
             </p>
         </div>
 
-        <div class="col-md-5 offset-md-1" style="margin-left: 0px;">
+        <div class="col-md-5 offset-md-1">
             <div class="card border-0 shadow-lg p-4" style="background-color: #005d66; border-radius: 20px;">
-                <div class="card-body text-white">
-                    <h2 class="text-center fw-bold mb-2">Masuk</h2>
-                    <p class="text-center small mb-4">Untuk memulai sesi !</p>
+                <div class="card-body text-white text-center">
+                    <h2 class="fw-bold mb-1">Masuk</h2>
+                    <p class="small mb-4">Untuk memulai sesi !</p>
 
                     <?php if (session()->getFlashdata('error')) : ?>
                         <div class="alert alert-danger py-2 small">
@@ -35,19 +35,31 @@
 
                     <form action="<?= base_url('auth/login') ?>" method="post">
                         <div class="mb-3">
-                            <input type="text" name="username" class="form-control py-2 rounded-pill" placeholder="Masukkan username" required>
+                            <input type="text" name="username" class="form-control py-2 rounded-pill text-center" placeholder="Masukkan username">
                         </div>
-                        <div class="mb-3">
+
+                        <div class="mb-2">
                             <div class="input-group">
-                                <input type="password" name="password" id="password" class="form-control py-2 rounded-start-pill" placeholder="Masukkan password" required style="border-right: none;">
+                                <input type="password" name="password" id="password" class="form-control py-2 rounded-start-pill text-center" placeholder="Masukkan password" style="border-right: none;">
                                 <span class="input-group-text bg-white border-start-0 rounded-end-pill" style="cursor: pointer;" onclick="togglePassword()">
                                     <i class="bi bi-eye-slash" id="toggleIcon"></i>
                                 </span>
                             </div>
                         </div>
-                        <div class="text-end mb-3">
+
+                        <div class="text-start mb-3 ms-2">
                             <a href="#" class="text-white text-decoration-none small">Lupa password?</a>
                         </div>
+
+                        <div class="mb-3 position-relative">
+                            <hr class="border-white opacity-50">
+                            <span class="position-absolute top-50 start-50 translate-middle px-3" style="background-color: #005d66; font-size: 0.85rem;">Atau</span>
+                        </div>
+
+                        <div class="mb-4">
+                            <input type="email" name="email" class="form-control py-2 rounded-pill text-center" placeholder="Masukkan email">
+                        </div>
+
                         <button type="submit" class="btn btn-success w-100 py-2 rounded-pill fw-bold" style="background-color: #00d285; border: none;">
                             Masuk
                         </button>
@@ -57,19 +69,17 @@
         </div>
     </div>
 </div>
+
 <script>
 function togglePassword() {
     const passwordField = document.getElementById("password");
     const toggleIcon = document.getElementById("toggleIcon");
-    
     if (passwordField.type === "password") {
         passwordField.type = "text";
-        // Ubah ikon jadi mata terbuka
         toggleIcon.classList.remove("bi-eye-slash");
         toggleIcon.classList.add("bi-eye");
     } else {
         passwordField.type = "password";
-        // Ubah ikon jadi mata tertutup
         toggleIcon.classList.remove("bi-eye");
         toggleIcon.classList.add("bi-eye-slash");
     }
