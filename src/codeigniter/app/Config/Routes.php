@@ -5,4 +5,9 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
+$routes->get('/', 'Dashboard::index');
+$routes->get('dashboard', 'Dashboard::index');
+$routes->get('login', 'Auth::index');
+$routes->post('auth/login', 'Auth::login');
+$routes->get('auth/logout', 'Auth::logout');
+$routes->get('auth/switch/(:num)', 'Auth::switch/$1');

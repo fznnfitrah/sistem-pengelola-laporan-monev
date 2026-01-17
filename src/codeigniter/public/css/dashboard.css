@@ -1,0 +1,52 @@
+/* Container Utama Konten */
+.content-area {
+    background-color: #f9fafb; /* Latar belakang abu sangat muda */
+    padding: 25px;
+}
+
+/* Card Dashboard Modern (Menggantikan .menu-card lama) */
+.dashboard-card {
+    background-color: #ffffff !important;
+    border-radius: 16px !important;
+    border: 1px solid #e5e7eb !important; /* Border tipis abu-abu */
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px); /* Efek melayang ke atas */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05) !important;
+    border-color: #059669 !important; /* Border berubah hijau saat hover */
+}
+
+/* Judul dan Teks dalam Card agar kontras di latar putih */
+.dashboard-card h5 {
+    color: #111827 !important; /* Hitam pekat */
+    font-weight: 700;
+}
+
+.dashboard-card p {
+    color: #6b7280 !important; /* Abu-abu teks */
+    font-size: 0.9rem;
+}
+
+/* Tombol Kustom Hijau Emerald sesuai permintaanmu */
+.btn-custom {
+    background-color: #00d47e !important;
+    color: white !important;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.btn-custom:hover {
+    background-color: #00b76e !important; /* Hijau lebih gelap sedikit saat hover */
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+}
+
+/* Ikon di dalam Card */
+.dashboard-card i {
+    color: #00d47e; /* Ikon sewarna dengan tombol */
+}

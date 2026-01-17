@@ -1,0 +1,73 @@
+.main-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+#content-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+/* SIDEBAR */
+.sidebar {
+    background-color: #fcfdff !important;
+    min-width: 260px;
+    border-right: 1px solid #e5e7eb;
+}
+.judul {
+    font-size: 1.50rem;
+    font-weight: 700;
+    color: #025964 !important;
+}
+/* Sidebar Link Standar */
+.sidebar .nav-link {
+    color: #000000 !important;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    margin: 4px 0;
+}
+
+/* Sidebar Link saat AKTIF */
+.sidebar .nav-link.active {
+    background-color: #ffffff !important;
+    color: #025964 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+
+
+/* TOPBAR */
+.navbar {
+    background-color: #025964 !important;
+    border-bottom: 1px solid #e5e7eb;
+    /* Gunakan padding untuk mengatur tinggi secara fleksibel */
+    padding-top: 15px; 
+    padding-bottom: 15px;
+    /* Atau gunakan min-height jika ingin ukuran yang pasti */
+    min-height: 75px; 
+}
+
+.brand-uni {
+    color: #ffffff !important;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.brand-sub {
+    color: #ffffff; /* Abu-abu medium */
+    font-size: 0.75rem;
+}
+.navbar .dropdown-item {
+    font-size: 0.85rem;
+    color: #4b5563;
+    transition: 0.2s;
+}
+
+.navbar .dropdown-item:hover {
+    background-color: #f3f4f6;
+    color: #059669;
+}
+
