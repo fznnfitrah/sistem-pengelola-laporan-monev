@@ -62,6 +62,7 @@ class Auth extends BaseController
         if ($targetUser && $targetUser['email'] == session()->get('email')) {
             session()->set([
                 'current_user_id' => $targetUser['id'],
+                'username'        => $targetUser['username'],
                 'fk_roles'        => $targetUser['fk_roles'],
                 'fk_fakultas'     => $targetUser['fk_fakultas'],
                 'fk_prodi'        => $targetUser['fk_prodi'],
