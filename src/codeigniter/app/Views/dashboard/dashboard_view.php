@@ -4,49 +4,57 @@
 
 <div class="container-fluid py-4">
     
-    <h2 class="mb-4">Selamat Datang, <?= esc(session()->get('username')) ?>!</h2>
+    <h2 class="mb-4 fw-bold" style="color: #111827;">Selamat Datang, <?= esc(session()->get('username')) ?>!</h2>
 
     <div class="row">
-
-        <?php if (session()->get('fk_roles') == 1) : ?>
+        <?php if ($roleId == 1) : ?>
             <div class="col-md-4 mb-4">
-                <div class="card shadow border-0 text-center p-4">
-                    <h5 class="fw-bold">Total User</h5>
-                    <p class="text-muted">Kelola pengguna sistem</p>
-                    <a href="/users" class="btn btn-primary w-100">Kelola</a>
-                </div>
-            </div>
-            <?php endif; ?>
-
-
-        <?php if (session()->get('fk_roles') == 3) : ?>
-            <div class="col-md-4 mb-4">
-                <div class="card shadow border-0 text-center p-4">
-                    <h5 class="fw-bold">Input Laporan</h5>
-                    <p class="text-muted">Unggah laporan Monev baru</p>
-                    <a href="/laporan/input" class="btn btn-outline-dark w-100">Mulai Input</a>
-                </div>
-            </div>
-             <div class="col-md-4 mb-4">
-                <div class="card shadow border-0 text-center p-4">
-                    <h5 class="fw-bold">History</h5>
-                    <p class="text-muted">Lihat riwayat laporan</p>
-                    <a href="/laporan/history" class="btn btn-outline-dark w-100">Buka History</a>
-                </div>
-            </div>
-        <?php endif; ?>
-        
-
-        <?php if (session()->get('fk_roles') == 2) : ?>
-            <div class="col-md-4 mb-4">
-                <div class="card shadow border-0 text-center p-4">
-                    <h5 class="fw-bold">Status Monev</h5>
-                    <p class="text-muted">Pantau progres Prodi</p>
-                    <a href="/monitoring" class="btn btn-success w-100">Lihat Status</a>
+                <div class="card dashboard-card shadow-sm text-center p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-people fs-1 text-success"></i>
+                    </div>
+                    <h5 class="mb-2">Total User</h5>
+                    <p class="mb-4">Kelola dan atur hak akses pengguna sistem.</p>
+                    <a href="<?= base_url('users') ?>" class="btn btn-custom w-100">Kelola</a>
                 </div>
             </div>
         <?php endif; ?>
 
+        <?php if ($roleId == 3) : ?>
+            <div class="col-md-4 mb-4">
+                <div class="card dashboard-card shadow-sm text-center p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-graph-up-arrow fs-1 text-success"></i>
+                    </div>
+                    <h5 class="mb-2">Status Monev</h5>
+                    <p class="mb-4">Pantau progres pengunggahan laporan tiap Prodi.</p>
+                    <a href="<?= base_url('monitoring') ?>" class="btn btn-custom w-100">Lihat Status</a>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($roleId == 4) : ?>
+            <div class="col-md-4 mb-4">
+                <div class="card dashboard-card shadow-sm text-center p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-cloud-arrow-up fs-1 text-success"></i>
+                    </div>
+                    <h5 class="mb-2">Input Laporan</h5>
+                    <p class="mb-4">Unggah link laporan Monev terbaru ke sistem.</p>
+                    <a href="<?= base_url('laporan/input') ?>" class="btn btn-custom w-100">Mulai Input</a>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card dashboard-card shadow-sm text-center p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-journal-text fs-1 text-success"></i>
+                    </div>
+                    <h5 class="mb-2">History</h5>
+                    <p class="mb-4">Lihat kembali riwayat laporan yang telah diunggah.</p>
+                    <a href="<?= base_url('laporan/history') ?>" class="btn btn-custom w-100">Buka History</a>
+                </div>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
 
