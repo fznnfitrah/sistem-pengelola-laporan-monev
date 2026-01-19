@@ -8,7 +8,7 @@
             <div class="card dashboard-card shadow-sm text-center p-4">
                 <div class="mb-3"><i class="bi bi-calendar-check fs-1 text-success"></i></div>
                 <h5 class="mb-2">Setting Periode</h5>
-                <p class="mb-4">Atur periode default laporan untuk seluruh user.</p>
+                <p class="mb-4">Atur periode  untuk seluruh user.</p>
                 <a href="<?= base_url('univ/periode') ?>" class="btn btn-custom w-100">Buka</a>
             </div>
         </div>
@@ -35,7 +35,7 @@
             <div class="card dashboard-card shadow-sm text-center p-4">
                 <div class="mb-3"><i class="bi bi-file-earmark-medical fs-1 text-success"></i></div>
                 <h5 class="mb-2">Item Monev</h5>
-                <p class="mb-4">Atur daftar dokumen wajib unggah tiap periode.</p>
+                <p class="mb-4">Atur item wajib unggah tiap periode.</p>
                 <a href="<?= base_url('univ/monev') ?>" class="btn btn-custom w-100">Buka</a>
             </div>
         </div>
