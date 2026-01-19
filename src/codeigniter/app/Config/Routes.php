@@ -14,6 +14,7 @@ $routes->get('auth/switch/(:num)', 'Auth::switch/$1');
 
 // app/admin/roles
 $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($routes) {
+    // ROUTES UNTUK ROLES
     $routes->get('roles', 'Roles::index');     // Menampilkan tabel ini
     $routes->get('roles/add', 'Roles::add');   // Menampilkan form tambah
     $routes->post('roles/save', 'Roles::save'); // Proses simpan
