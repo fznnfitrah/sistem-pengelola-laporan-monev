@@ -13,18 +13,22 @@ $routes->get('auth/logout', 'Auth::logout');
 $routes->get('auth/switch/(:num)', 'Auth::switch/$1');
 
 // app/admin/roles
-$routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function($routes) {
+$routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($routes) {
     $routes->get('roles', 'Roles::index');     // Menampilkan tabel ini
     $routes->get('roles/add', 'Roles::add');   // Menampilkan form tambah
     $routes->post('roles/save', 'Roles::save'); // Proses simpan
     $routes->delete('roles/(:num)', 'Roles::delete/$1'); // Proses hapus
     $routes->get('roles/edit/(:num)', 'Roles::edit/$1'); // Menampilkan form edit
     $routes->put('roles/(:num)', 'Roles::update/$1'); //
+
+    // ROUTES UNTUK USERS
+    $routes->get('users', 'Users::index');
 });
 
-$routes->group('univ', function($routes) {
+
+$routes->group('univ', function ($routes) {
     $routes->get('master', 'Univ\Master::index');
-    
+
     // Fitur Fakultas
     $routes->post('master/simpanFakultas', 'Univ\Master::simpanFakultas');
     $routes->post('master/editFakultas', 'Univ\Master::editFakultas'); // Tambahkan ini

@@ -19,6 +19,11 @@
                     <i class="bi bi-person-gear me-2"></i> Kelola Roles
                 </a>
             </li>
+            <li class="nav-item mt-2">
+                <a href="/admin/users" class="nav-link <?= (uri_string() == 'admin/users') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-person-gear me-2"></i> Kelola User
+                </a>
+            </li>
         <?php endif; ?>
 
         <?php if (session()->get('fk_roles') == 2 || session()->get('fk_roles') == 3) : ?>
