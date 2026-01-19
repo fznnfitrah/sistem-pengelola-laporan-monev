@@ -21,3 +21,17 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function($rout
     $routes->get('roles/edit/(:num)', 'Roles::edit/$1'); // Menampilkan form edit
     $routes->put('roles/(:num)', 'Roles::update/$1'); //
 });
+
+$routes->group('univ', function($routes) {
+    $routes->get('master', 'Univ\Master::index');
+    
+    // Fitur Fakultas
+    $routes->post('master/simpanFakultas', 'Univ\Master::simpanFakultas');
+    $routes->post('master/editFakultas', 'Univ\Master::editFakultas'); // Tambahkan ini
+    $routes->get('master/hapusFakultas/(:any)', 'Univ\Master::hapusFakultas/$1'); // Tambahkan ini
+
+    // Fitur Prodi
+    $routes->post('master/simpanProdi', 'Univ\Master::simpanProdi');
+    $routes->post('master/editProdi', 'Univ\Master::editProdi'); // Tambahkan ini
+    $routes->get('master/hapusProdi/(:any)', 'Univ\Master::hapusProdi/$1'); // Tambahkan ini
+});
