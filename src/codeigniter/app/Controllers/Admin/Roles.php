@@ -34,7 +34,6 @@ class Roles extends BaseController
 
     public function save()
     {
-        // Validasi Input
         if (!$this->validate([
             'nama_roles' => [
                 'rules'  => 'required|is_unique[roles.nama_roles]',
@@ -50,26 +49,22 @@ class Roles extends BaseController
                 ]
             ]
         ])) {
-            // Jika validasi gagal, kembalikan ke form dengan input sebelumnya
             return redirect()->to('/admin/roles/add')->withInput()->with('errors', $this->validator->getErrors());;
         }
 
-        // Simpan ke Database
         $this->roleModel->save([
             'nama_roles' => $this->request->getPost('nama_roles'), // Sesuai kolom DB
             'deskripsi'  => $this->request->getPost('deskripsi'),  // Sesuai kolom DB
         ]);
 
-        // Redirect ke halaman index dengan pesan sukses
         return redirect()->to('/admin/roles')->with('message', 'Role berhasil ditambahkan!');
     }
 
-    // Method delete tetap sama, hanya cara panggilannya dari route yang berbeda
     public function delete($id = null)
     {
         // Proteksi Role Admin Utama (ID 1)
         if ($id == 1) {
-             return redirect()->back()->with('error', 'Role Admin Utama tidak boleh dihapus!');
+            return redirect()->back()->with('error', 'Role Admin Utama tidak boleh dihapus!');
         }
 
         // Cek apakah data ada sebelum hapus (opsional tapi disarankan)
@@ -81,5 +76,52 @@ class Roles extends BaseController
         $this->roleModel->delete($id);
 
         return redirect()->to('/admin/roles')->with('message', 'Role berhasil dihapus!');
+    }
+
+    public function edit($id = null)
+    {
+        $dataRole = $this->roleModel->find($id);
+
+        if (!$dataRole) {
+            return redirect()->to('/admin/roles')->with('error', 'Data role tidak ditemukan.');
+        }
+
+        $data = [
+            'title' => 'Edit Role',
+            'validation' => \Config\Services::validation(),
+            'role' => $dataRole // Kirim data role ke view
+        ];
+
+        return view('admin/roles/edit_roles_view', $data);
+    }
+
+    public function update($id = null)
+    {
+        // Validasi
+        if (!$this->validate([
+            'nama_roles' => [
+                'rules'  => "required|is_unique[roles.nama_roles,id,{$id}]",
+                'errors' => [
+                    'required'  => 'Nama Role wajib diisi.',
+                    'is_unique' => 'Nama Role sudah ada, gunakan nama lain.'
+                ]
+            ],
+            'deskripsi' => [
+                'rules'  => 'permit_empty|max_length[255]',
+                'errors' => [
+                    'max_length' => 'Deskripsi terlalu panjang.'
+                ]
+            ]
+        ])) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        // Proses Upda
+        $this->roleModel->update($id, [
+            'nama_roles' => $this->request->getPost('nama_roles'),
+            'deskripsi'  => $this->request->getPost('deskripsi'),
+        ]);
+
+        return redirect()->to('/admin/roles')->with('message', 'Role berhasil diperbarui!');
     }
 }

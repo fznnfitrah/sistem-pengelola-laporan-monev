@@ -41,7 +41,7 @@
                                             <td class="fw-bold"><?= esc($row['nama_roles']) ?></td>
                                             <td><?= esc($row['deskripsi']) ?></td>
                                             <td class="text-center">
-                                                <a href="#" class="btn btn-warning btn-sm me-1" title="Edit">
+                                                <a href="<?= base_url('admin/roles/edit/' . $row['id']) ?>" class="btn btn-warning btn-sm me-1" title="Edit">
                                                     <i class="bi bi-pencil-square"></i>
                                                 </a>
 
@@ -52,9 +52,6 @@
                                                         <i class="bi bi-trash"></i>
                                                     </button>
                                                 </form>
-                                                <!-- <a href="#" class="btn btn-danger btn-sm" title="Hapus" onclick="return confirm('Yakin ingin menghapus data ini?')">
-                                                    <i class="bi bi-trash"></i>
-                                                </a> -->
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>

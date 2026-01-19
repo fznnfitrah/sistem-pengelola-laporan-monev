@@ -18,4 +18,6 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function($rout
     $routes->get('roles/add', 'Roles::add');   // Menampilkan form tambah
     $routes->post('roles/save', 'Roles::save'); // Proses simpan
     $routes->delete('roles/(:num)', 'Roles::delete/$1'); // Proses hapus
+    $routes->get('roles/edit/(:num)', 'Roles::edit/$1'); // Menampilkan form edit
+    $routes->put('roles/(:num)', 'Roles::update/$1'); //
 });
