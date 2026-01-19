@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card shadow-sm">
-                
+
                 <div class="card-header d-flex justify-content-between align-items-center bg-white">
                     <h5 class="mb-0 text-secondary">Daftar Roles Admin</h5>
                     <a href="<?= base_url('admin/roles/add') ?>" class="btn btn-primary btn-sm">
@@ -14,7 +14,7 @@
                 </div>
 
                 <div class="card-body">
-                    
+
                     <?php if (session()->getFlashdata('message')) : ?>
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             <?= session()->getFlashdata('message') ?>
@@ -38,15 +38,23 @@
                                     <?php foreach ($roles as $row) : ?>
                                         <tr>
                                             <td class="text-center"><?= $i++ ?></td>
-                                            <td class="fw-bold"><?= esc($row['nama_roles']) ?></td> 
+                                            <td class="fw-bold"><?= esc($row['nama_roles']) ?></td>
                                             <td><?= esc($row['deskripsi']) ?></td>
                                             <td class="text-center">
                                                 <a href="#" class="btn btn-warning btn-sm me-1" title="Edit">
                                                     <i class="bi bi-pencil-square"></i>
                                                 </a>
-                                                <a href="#" class="btn btn-danger btn-sm" title="Hapus" onclick="return confirm('Yakin ingin menghapus data ini?')">
+
+                                                <form action="<?= base_url('admin/roles/' . $row['id']) ?>" method="post" class="d-inline">
+                                                    <?= csrf_field() ?> <input type="hidden" name="_method" value="DELETE">
+
+                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data role ini?')">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                                <!-- <a href="#" class="btn btn-danger btn-sm" title="Hapus" onclick="return confirm('Yakin ingin menghapus data ini?')">
                                                     <i class="bi bi-trash"></i>
-                                                </a>
+                                                </a> -->
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
