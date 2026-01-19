@@ -23,6 +23,11 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
 
     // ROUTES UNTUK USERS
     $routes->get('users', 'Users::index');
+    $routes->get('users/add', 'Users::add');
+    $routes->post('users/save', 'Users::save');
+    $routes->delete('users/(:num)', 'Users::delete/$1');
+    $routes->get('users/edit/(:num)', 'Users::edit/$1');
+    $routes->put('users/(:num)', 'Users::update/$1');
 });
 
 
