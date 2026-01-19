@@ -11,3 +11,10 @@ $routes->get('login', 'Auth::index');
 $routes->post('auth/login', 'Auth::login');
 $routes->get('auth/logout', 'Auth::logout');
 $routes->get('auth/switch/(:num)', 'Auth::switch/$1');
+
+// app/Config/Routes.php
+$routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function($routes) {
+    $routes->get('roles', 'Roles::index');     // Menampilkan tabel ini
+    $routes->get('roles/add', 'Roles::add');   // Menampilkan form tambah
+    $routes->post('roles/save', 'Roles::save'); // Proses simpan
+});
