@@ -15,6 +15,8 @@ $routes->get('auth/switch/(:num)', 'Auth::switch/$1');
 // app/admin/roles
 
 // Routes untuk role admin
+
+// Routes untuk role UNIVERSITAS
 $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($routes) {
     // ROUTES UNTUK ROLES
     $routes->get('roles', 'Roles::index');     
