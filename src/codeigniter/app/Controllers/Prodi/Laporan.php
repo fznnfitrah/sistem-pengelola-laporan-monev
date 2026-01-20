@@ -28,4 +28,26 @@ class Laporan extends BaseController
 
         return view('prodi/laporan/history_lmonev_view', $data);
     }
+
+    public function input()
+    {
+        $periodeAktif = $this->periodeModel->getActivePeriode();
+
+        if (!$periodeAktif) {
+            session()->setFlashdata('error', 'Tidak ada periode aktif. Silakan hubungi administrator.');
+            return redirect()->back();
+        }
+
+
+        $data = [
+            'title' => 'Input Laporan Monev',
+            'periode' => $periodeAktif,
+            'jenis_monev' => $this->monevModel->findAll(),
+            'validation' => \Config\Services::validation(),
+        ];
+
+
+
+        return view('prodi/laporan/input_lmonev_view', $data);
+    }
 }

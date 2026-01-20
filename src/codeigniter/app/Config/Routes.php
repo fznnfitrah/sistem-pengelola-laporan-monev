@@ -38,6 +38,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
 $routes->group('prodi', ['namespace' => 'App\Controllers\Prodi'], function ($routes) {
     // ROUTES UNTUK MONEV
     $routes->get('laporan/history', 'Laporan::history');
+    $routes->get('laporan/input', 'Laporan::input');
 
 });
 
