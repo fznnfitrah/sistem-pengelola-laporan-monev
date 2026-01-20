@@ -14,15 +14,15 @@ $routes->get('auth/switch/(:num)', 'Auth::switch/$1');
 
 // app/admin/roles
 
-// Routes untuk role UNIVERSITAS
+// Routes untuk role admin
 $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($routes) {
     // ROUTES UNTUK ROLES
-    $routes->get('roles', 'Roles::index');     // Menampilkan tabel ini
-    $routes->get('roles/add', 'Roles::add');   // Menampilkan form tambah
-    $routes->post('roles/save', 'Roles::save'); // Proses simpan
-    $routes->delete('roles/(:num)', 'Roles::delete/$1'); // Proses hapus
-    $routes->get('roles/edit/(:num)', 'Roles::edit/$1'); // Menampilkan form edit
-    $routes->put('roles/(:num)', 'Roles::update/$1'); //
+    $routes->get('roles', 'Roles::index');     
+    $routes->get('roles/add', 'Roles::add');   
+    $routes->post('roles/save', 'Roles::save'); 
+    $routes->delete('roles/(:num)', 'Roles::delete/$1'); 
+    $routes->get('roles/edit/(:num)', 'Roles::edit/$1'); 
+    $routes->put('roles/(:num)', 'Roles::update/$1'); 
 
     // ROUTES UNTUK USERS
     $routes->get('users', 'Users::index');
@@ -34,6 +34,14 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
 });
 
 
+// Routes untuk role prodi
+$routes->group('prodi', ['namespace' => 'App\Controllers\Prodi'], function ($routes) {
+    // ROUTES UNTUK MONEV
+    $routes->get('laporan/history', 'Laporan::history');
+
+});
+
+// Routes untuk role universitas
 $routes->group('univ', function ($routes) {
     $routes->get('master', 'Univ\Master::index');
 

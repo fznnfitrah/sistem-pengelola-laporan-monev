@@ -26,10 +26,23 @@
             </li>
         <?php endif; ?>
 
-        <?php if (session()->get('fk_roles') == 2 || session()->get('fk_roles') == 3) : ?>
+        <?php if (session()->get('fk_roles') == 2) : ?>
             <li class="nav-item mt-2">
                 <a href="/laporan/input" class="nav-link <?= (uri_string() == 'laporan/input') ? 'active' : 'text-dark' ?>">
                     <i class="bi bi-pencil-square me-2"></i> Input Laporan
+                </a>
+            </li>
+        <?php endif; ?>
+
+        <?php if (session()->get('fk_roles') == 3) : ?>
+            <li class="nav-item mt-2">
+                <a href="<?= base_url('prodi/laporan/input') ?>" class="nav-link <?= (uri_string() == 'prodi/laporan/input') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-pencil-square me-2"></i> Input Laporan
+                </a>
+            </li>
+            <li class="nav-item mt-2">
+                <a href="<?= base_url('prodi/laporan/history') ?>" class="nav-link <?= (uri_string() == 'prodi/laporan/history') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-pencil-square me-2"></i> History Laporan
                 </a>
             </li>
         <?php endif; ?>
