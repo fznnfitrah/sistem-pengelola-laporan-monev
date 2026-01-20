@@ -12,7 +12,7 @@
                     </a>
                 </div>
                 <div class="card-body">
-                    
+
                     <?php if (session()->getFlashdata('message')) : ?>
                         <div class="alert alert-success alert-dismissible fade show">
                             <?= session()->getFlashdata('message') ?>
@@ -25,43 +25,39 @@
                             <thead class="table-light">
                                 <tr>
                                     <th class="text-center" style="width: 5%">No</th>
-                                    <th style="width: 15%">Tanggal Upload</th>
-                                    <th style="width: 20%">Jenis Monev</th>
-                                    <th>Keterangan / Judul</th>
+                                    <th style="width: 15%">Tanggal</th>
+                                    <th>Jenis Laporan Monev</th>
                                     <th style="width: 15%">Periode</th>
-                                    <th class="text-center" style="width: 10%">Bukti</th>
+                                    <th class="text-center" style="width: 10%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php if (!empty($laporan)) : ?>
-                                    <?php $i = 1; foreach ($laporan as $row) : ?>
+                                    <?php $i = 1;
+                                    foreach ($laporan as $row) : ?>
                                         <tr>
                                             <td class="text-center"><?= $i++ ?></td>
-                                            <td><?= date('d M Y H:i', strtotime($row['create_at'])) ?></td>
+                                            <td><?= date('d/m/Y', strtotime($row['create_at'])) ?></td>
                                             <td>
-                                                <span class="badge bg-info text-dark">
-                                                    <?= esc($row['nama_monev']) ?>
-                                                </span>
-                                            </td>
-                                            <td><?= esc($row['keterangan']) ?></td>
-                                            <td>
+                                                <span class="fw-bold"><?= esc($row['nama_monev']) ?></span>
+                                                <br>
                                                 <small class="text-muted">
-                                                    <?= esc($row['tahun_akademik']) ?> (<?= esc($row['semester']) ?>)
+                                                    <?= esc(mb_substr($row['keterangan'] ?? '', 0, 50)) ?>...
                                                 </small>
                                             </td>
+                                            <td>
+                                                <span class="badge bg-secondary">
+                                                    <?= esc($row['tahun_akademik']) ?> (<?= esc($row['semester']) ?>)
+                                                </span>
+                                            </td>
                                             <td class="text-center">
-                                                <a href="<?= esc($row['link_bukti']) ?>" target="_blank" class="btn btn-outline-primary btn-sm">
-                                                    <i class="bi bi-link-45deg"></i> Buka
+                                                <a href="<?= base_url('prodi/laporan/detail/' . $row['id']) ?>" class="btn btn-info btn-sm text-white" title="Lihat Detail">
+                                                    <i class="bi bi-eye"></i> Detail
                                                 </a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else : ?>
-                                    <tr>
-                                        <td colspan="6" class="text-center py-4 text-muted">
-                                            Belum ada laporan yang dikirim.
-                                        </td>
-                                    </tr>
                                 <?php endif; ?>
                             </tbody>
                         </table>

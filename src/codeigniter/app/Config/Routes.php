@@ -19,12 +19,12 @@ $routes->get('auth/switch/(:num)', 'Auth::switch/$1');
 // Routes untuk role UNIVERSITAS
 $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($routes) {
     // ROUTES UNTUK ROLES
-    $routes->get('roles', 'Roles::index');     
-    $routes->get('roles/add', 'Roles::add');   
-    $routes->post('roles/save', 'Roles::save'); 
-    $routes->delete('roles/(:num)', 'Roles::delete/$1'); 
-    $routes->get('roles/edit/(:num)', 'Roles::edit/$1'); 
-    $routes->put('roles/(:num)', 'Roles::update/$1'); 
+    $routes->get('roles', 'Roles::index');
+    $routes->get('roles/add', 'Roles::add');
+    $routes->post('roles/save', 'Roles::save');
+    $routes->delete('roles/(:num)', 'Roles::delete/$1');
+    $routes->get('roles/edit/(:num)', 'Roles::edit/$1');
+    $routes->put('roles/(:num)', 'Roles::update/$1');
 
     // ROUTES UNTUK USERS
     $routes->get('users', 'Users::index');
@@ -41,7 +41,8 @@ $routes->group('prodi', ['namespace' => 'App\Controllers\Prodi'], function ($rou
     // ROUTES UNTUK MONEV
     $routes->get('laporan/history', 'Laporan::history');
     $routes->get('laporan/input', 'Laporan::input');
-
+    $routes->post('laporan/save', 'Laporan::save');
+    $routes->get('laporan/detail/(:num)', 'Laporan::detail/$1');
 });
 
 // Routes untuk role universitas
@@ -50,7 +51,7 @@ $routes->group('univ', function ($routes) {
 
     // Fitur Fakultas
     $routes->post('master/simpanFakultas', 'Univ\Master::simpanFakultas');
-    $routes->post('master/editFakultas', 'Univ\Master::editFakultas'); 
+    $routes->post('master/editFakultas', 'Univ\Master::editFakultas');
     $routes->get('master/hapusFakultas/(:any)', 'Univ\Master::hapusFakultas/$1');
 
     // Fitur Prodi
