@@ -15,12 +15,12 @@
 
         <?php if (session()->get('fk_roles') == 1) : ?>
             <li class="nav-item mt-2">
-                <a href="/admin/roles" class="nav-link <?= (uri_string() == 'admin/roles') ? 'active' : 'text-dark' ?>">
+                <a href="<?= base_url('admin/roles') ?>" class="nav-link <?= (uri_string() == 'admin/roles') ? 'active' : 'text-dark' ?>">
                     <i class="bi bi-person-gear me-2"></i> Kelola Roles
                 </a>
             </li>
             <li class="nav-item mt-2">
-                <a href="/admin/users" class="nav-link <?= (uri_string() == 'admin/users') ? 'active' : 'text-dark' ?>">
+                <a href="<?= base_url('admin/users') ?>" class="nav-link <?= (uri_string() == 'admin/users') ? 'active' : 'text-dark' ?>">
                     <i class="bi bi-person-gear me-2"></i> Kelola User
                 </a>
             </li>
