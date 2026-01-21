@@ -20,54 +20,6 @@ class KinerjaProdiUnit extends BaseController
         $this->periodeModel = new PeriodeModel();
     }
 
-    // public function input()
-    // {
-    //     // 1. Cek Periode Aktif
-    //     $periodeAktif = $this->periodeModel->getActivePeriode();
-    //     if (!$periodeAktif) return view('prodi/laporan/tutup_akses_view'); // Reuse view tutup akses
-
-    //     // 2. Deteksi Role & Identitas User
-    //     $isProdi = !empty(session()->get('fk_prodi')); // Cek apakah dia orang Prodi?
-
-    //     $identitasID = null;
-    //     $jenisKinerja = '';
-
-    //     if ($isProdi) {
-    //         $jenisKinerja = 'prodi';
-    //         $identitasID  = session()->get('fk_prodi'); // String kode prodi
-    //     } else {
-    //         $jenisKinerja = 'unit';
-    //         $identitasID  = session()->get('fk_unit');  // String kode unit
-    //     }
-
-    //     // 3. Ambil Master Kinerja SESUAI ROLE (Prodi cuma lihat 'prodi', Unit lihat 'unit')
-    //     $daftarIndikator = $this->mKinerja->getKinerjaByJenis($jenisKinerja);
-
-    //     // 4. Ambil Data yang SUDAH DIISI (agar form terisi nilai lama saat dibuka)
-    //     // Query menyesuaikan apakah dia prodi atau unit
-    //     $columnFilter = $isProdi ? 'fk_prodi' : 'fk_unit';
-
-    //     $dataSudahIsi = $this->transaksiKinerja
-    //         ->where($columnFilter, $identitasID)
-    //         ->where('fk_setting_periode', $periodeAktif['id'])
-    //         ->findAll();
-
-    //     // Mapping agar mudah dipanggil di view: [id_kinerja => data_row]
-    //     $mappedData = [];
-    //     foreach ($dataSudahIsi as $d) {
-    //         $mappedData[$d['fk_kinerja']] = $d;
-    //     }
-
-    //     $data = [
-    //         'title'        => 'Input Kinerja ' . ucfirst($jenisKinerja),
-    //         'periode'      => $periodeAktif,
-    //         'indikator'    => $daftarIndikator, // Daftar Pertanyaan
-    //         'sudah_isi'    => $mappedData,      // Jawaban User
-    //         'is_prodi'     => $isProdi          // Flag untuk view
-    //     ];
-
-    //     return view('prodi/kinerja/input_kinerja_view', $data);
-    // }
 
     public function index()
     {
