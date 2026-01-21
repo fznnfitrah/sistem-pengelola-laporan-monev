@@ -27,9 +27,17 @@
         <?php endif; ?>
 
         <?php if (session()->get('fk_roles') == 2) : ?>
-            <li class="nav-item mt-2">
-                <a href="/laporan/input" class="nav-link <?= (uri_string() == 'laporan/input') ? 'active' : 'text-dark' ?>">
+            <li class="nav-item mt-3">
+                <small class="text-uppercase text-muted fw-bold" style="font-size: 0.7rem;">Menu Fakultas</small>
+            </li>
+            <li class="nav-item mt-1">
+                <a href="<?= base_url('fakultas/laporan/input') ?>" class="nav-link <?= (uri_string() == 'fakultas/laporan/input') ? 'active' : 'text-dark' ?>">
                     <i class="bi bi-pencil-square me-2"></i> Input Laporan
+                </a>
+            </li>
+            <li class="nav-item mt-1">
+                <a href="<?= base_url('fakultas/laporan/history') ?>" class="nav-link <?= (uri_string() == 'fakultas/laporan/history') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-clock-history me-2"></i> History Laporan
                 </a>
             </li>
         <?php endif; ?>

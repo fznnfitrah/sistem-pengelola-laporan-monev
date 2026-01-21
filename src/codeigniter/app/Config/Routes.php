@@ -12,11 +12,8 @@ $routes->post('auth/login', 'Auth::login');
 $routes->get('auth/logout', 'Auth::logout');
 $routes->get('auth/switch/(:num)', 'Auth::switch/$1');
 
-// app/admin/roles
 
-// Routes untuk role admin
 
-// Routes untuk role UNIVERSITAS
 $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($routes) {
     // ROUTES UNTUK ROLES
     $routes->get('roles', 'Roles::index');
@@ -36,6 +33,8 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
 });
 
 
+
+
 // Routes untuk role prodi
 $routes->group('prodi', ['namespace' => 'App\Controllers\Prodi'], function ($routes) {
     // ROUTES UNTUK MONEV
@@ -50,6 +49,8 @@ $routes->group('prodi', ['namespace' => 'App\Controllers\Prodi'], function ($rou
     $routes->get('kinerja/input', 'KinerjaProdiUnit::index');
     $routes->post('kinerja/save', 'KinerjaProdiUnit::save');
 });
+
+
 
 // Routes untuk role universitas
 $routes->group('univ', function ($routes) {
@@ -88,4 +89,13 @@ $routes->group('univ', function ($routes) {
     $routes->post('kinerja/simpan', 'Univ\Kinerja::simpan');
     $routes->post('kinerja/edit', 'Univ\Kinerja::edit');
     $routes->get('kinerja/hapus/(:num)', 'Univ\Kinerja::hapus/$1');
+});
+
+
+// Routes untuk role fakultas
+$routes->group('fakultas', function($routes) {
+    $routes->get('dashboard', 'Fakultas\Dashboard::index');
+    $routes->get('laporan/input', 'Fakultas\Laporan::input');
+    $routes->post('laporan/simpan', 'Fakultas\Laporan::simpan');
+    $routes->get('laporan/history', 'Fakultas\Laporan::history');
 });
