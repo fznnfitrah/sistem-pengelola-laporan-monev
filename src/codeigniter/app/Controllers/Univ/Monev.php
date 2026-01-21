@@ -31,6 +31,10 @@ class Monev extends BaseController
             'username' => session()->get('username'),
             'monev'    => $query->getResultArray(),
             'periode'  => $this->periodeModel->findAll() // Untuk dropdown di modal
+        $data = [
+            'title'    => 'Master Item Monev',
+            'username' => session()->get('username'),
+            'monev'    => $this->monevModel->findAll()
         ];
         return view('univ/monev/index', $data);
     }
@@ -42,6 +46,8 @@ class Monev extends BaseController
             'nama_monev'         => $this->request->getPost('nama_monev'),
             'keterangan'         => $this->request->getPost('keterangan'),
             'status'             => 1
+            'nama_monev' => $this->request->getPost('nama_monev'),
+            'status'     => 1 // Default aktif
         ]);
         return redirect()->back()->with('success', 'Item Monev berhasil ditambahkan!');
     }
@@ -54,6 +60,8 @@ class Monev extends BaseController
             'nama_monev'         => $this->request->getPost('nama_monev'),
             'keterangan'         => $this->request->getPost('keterangan'),
             'status'             => $this->request->getPost('status')
+            'nama_monev' => $this->request->getPost('nama_monev'),
+            'status'     => $this->request->getPost('status')
         ]);
         return redirect()->back()->with('success', 'Item Monev berhasil diperbarui!');
     }
