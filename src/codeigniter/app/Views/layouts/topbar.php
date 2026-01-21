@@ -40,7 +40,7 @@
                         <p class="small text-muted mb-0">Selamat Datang,</p>
                         <p class="small fw-bold mb-0 text-dark"><?= esc(session()->get('username')) ?></p>
                     </div>
-                    <li><a class="dropdown-item py-2" href="#"><i class="bi bi-person me-2"></i> Profile</a></li>
+                    <li><a class="dropdown-item py-2" href="<?= base_url('auth/profile') ?>"><i class="bi bi-person me-2"></i> Profile</a></li>
 
                     <?php 
                         $availableRoles = session()->get('available_roles');

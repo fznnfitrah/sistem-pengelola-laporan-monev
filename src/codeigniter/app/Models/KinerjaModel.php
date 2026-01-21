@@ -11,4 +11,9 @@ class KinerjaModel extends Model
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $allowedFields    = ['nama_kinerja', 'jenis', 'satuan']; // Kolom sesuai gambar
+
+    public function getKinerjaByJenis($jenis)
+    {
+        return $this->where('jenis', $jenis)->findAll();
+    } 
 }

@@ -43,6 +43,12 @@ $routes->group('prodi', ['namespace' => 'App\Controllers\Prodi'], function ($rou
     $routes->get('laporan/input', 'Laporan::input');
     $routes->post('laporan/save', 'Laporan::save');
     $routes->get('laporan/detail/(:num)', 'Laporan::detail/$1');
+
+
+    // ROUTES UNTUK KINERJA PRODI/UNIT
+
+    $routes->get('kinerja/input', 'KinerjaProdiUnit::index');
+    $routes->post('kinerja/save', 'KinerjaProdiUnit::save');
 });
 
 // Routes untuk role universitas
