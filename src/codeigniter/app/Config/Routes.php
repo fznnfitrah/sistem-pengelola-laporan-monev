@@ -17,12 +17,12 @@ $routes->get('auth/switch/(:num)', 'Auth::switch/$1');
 // Routes untuk role UNIVERSITAS
 $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($routes) {
     // ROUTES UNTUK ROLES
-    $routes->get('roles', 'Roles::index');     // Menampilkan tabel ini
-    $routes->get('roles/add', 'Roles::add');   // Menampilkan form tambah
-    $routes->post('roles/save', 'Roles::save'); // Proses simpan
-    $routes->delete('roles/(:num)', 'Roles::delete/$1'); // Proses hapus
-    $routes->get('roles/edit/(:num)', 'Roles::edit/$1'); // Menampilkan form edit
-    $routes->put('roles/(:num)', 'Roles::update/$1'); //
+    $routes->get('roles', 'Roles::index');
+    $routes->get('roles/add', 'Roles::add');
+    $routes->post('roles/save', 'Roles::save');
+    $routes->delete('roles/(:num)', 'Roles::delete/$1');
+    $routes->get('roles/edit/(:num)', 'Roles::edit/$1');
+    $routes->put('roles/(:num)', 'Roles::update/$1');
 
     // ROUTES UNTUK USERS
     $routes->get('users', 'Users::index');
@@ -34,12 +34,32 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
 });
 
 
+
+
+// Routes untuk role prodi
+$routes->group('prodi', ['namespace' => 'App\Controllers\Prodi'], function ($routes) {
+    // ROUTES UNTUK MONEV
+    $routes->get('laporan/history', 'Laporan::history');
+    $routes->get('laporan/input', 'Laporan::input');
+    $routes->post('laporan/save', 'Laporan::save');
+    $routes->get('laporan/detail/(:num)', 'Laporan::detail/$1');
+
+
+    // ROUTES UNTUK KINERJA PRODI/UNIT
+
+    $routes->get('kinerja/input', 'KinerjaProdiUnit::index');
+    $routes->post('kinerja/save', 'KinerjaProdiUnit::save');
+});
+
+
+
+// Routes untuk role universitas
 $routes->group('univ', function ($routes) {
     $routes->get('master', 'Univ\Master::index');
 
     // Fitur Fakultas
     $routes->post('master/simpanFakultas', 'Univ\Master::simpanFakultas');
-    $routes->post('master/editFakultas', 'Univ\Master::editFakultas'); 
+    $routes->post('master/editFakultas', 'Univ\Master::editFakultas');
     $routes->get('master/hapusFakultas/(:any)', 'Univ\Master::hapusFakultas/$1');
 
     // Fitur Prodi
@@ -70,4 +90,13 @@ $routes->group('univ', function ($routes) {
     $routes->post('kinerja/simpan', 'Univ\Kinerja::simpan');
     $routes->post('kinerja/edit', 'Univ\Kinerja::edit');
     $routes->get('kinerja/hapus/(:num)', 'Univ\Kinerja::hapus/$1');
+});
+
+
+// Routes untuk role fakultas
+$routes->group('fakultas', function($routes) {
+    $routes->get('dashboard', 'Fakultas\Dashboard::index');
+    $routes->get('laporan/input', 'Fakultas\Laporan::input');
+    $routes->post('laporan/simpan', 'Fakultas\Laporan::simpan');
+    $routes->get('laporan/history', 'Fakultas\Laporan::history');
 });

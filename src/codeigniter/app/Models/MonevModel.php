@@ -10,5 +10,5 @@ class MonevModel extends Model
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
-    protected $allowedFields    = ['nama_monev', 'status'];
+    protected $allowedFields = ['nama_monev', 'status', 'keterangan','fk_setting_periode', 'keterangan'];
 }

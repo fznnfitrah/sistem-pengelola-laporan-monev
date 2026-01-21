@@ -15,21 +15,47 @@
 
         <?php if (session()->get('fk_roles') == 1) : ?>
             <li class="nav-item mt-2">
-                <a href="/admin/roles" class="nav-link <?= (uri_string() == 'admin/roles') ? 'active' : 'text-dark' ?>">
+                <a href="<?= base_url('admin/roles') ?>" class="nav-link <?= (uri_string() == 'admin/roles') ? 'active' : 'text-dark' ?>">
                     <i class="bi bi-person-gear me-2"></i> Kelola Roles
                 </a>
             </li>
             <li class="nav-item mt-2">
-                <a href="/admin/users" class="nav-link <?= (uri_string() == 'admin/users') ? 'active' : 'text-dark' ?>">
+                <a href="<?= base_url('admin/users') ?>" class="nav-link <?= (uri_string() == 'admin/users') ? 'active' : 'text-dark' ?>">
                     <i class="bi bi-person-gear me-2"></i> Kelola User
                 </a>
             </li>
         <?php endif; ?>
 
-        <?php if (session()->get('fk_roles') == 2 || session()->get('fk_roles') == 3) : ?>
-            <li class="nav-item mt-2">
-                <a href="/laporan/input" class="nav-link <?= (uri_string() == 'laporan/input') ? 'active' : 'text-dark' ?>">
+        <?php if (session()->get('fk_roles') == 2) : ?>
+            <li class="nav-item mt-3">
+                <small class="text-uppercase text-muted fw-bold" style="font-size: 0.7rem;">Menu Fakultas</small>
+            </li>
+            <li class="nav-item mt-1">
+                <a href="<?= base_url('fakultas/laporan/input') ?>" class="nav-link <?= (uri_string() == 'fakultas/laporan/input') ? 'active' : 'text-dark' ?>">
                     <i class="bi bi-pencil-square me-2"></i> Input Laporan
+                </a>
+            </li>
+            <li class="nav-item mt-1">
+                <a href="<?= base_url('fakultas/laporan/history') ?>" class="nav-link <?= (uri_string() == 'fakultas/laporan/history') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-clock-history me-2"></i> History Laporan
+                </a>
+            </li>
+        <?php endif; ?>
+
+        <?php if (session()->get('fk_roles') == 3) : ?>
+            <li class="nav-item mt-2">
+                <a href="<?= base_url('prodi/laporan/input') ?>" class="nav-link <?= (uri_string() == 'prodi/laporan/input') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-file-earmark-plus me-2"></i> Input Laporan
+                </a>
+            </li>
+            <li class="nav-item mt-2">
+                <a href="<?= base_url('prodi/laporan/history') ?>" class="nav-link <?= (uri_string() == 'prodi/laporan/history') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-clock-history me-2"></i> History Laporan
+                </a>
+            </li>
+            <li class="nav-item mt-2">
+                <a href="<?= base_url('prodi/kinerja/input') ?>" class="nav-link <?= (uri_string() == 'prodi/kinerja/input') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-speedometer2 me-2"></i> Laporan Kinerja Prodi
                 </a>
             </li>
         <?php endif; ?>
