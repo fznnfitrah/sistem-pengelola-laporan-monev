@@ -12,7 +12,7 @@ class LaporanMonevModel extends Model
     protected $allowedFields    = [
         'fk_prodi',
         'fk_unit',
-        'fk_fakultas', 
+        'fk_fakultas',
         'fk_setting_periode',
         'fk_monev',
         'keterangan',
@@ -22,16 +22,17 @@ class LaporanMonevModel extends Model
 
     protected $useTimestamps = true;
     protected $createdField  = 'create_at';
-    protected $updatedField  = ''; 
+    protected $updatedField  = '';
 
     private function _getBaseQuery()
     {
         // Tambahkan join ke mFakultas agar nama fakultas muncul di detail
-        return $this->select('laporan_monev.*, mMonev.nama_monev, setting_periode.tahun_akademik, setting_periode.semester, mProdi.nama_prodi, mFakultas.nama_fakultas')
+        return $this->select('laporan_monev.*, mMonev.nama_monev, setting_periode.tahun_akademik, setting_periode.semester, mProdi.nama_prodi, mFakultas.nama_fakultas, mUnit.nama_unit')
             ->join('mMonev', 'mMonev.id = laporan_monev.fk_monev')
             ->join('setting_periode', 'setting_periode.id = laporan_monev.fk_setting_periode')
             ->join('mFakultas', 'mFakultas.id = laporan_monev.fk_fakultas', 'left') // Join untuk Fakultas
-            ->join('mProdi', 'mProdi.id = laporan_monev.fk_prodi', 'left');
+            ->join('mProdi', 'mProdi.id = laporan_monev.fk_prodi', 'left')
+            ->join('mUnit', 'mUnit.id = laporan_monev.fk_unit', 'left');
     }
 
     public function getLaporanByProdi($kodeProdi)
@@ -52,12 +53,12 @@ class LaporanMonevModel extends Model
     }
 
     public function getLaporanByUnit($kodeUnit)
-{
-    return $this->_getBaseQuery()
-                ->where('laporan_monev.fk_unit', $kodeUnit) // <--- Filter Unit
-                ->orderBy('laporan_monev.create_at', 'DESC')
-                ->findAll();
-}
+    {
+        return $this->_getBaseQuery()
+            ->where('laporan_monev.fk_unit', $kodeUnit)
+            ->orderBy('laporan_monev.create_at', 'DESC')
+            ->findAll();
+    }
 
     public function getLaporanDetail($id)
     {

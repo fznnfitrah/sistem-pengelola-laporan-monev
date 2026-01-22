@@ -55,10 +55,10 @@ class Laporan extends BaseController
 
         // 3. Jika tidak ada periode sama sekali, tampilkan halaman tutup akses
         if (!$periodeTerpilih) {
-            return view('prodi/laporan/tutup_akses_view', ['title' => 'Belum Ada Periode']);
+            return view('unit/laporan/tutup_akses_view', ['title' => 'Belum Ada Periode']);
         }
 
-        $prodiID = session()->get('fk_prodi');
+        $unitID = session()->get('fk_unit');
 
         // 4. Ambil Daftar Monev sesuai PERIODE YANG DIPILIH
         $daftarMonev = $this->monevModel->where('fk_setting_periode', $periodeTerpilih['id'])
@@ -66,7 +66,7 @@ class Laporan extends BaseController
             ->findAll();
 
         // 5. Ambil Laporan yang SUDAH dikirim di PERIODE YANG DIPILIH
-        $laporanSudahMasuk = $this->laporanMonevModel->where('fk_prodi', $prodiID)
+        $laporanSudahMasuk = $this->laporanMonevModel->where('fk_unit', $unitID)
             ->where('fk_setting_periode', $periodeTerpilih['id'])
             ->findAll();
 
@@ -80,7 +80,7 @@ class Laporan extends BaseController
             'semua_periode'   => $semuaPeriode,
             'periode_pilih'   => $periodeTerpilih,
             'daftar_monev'    => $daftarMonev,
-            'laporan_prodi'   => $laporanMapped,
+            'laporan_unit'   => $laporanMapped,
             'validation'      => \Config\Services::validation()
         ];
 
@@ -116,29 +116,4 @@ class Laporan extends BaseController
             ->with('message', 'Laporan berhasil dikirim!');
     }
 
-    // MENU 3: HALAMAN DETAIL
-    // public function detail($id = null)
-    // {
-    //     // Panggil fungsi model yang baru dibuat
-    //     $laporan = $this->laporanMonevModel->getLaporanDetail($id);
-
-    //     // Cek jika data tidak ditemukan (misal ID asal-asalan)
-    //     if (!$laporan) {
-    //         return redirect()->to('prodi/laporan/history')->with('error', 'Data laporan tidak ditemukan.');
-    //     }
-
-    //     $currentProdiID = session()->get('fk_prodi');
-
-
-    //     if ($laporan['fk_prodi'] != $currentProdiID) {
-    //         return redirect()->to('prodi/laporan/history')->with('error', 'Anda tidak memiliki akses ke laporan ini.');
-    //     }
-
-    //     $data = [
-    //         'title'   => 'Detail Laporan Monev',
-    //         'laporan' => $laporan
-    //     ];
-
-    //     return view('prodi/laporan/detail_lmonev_view', $data);
-    // }
 }

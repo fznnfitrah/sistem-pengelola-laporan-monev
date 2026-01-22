@@ -12,7 +12,6 @@ $routes->post('auth/login', 'Auth::login');
 $routes->get('auth/logout', 'Auth::logout');
 $routes->get('auth/switch/(:num)', 'Auth::switch/$1');
 
-// app/admin/roles
 
 // Routes untuk role UNIVERSITAS
 $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($routes) {
@@ -42,14 +41,13 @@ $routes->group('prodi', ['namespace' => 'App\Controllers\Prodi'], function ($rou
     $routes->get('laporan/history', 'Laporan::history');
     $routes->get('laporan/input', 'Laporan::input');
     $routes->post('laporan/save', 'Laporan::save');
-    // $routes->get('laporan/detail/(:num)', 'Laporan::detail/$1');
 
-
-    // ROUTES UNTUK KINERJA PRODI/UNIT
+    // ROUTES UNTUK KINERJA PRODI
     $routes->get('kinerja/input', 'KinerjaProdiUnit::index');
     $routes->post('kinerja/save', 'KinerjaProdiUnit::save');
 });
 
+// Routes untuk role unit
 $routes->group('unit', ['namespace' => 'App\Controllers\Unit'], function ($routes) {
 
     // Laporan Monev

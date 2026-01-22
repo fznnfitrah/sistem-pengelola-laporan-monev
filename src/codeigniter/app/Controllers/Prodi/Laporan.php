@@ -29,7 +29,6 @@ class Laporan extends BaseController
 
         $data = [
             'title'   => 'Riwayat Laporan Monev Prodi',
-            // Memanggil fungsi dari model yang kamu kirim
             'laporan' => $this->laporanMonevModel->getLaporanByProdi($kodeProdi)
         ];
 
@@ -112,35 +111,8 @@ class Laporan extends BaseController
             'keterangan'         => $this->request->getPost('keterangan'),
         ]);
 
-        // Redirect kembali ke halaman input DENGAN MEMBAWA ID PERIODE
-        // Agar user tidak 'terlempar' kembali ke periode default setelah simpan
         return redirect()->to("prodi/laporan/input?periode=$periodeID")
             ->with('message', 'Laporan berhasil dikirim!');
     }
 
-    // MENU 3: HALAMAN DETAIL
-    public function detail($id = null)
-    {
-        // Panggil fungsi model yang baru dibuat
-        $laporan = $this->laporanMonevModel->getLaporanDetail($id);
-
-        // Cek jika data tidak ditemukan (misal ID asal-asalan)
-        if (!$laporan) {
-            return redirect()->to('prodi/laporan/history')->with('error', 'Data laporan tidak ditemukan.');
-        }
-
-        $currentProdiID = session()->get('fk_prodi');
-
-
-        if ($laporan['fk_prodi'] != $currentProdiID) {
-            return redirect()->to('prodi/laporan/history')->with('error', 'Anda tidak memiliki akses ke laporan ini.');
-        }
-
-        $data = [
-            'title'   => 'Detail Laporan Monev',
-            'laporan' => $laporan
-        ];
-
-        return view('prodi/laporan/detail_lmonev_view', $data);
-    }
 }
