@@ -28,13 +28,13 @@ class Laporan extends BaseController
         }
 
         $data = [
-            'title'   => 'Riwayat Laporan Monev',
+            'title'   => 'Riwayat Laporan Monev Prodi',
+            // Memanggil fungsi dari model yang kamu kirim
             'laporan' => $this->laporanMonevModel->getLaporanByProdi($kodeProdi)
         ];
 
         return view('prodi/laporan/history_lmonev_view', $data);
     }
-
     public function input()
     {
         // 1. Ambil Semua Periode 

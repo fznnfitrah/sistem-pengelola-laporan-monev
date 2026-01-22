@@ -69,6 +69,7 @@ class Auth extends BaseController
             // SIMPAN APA ADANYA (String "infor1", "teknik1", dll)
             'fk_prodi'        => $user['fk_prodi'],
             'fk_unit'         => $user['fk_unit'],
+            'fk_fakultas'     => $user['fk_fakultas'],
 
             'available_roles' => $allRoles
         ]);

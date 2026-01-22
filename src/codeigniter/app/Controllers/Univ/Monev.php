@@ -19,7 +19,7 @@ class Monev extends BaseController
 
     public function index()
     {
-        // Kita join dengan tabel periode agar bisa menampilkan Tahun/Semester di tabel
+        // Gabungkan tabel mMonev dengan setting_periode untuk mendapatkan teks Tahun & Semester
         $db = \Config\Database::connect();
         $builder = $db->table('mMonev');
         $builder->select('mMonev.*, setting_periode.tahun_akademik, setting_periode.semester');
@@ -30,39 +30,37 @@ class Monev extends BaseController
             'title'    => 'Master Item Monev',
             'username' => session()->get('username'),
             'monev'    => $query->getResultArray(),
-            'periode'  => $this->periodeModel->findAll() // Untuk dropdown di modal
-        $data = [
-            'title'    => 'Master Item Monev',
-            'username' => session()->get('username'),
-            'monev'    => $this->monevModel->findAll()
+            'periode'  => $this->periodeModel->findAll() // Data untuk dropdown di modal tambah/edit
         ];
+
         return view('univ/monev/index', $data);
     }
 
     public function simpan()
     {
+        // Simpan data sesuai dengan kolom yang ada di database
         $this->monevModel->insert([
             'fk_setting_periode' => $this->request->getPost('fk_setting_periode'),
             'nama_monev'         => $this->request->getPost('nama_monev'),
             'keterangan'         => $this->request->getPost('keterangan'),
-            'status'             => 1
-            'nama_monev' => $this->request->getPost('nama_monev'),
-            'status'     => 1 // Default aktif
+            'status'             => 1 // Default langsung aktif
         ]);
+
         return redirect()->back()->with('success', 'Item Monev berhasil ditambahkan!');
     }
 
     public function edit()
     {
         $id = $this->request->getPost('id');
+        
+        // Update data berdasarkan ID yang dikirim dari form
         $this->monevModel->update($id, [
             'fk_setting_periode' => $this->request->getPost('fk_setting_periode'),
             'nama_monev'         => $this->request->getPost('nama_monev'),
             'keterangan'         => $this->request->getPost('keterangan'),
             'status'             => $this->request->getPost('status')
-            'nama_monev' => $this->request->getPost('nama_monev'),
-            'status'     => $this->request->getPost('status')
         ]);
+
         return redirect()->back()->with('success', 'Item Monev berhasil diperbarui!');
     }
 
