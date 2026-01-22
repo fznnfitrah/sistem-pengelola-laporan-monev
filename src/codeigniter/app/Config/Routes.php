@@ -101,6 +101,9 @@ $routes->group('univ', function ($routes) {
     $routes->post('kinerja/simpan', 'Univ\Kinerja::simpan');
     $routes->post('kinerja/edit', 'Univ\Kinerja::edit');
     $routes->get('kinerja/hapus/(:num)', 'Univ\Kinerja::hapus/$1');
+
+    // Fitur Monitoring Laporan
+    $routes->get('monitoring', 'Univ\Monitoring::index');
 });
 
 
