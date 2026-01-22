@@ -42,11 +42,22 @@ $routes->group('prodi', ['namespace' => 'App\Controllers\Prodi'], function ($rou
     $routes->get('laporan/history', 'Laporan::history');
     $routes->get('laporan/input', 'Laporan::input');
     $routes->post('laporan/save', 'Laporan::save');
-    $routes->get('laporan/detail/(:num)', 'Laporan::detail/$1');
+    // $routes->get('laporan/detail/(:num)', 'Laporan::detail/$1');
 
 
     // ROUTES UNTUK KINERJA PRODI/UNIT
+    $routes->get('kinerja/input', 'KinerjaProdiUnit::index');
+    $routes->post('kinerja/save', 'KinerjaProdiUnit::save');
+});
 
+$routes->group('unit', ['namespace' => 'App\Controllers\Unit'], function ($routes) {
+
+    // Laporan Monev
+    $routes->get('laporan/input', 'Laporan::input');
+    $routes->post('laporan/save', 'Laporan::save');
+    $routes->get('laporan/history', 'Laporan::history');
+
+    // Kinerja
     $routes->get('kinerja/input', 'KinerjaProdiUnit::index');
     $routes->post('kinerja/save', 'KinerjaProdiUnit::save');
 });
@@ -94,7 +105,7 @@ $routes->group('univ', function ($routes) {
 
 
 // Routes untuk role fakultas
-$routes->group('fakultas', function($routes) {
+$routes->group('fakultas', function ($routes) {
     $routes->get('dashboard', 'Fakultas\Dashboard::index');
     $routes->get('laporan/input', 'Fakultas\Laporan::input');
     $routes->post('laporan/simpan', 'Fakultas\Laporan::simpan');

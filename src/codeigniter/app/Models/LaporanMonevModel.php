@@ -12,7 +12,7 @@ class LaporanMonevModel extends Model
     protected $allowedFields    = [
         'fk_prodi',
         'fk_unit',
-        'fk_fakultas', // Tambahkan ini agar role fakultas bisa simpan
+        'fk_fakultas', 
         'fk_setting_periode',
         'fk_monev',
         'keterangan',
@@ -50,6 +50,14 @@ class LaporanMonevModel extends Model
             ->orderBy('laporan_monev.create_at', 'DESC')
             ->findAll();
     }
+
+    public function getLaporanByUnit($kodeUnit)
+{
+    return $this->_getBaseQuery()
+                ->where('laporan_monev.fk_unit', $kodeUnit) // <--- Filter Unit
+                ->orderBy('laporan_monev.create_at', 'DESC')
+                ->findAll();
+}
 
     public function getLaporanDetail($id)
     {
