@@ -91,7 +91,15 @@
 
                                 <div class="mb-3">
                                     <label class="form-label">Kode Unit</label>
-                                    <input type="text" name="fk_unit" class="form-control" value="<?= old('fk_unit', $user['fk_unit']) ?>">
+                                    <select name="fk_unit" class="form-select">
+                                        <option value="">-- Bukan User Unit --</option>
+                                        <?php foreach ($data_unit as $unit) : ?>
+                                            <option value="<?= $unit['id'] ?>"
+                                                <?= (old('fk_unit', $user['fk_unit']) == $unit['id']) ? 'selected' : '' ?>>
+                                                <?= $unit['id'] ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
                             </div>
                         </div>

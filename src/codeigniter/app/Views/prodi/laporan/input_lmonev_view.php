@@ -2,129 +2,115 @@
 
 <?= $this->section('content') ?>
 <div class="container-fluid py-4">
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white border-bottom p-3">
-                    <div class="row align-items-center">
-                        <div class="col-md-6">
-                            <h5 class="mb-0 text-primary">Tagihan Laporan Monev</h5>
-                            <small class="text-muted">Silakan pilih periode laporan yang ingin diisi/lihat.</small>
-                        </div>
+    <div class="card shadow-sm border-0 mb-4" style="border-radius: 15px;">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="fw-bold text-success mb-0">Tagihan Laporan Monev Prodi</h5>
+                <p class="text-muted small mb-0">Silakan pilih periode untuk mengisi atau memperbarui laporan.</p>
+            </div>
+            <form action="" method="get" class="d-flex gap-2">
+                <select name="periode" class="form-select border-2" style="width: 280px; border-radius: 10px;">
+                    <?php foreach ($semua_periode as $p) : ?>
+                        <option value="<?= $p['id'] ?>" <?= ($p['id'] == $periode_pilih['id']) ? 'selected' : '' ?>>
+                            <?= esc($p['tahun_akademik']) ?> - <?= esc($p['semester']) ?> 
+                            <?= ($p['status_aktif'] == 1) ? '(Aktif)' : '' ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <button type="submit" class="btn btn-success px-4" style="border-radius: 10px;">Pilih</button>
+            </form>
+        </div>
+    </div>
 
-                        <div class="col-md-6">
-                            <form action="" method="get">
-                                <div class="input-group">
-                                    <label class="input-group-text bg-light fw-bold">Periode:</label>
-                                    <select name="periode" class="form-select" onchange="this.form.submit()">
-                                        <?php foreach ($semua_periode as $p) : ?>
-                                            <option value="<?= $p['id'] ?>"
-                                                <?= ($p['id'] == $periode_pilih['id']) ? 'selected' : '' ?>>
+    <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th width="5%" class="ps-4 text-center">No</th>
+                            <th width="35%">Item Monev</th>
+                            <th>Form Pengisian / Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($daftar_monev)) : ?>
+                            <tr>
+                                <td colspan="3" class="text-center py-5 text-muted fst-italic">
+                                    Belum ada item tagihan untuk periode ini.
+                                </td>
+                            </tr>
+                        <?php endif; ?>
 
-                                                <?= esc($p['tahun_akademik']) ?> <?= esc($p['semester']) ?>
+                        <?php $no = 1; foreach ($daftar_monev as $item) : ?>
+                            <?php
+                            $sudahLapor = array_key_exists($item['id'], $laporan_prodi);
+                            $dataLaporan = $sudahLapor ? $laporan_prodi[$item['id']] : null;
+                            ?>
+                            <tr>
+                                <td class="ps-4 text-center"><?= $no++ ?></td>
+                                <td>
+                                    <p class="fw-bold mb-1 text-dark"><?= esc($item['nama_monev']) ?></p>
+                                    <small class="text-muted italic"><?= esc($item['keterangan']) ?></small>
+                                </td>
+                                <td>
+                                    <?php if ($sudahLapor) : ?>
+                                        <div class="p-3 bg-light rounded-3 border-start border-success border-4 shadow-sm">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <span class="badge bg-success mb-2"><i class="bi bi-check-circle me-1"></i> Sudah Dikirim</span><br>
+                                                    <a href="<?= esc($dataLaporan['link_bukti']) ?>" target="_blank" class="small text-decoration-none text-success fw-bold">
+                                                        <i class="bi bi-link-45deg"></i> Lihat Dokumen Saat Ini
+                                                    </a>
+                                                </div>
+                                                <button class="btn btn-sm btn-outline-success border-0" type="button" data-bs-toggle="collapse" data-bs-target="#editForm<?= $item['id'] ?>">
+                                                    <i class="bi bi-pencil-square"></i> Edit
+                                                </button>
+                                            </div>
+                                            <p class="small text-muted mb-0 mt-1 italic">"<?= esc($dataLaporan['keterangan']) ?>"</p>
+                                        </div>
 
-                                                <?= ($p['status_aktif'] == 1) ? '(Aktif Sekarang)' : '' ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <button class="btn btn-primary" type="submit">Pilih</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                                        <div class="collapse mt-2" id="editForm<?= $item['id'] ?>">
+                                            <form action="<?= base_url('prodi/laporan/save') ?>" method="post" class="row g-2 p-2 border rounded bg-white">
+                                                <?= csrf_field() ?>
+                                                <input type="hidden" name="fk_monev" value="<?= $item['id'] ?>">
+                                                <input type="hidden" name="fk_setting_periode" value="<?= $periode_pilih['id'] ?>">
+                                                <div class="col-md-5">
+                                                    <input type="url" name="link_bukti" class="form-control form-control-sm border-2" value="<?= esc($dataLaporan['link_bukti']) ?>" required>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input type="text" name="keterangan" class="form-control form-control-sm border-2" value="<?= esc($dataLaporan['keterangan']) ?>">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <button type="submit" class="btn btn-success btn-sm w-100 shadow-sm"><i class="bi bi-arrow-repeat me-1"></i> Perbarui</button>
+                                                </div>
+                                            </form>
+                                        </div>
 
-                <div class="card-body">
-                    <?php if (session()->getFlashdata('errors')) : ?>
-                        <div class="alert alert-danger">
-                            Gagal menyimpan data. Pastikan format link benar dan kolom terisi.
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if (session()->getFlashdata('message')) : ?>
-                        <div class="alert alert-success">
-                            <?= session()->getFlashdata('message') ?>
-                        </div>
-                    <?php endif; ?>
-
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover align-middle">
-                            <thead class="table-light">
-                                <tr class="text-center">
-                                    <th style="width: 5%">No</th>
-                                    <th style="width: 25%">Item Monev</th>
-                                    <th>Form Pengisian / Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (empty($daftar_monev)) : ?>
-                                    <tr>
-                                        <td colspan="3" class="text-center text-muted py-4">
-                                            Tidak ada item monev yang perlu dilaporkan pada periode ini.
-                                        </td>
-                                    </tr>
-                                <?php else : ?>
-                                    <?php $i = 1;
-                                    foreach ($daftar_monev as $item) : ?>
-                                        <?php
-                                        // Cek apakah item ini sudah dilaporkan?
-                                        $sudahLapor = array_key_exists($item['id'], $laporan_prodi);
-                                        $dataLaporan = $sudahLapor ? $laporan_prodi[$item['id']] : null;
-                                        ?>
-                                        <tr>
-                                            <td class="text-center"><?= $i++ ?></td>
-                                            <td>
-                                                <strong><?= esc($item['nama_monev']) ?></strong>
-                                                <?php if ($item['keterangan']): ?>
-                                                    <br><small class="text-muted"><?= esc($item['keterangan']) ?></small>
-                                                <?php endif; ?>
-                                            </td>
-
-                                            <td class="bg-light">
-                                                <?php if ($sudahLapor) : ?>
-                                                    <div class="p-2">
-                                                        <span class="badge bg-success mb-2"><i class="bi bi-check-circle"></i> Sudah Dikirim</span>
-                                                        <br>
-                                                        <small class="text-muted">Link Bukti:</small><br>
-                                                        <a href="<?= esc($dataLaporan['link_bukti']) ?>" target="_blank" class="text-decoration-none">
-                                                            <i class="bi bi-link-45deg"></i> Lihat Dokumen
-                                                        </a>
-                                                        <hr class="my-1">
-                                                        <small class="text-muted">Catatan:</small>
-                                                        <p class="mb-0 text-sm fst-italic">"<?= esc($dataLaporan['keterangan']) ?>"</p>
-                                                    </div>
-
-                                                <?php else : ?>
-                                                    <form action="<?= base_url('prodi/laporan/save') ?>" method="post">
-                                                        <?= csrf_field() ?>
-                                                        <input type="hidden" name="fk_monev" value="<?= $item['id'] ?>">
-                                                        <input type="hidden" name="fk_setting_periode" value="<?= $periode_pilih['id'] ?>">
-
-                                                        <div class="row g-2">
-                                                            <div class="col-md-5">
-                                                                <input type="url" name="link_bukti" class="form-control form-control-sm"
-                                                                    placeholder="Link Google Drive/Dokumen..." required>
-                                                            </div>
-                                                            <div class="col-md-5">
-                                                                <input type="text" name="keterangan" class="form-control form-control-sm"
-                                                                    placeholder="Keterangan singkat..." required>
-                                                            </div>
-                                                            <div class="col-md-2">
-                                                                <button type="submit" class="btn btn-primary btn-sm w-100">
-                                                                    <i class="bi bi-send"></i> Simpan
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                <?php endif; ?>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                                    <?php else : ?>
+                                        <form action="<?= base_url('prodi/laporan/save') ?>" method="post" class="row g-2 p-1">
+                                            <?= csrf_field() ?>
+                                            <input type="hidden" name="fk_monev" value="<?= $item['id'] ?>">
+                                            <input type="hidden" name="fk_setting_periode" value="<?= $periode_pilih['id'] ?>">
+                                            
+                                            <div class="col-md-5">
+                                                <input type="url" name="link_bukti" class="form-control form-control-sm border-2" placeholder="Link G-Drive/Dokumen..." required style="border-radius: 8px;">
+                                            </div>
+                                            <div class="col-md-5">
+                                                <input type="text" name="keterangan" class="form-control form-control-sm border-2" placeholder="Keterangan singkat..." required style="border-radius: 8px;">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button type="submit" class="btn btn-success btn-sm w-100 shadow-sm" style="border-radius: 8px;">
+                                                    <i class="bi bi-send me-1"></i> Simpan
+                                                </button>
+                                            </div>
+                                        </form>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

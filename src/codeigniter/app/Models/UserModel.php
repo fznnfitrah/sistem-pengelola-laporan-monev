@@ -27,7 +27,6 @@ class UserModel extends Model
     protected $useTimestamps = true;
     protected $createdField  = 'create_at';
 
-    // Perhatikan: Biasanya ada updatedField untuk mencatat kapan data diedit
     protected $updatedField  = '';
 
     protected $deletedField  = 'delete_at';

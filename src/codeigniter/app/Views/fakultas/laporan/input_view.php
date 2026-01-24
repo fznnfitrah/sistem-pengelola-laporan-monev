@@ -42,20 +42,42 @@
                             </td>
                             <td>
                                 <?php if(isset($laporan[$row['id']])): ?>
-                                    <div class="p-3 bg-light rounded-3 border-start border-success border-4">
-                                        <span class="badge bg-success mb-2"><i class="bi bi-check-circle me-1"></i> Sudah Dikirim</span><br>
-                                        <a href="<?= $laporan[$row['id']]['link_bukti'] ?>" target="_blank" class="small text-decoration-none text-success fw-bold">
-                                            <i class="bi bi-link-45deg"></i> Lihat Dokumen
-                                        </a>
+                                    <div class="p-3 bg-light rounded-3 border-start border-success border-4 shadow-sm mb-2">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <span class="badge bg-success mb-2"><i class="bi bi-check-circle me-1"></i> Sudah Dikirim</span><br>
+                                                <a href="<?= $laporan[$row['id']]['link_bukti'] ?>" target="_blank" class="small text-decoration-none text-success fw-bold">
+                                                    <i class="bi bi-link-45deg"></i> Lihat Link Saat Ini
+                                                </a>
+                                            </div>
+                                            <button class="btn btn-sm btn-outline-success border-0" type="button" data-bs-toggle="collapse" data-bs-target="#editForm<?= $row['id'] ?>">
+                                                <i class="bi bi-pencil-square"></i> Edit
+                                            </button>
+                                        </div>
                                         <p class="small text-muted mb-0 mt-1 italic">"<?= $laporan[$row['id']]['keterangan'] ?>"</p>
+                                    </div>
+
+                                    <div class="collapse mt-2" id="editForm<?= $row['id'] ?>">
+                                        <form action="<?= base_url('fakultas/laporan/simpan') ?>" method="post" class="row g-2 p-2 border rounded">
+                                            <input type="hidden" name="fk_setting_periode" value="<?= $selectedPeriode ?>">
+                                            <input type="hidden" name="fk_monev" value="<?= $row['id'] ?>">
+                                            <div class="col-md-5">
+                                                <input type="url" name="link_bukti" class="form-control form-control-sm" value="<?= $laporan[$row['id']]['link_bukti'] ?>" required>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="text" name="keterangan" class="form-control form-control-sm" value="<?= $laporan[$row['id']]['keterangan'] ?>">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button type="submit" class="btn btn-success btn-sm w-100"><i class="bi bi-arrow-repeat me-1"></i> Update</button>
+                                            </div>
+                                        </form>
                                     </div>
                                 <?php else: ?>
                                     <form action="<?= base_url('fakultas/laporan/simpan') ?>" method="post" class="row g-2">
-                                        <?= csrf_field() ?>
                                         <input type="hidden" name="fk_setting_periode" value="<?= $selectedPeriode ?>">
                                         <input type="hidden" name="fk_monev" value="<?= $row['id'] ?>">
                                         <div class="col-md-5">
-                                            <input type="url" name="link_bukti" class="form-control form-control-sm" placeholder="Link Bukti (GDrive/Lainnya)" required>
+                                            <input type="url" name="link_bukti" class="form-control form-control-sm" placeholder="Inputkan link yang benar..." required>
                                         </div>
                                         <div class="col-md-5">
                                             <input type="text" name="keterangan" class="form-control form-control-sm" placeholder="Catatan singkat...">

@@ -60,18 +60,46 @@ class Laporan extends BaseController
 
     public function simpan()
     {
-        // Ambil ID User dari session sesuai Auth.php kamu
-        $userId = session()->get('current_user_id');
+        // 1. Ambil data dari session
+        $idFakultas = session()->get('fk_fakultas');
+        
+        // Validasi sederhana: Jika session hilang/habis, jangan ijinkan simpan
+        if (!$idFakultas) {
+            return redirect()->back()->with('error', 'Sesi Anda habis atau ID Fakultas tidak ditemukan. Silakan login kembali.');
+        }
 
-        $this->laporanModel->insert([
-            'fk_fakultas'        => session()->get('fk_fakultas'),
-            'fk_setting_periode' => $this->request->getPost('fk_setting_periode'),
-            'fk_monev'           => $this->request->getPost('fk_monev'),
+        $fk_periode = $this->request->getPost('fk_setting_periode');
+        $fk_monev   = $this->request->getPost('fk_monev');
+
+        // 2. Cek apakah sudah ada laporan sebelumnya (logika Upsert/Update)
+        $cekLaporan = $this->laporanModel->where([
+            'fk_fakultas'        => $idFakultas,
+            'fk_setting_periode' => $fk_periode,
+            'fk_monev'           => $fk_monev,
+            'fk_prodi'           => null // Penting: Memastikan ini laporan level fakultas
+        ])->first();
+
+        $dataStore = [
+            'fk_fakultas'        => $idFakultas,
+            'fk_setting_periode' => $fk_periode,
+            'fk_monev'           => $fk_monev,
             'link_bukti'         => $this->request->getPost('link_bukti'),
             'keterangan'         => $this->request->getPost('keterangan'),
-        ]);
+            'fk_prodi'           => null, // Paksa NULL agar tidak dianggap laporan Prodi
+            'fk_unit'            => null
+        ];
 
-        return redirect()->back()->with('success', 'Laporan berhasil disimpan!');
+        if ($cekLaporan) {
+            // Update jika sudah ada
+            $this->laporanModel->update($cekLaporan['id'], $dataStore);
+            $pesan = 'Laporan berhasil diperbarui!';
+        } else {
+            // Simpan baru jika belum ada
+            $this->laporanModel->insert($dataStore);
+            $pesan = 'Laporan berhasil disimpan!';
+        }
+
+        return redirect()->back()->with('success', $pesan);
     }
 
     public function history()

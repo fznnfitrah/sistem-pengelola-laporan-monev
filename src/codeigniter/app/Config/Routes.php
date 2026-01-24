@@ -12,7 +12,6 @@ $routes->post('auth/login', 'Auth::login');
 $routes->get('auth/logout', 'Auth::logout');
 $routes->get('auth/switch/(:num)', 'Auth::switch/$1');
 
-// app/admin/roles
 
 // Routes untuk role UNIVERSITAS
 $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($routes) {
@@ -42,11 +41,21 @@ $routes->group('prodi', ['namespace' => 'App\Controllers\Prodi'], function ($rou
     $routes->get('laporan/history', 'Laporan::history');
     $routes->get('laporan/input', 'Laporan::input');
     $routes->post('laporan/save', 'Laporan::save');
-    $routes->get('laporan/detail/(:num)', 'Laporan::detail/$1');
 
+    // ROUTES UNTUK KINERJA PRODI
+    $routes->get('kinerja/input', 'KinerjaProdiUnit::index');
+    $routes->post('kinerja/save', 'KinerjaProdiUnit::save');
+});
 
-    // ROUTES UNTUK KINERJA PRODI/UNIT
+// Routes untuk role unit
+$routes->group('unit', ['namespace' => 'App\Controllers\Unit'], function ($routes) {
 
+    // Laporan Monev
+    $routes->get('laporan/input', 'Laporan::input');
+    $routes->post('laporan/save', 'Laporan::save');
+    $routes->get('laporan/history', 'Laporan::history');
+
+    // Kinerja
     $routes->get('kinerja/input', 'KinerjaProdiUnit::index');
     $routes->post('kinerja/save', 'KinerjaProdiUnit::save');
 });
@@ -90,11 +99,14 @@ $routes->group('univ', function ($routes) {
     $routes->post('kinerja/simpan', 'Univ\Kinerja::simpan');
     $routes->post('kinerja/edit', 'Univ\Kinerja::edit');
     $routes->get('kinerja/hapus/(:num)', 'Univ\Kinerja::hapus/$1');
+
+    // Fitur Monitoring Laporan
+    $routes->get('monitoring', 'Univ\Monitoring::index');
 });
 
 
 // Routes untuk role fakultas
-$routes->group('fakultas', function($routes) {
+$routes->group('fakultas', function ($routes) {
     $routes->get('dashboard', 'Fakultas\Dashboard::index');
     $routes->get('laporan/input', 'Fakultas\Laporan::input');
     $routes->post('laporan/simpan', 'Fakultas\Laporan::simpan');

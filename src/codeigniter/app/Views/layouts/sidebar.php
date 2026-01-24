@@ -43,6 +43,9 @@
         <?php endif; ?>
 
         <?php if (session()->get('fk_roles') == 3) : ?>
+            <li class="nav-item mt-3">
+                <small class="text-uppercase text-muted fw-bold" style="font-size: 0.7rem;">Menu Program Studi</small>
+            </li>
             <li class="nav-item mt-2">
                 <a href="<?= base_url('prodi/laporan/input') ?>" class="nav-link <?= (uri_string() == 'prodi/laporan/input') ? 'active' : 'text-dark' ?>">
                     <i class="bi bi-file-earmark-plus me-2"></i> Input Laporan
@@ -56,6 +59,27 @@
             <li class="nav-item mt-2">
                 <a href="<?= base_url('prodi/kinerja/input') ?>" class="nav-link <?= (uri_string() == 'prodi/kinerja/input') ? 'active' : 'text-dark' ?>">
                     <i class="bi bi-speedometer2 me-2"></i> Laporan Kinerja Prodi
+                </a>
+            </li>
+        <?php endif; ?>
+
+        <?php if (session()->get('fk_roles') == 4) : ?>
+            <li class="nav-item mt-3">
+                <small class="text-uppercase text-muted fw-bold" style="font-size: 0.7rem;">Menu Unit</small>
+            </li>
+            <li class="nav-item mt-2">
+                <a href="<?= base_url('unit/laporan/input') ?>" class="nav-link <?= (uri_string() == 'unit/laporan/input') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-file-earmark-plus me-2"></i> Input Laporan
+                </a>
+            </li>
+            <li class="nav-item mt-2">
+                <a href="<?= base_url('unit/laporan/history') ?>" class="nav-link <?= (uri_string() == 'unit/laporan/history') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-clock-history me-2"></i> History Laporan
+                </a>
+            </li>
+            <li class="nav-item mt-2">
+                <a href="<?= base_url('unit/kinerja/input') ?>" class="nav-link <?= (uri_string() == 'unit/kinerja/input') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-speedometer2 me-2"></i> Laporan Kinerja Unit
                 </a>
             </li>
         <?php endif; ?>
