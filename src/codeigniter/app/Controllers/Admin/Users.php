@@ -8,6 +8,7 @@ use App\Models\UserModel;
 use App\Models\RoleModel;
 use App\Models\FakultasModel;
 use App\Models\ProdiModel;
+use App\Models\UnitModel;
 
 class Users extends BaseController
 {
@@ -15,6 +16,7 @@ class Users extends BaseController
     protected $roleModel;
     protected $fakultasModel;
     protected $prodiModel;
+    protected $unitModel;
 
     public function __construct()
     {
@@ -22,6 +24,7 @@ class Users extends BaseController
         $this->roleModel = new RoleModel();
         $this->fakultasModel = new FakultasModel();
         $this->prodiModel = new ProdiModel();
+        $this->unitModel = new UnitModel();
     }
 
     public function index()
@@ -42,6 +45,7 @@ class Users extends BaseController
 
             'data_fakultas' => $this->fakultasModel->findAll(),
             'data_prodi'    => $this->prodiModel->findAll(),
+            'data_unit'     => $this->unitModel->findAll(),
 
             'validation' => \Config\Services::validation()
         ];
@@ -58,8 +62,8 @@ class Users extends BaseController
                 'errors' => ['is_unique' => 'Username sudah terdaftar.']
             ],
             'email' => [
-                'rules' => 'permit_empty|valid_email|is_unique[user.email]',
-                'errors' => ['is_unique' => 'Email sudah terdaftar.']
+                'rules' => "permit_empty|valid_email",
+                'errors' => ['valid_email' => 'Format email tidak valid.']
             ],
             'password' => 'required|min_length[6]',
             'fk_roles' => 'required',
@@ -79,7 +83,7 @@ class Users extends BaseController
         $this->userModel->save([
             'username' => $this->request->getPost('username'),
             'email'    => $this->request->getPost('email'),
-            'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
+            'password' => $this->request->getPost('password'),
             'fk_roles' => $this->request->getPost('fk_roles'),
 
             // Logic konversi String Kosong "" menjadi NULL
@@ -122,6 +126,7 @@ class Users extends BaseController
 
             'data_fakultas' => $this->fakultasModel->findAll(),
             'data_prodi'    => $this->prodiModel->findAll(),
+            'data_unit'     => $this->unitModel->findAll(),
 
             'validation' => \Config\Services::validation()
         ];
@@ -139,8 +144,8 @@ class Users extends BaseController
                 'errors' => ['is_unique' => 'Username sudah digunakan user lain.']
             ],
             'email' => [
-                'rules' => "permit_empty|valid_email|is_unique[user.email,id,{$id}]",
-                'errors' => ['is_unique' => 'Email sudah digunakan user lain.']
+                'rules' => "permit_empty|valid_email",
+                'errors' => ['valid_email' => 'Format email tidak valid.']
             ],
             // Password tidak wajib diisi saat edit (permit_empty)
             'password' => 'permit_empty|min_length[6]',

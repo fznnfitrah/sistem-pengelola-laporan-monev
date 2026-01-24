@@ -86,8 +86,14 @@
 
                                 <div class="mb-3">
                                     <label class="form-label">Kode Unit (FK Unit)</label>
-                                    <input type="text" name="fk_unit" class="form-control" value="<?= old('fk_unit') ?>" placeholder="cth: LPPM">
-                                    <small class="text-muted">*Kosongkan jika bukan user unit</small>
+                                    <select name="fk_unit" class="form-select">
+                                        <option value="" selected>-- Tidak Ada / Bukan Unit --</option>
+                                        <?php foreach ($data_unit as $unit) : ?>
+                                            <option value="<?= $unit['id'] ?>" <?= (old('fk_unit') == $unit['id']) ? 'selected' : '' ?>>
+                                                <?= $unit['id'] ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
                             </div>
                         </div>
