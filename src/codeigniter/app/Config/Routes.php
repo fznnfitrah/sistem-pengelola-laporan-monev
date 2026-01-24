@@ -13,6 +13,14 @@ $routes->get('auth/logout', 'Auth::logout');
 $routes->get('auth/switch/(:num)', 'Auth::switch/$1');
 
 
+// Routes untuk profil user
+$routes->group('profile', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'Profile::index');
+    $routes->get('edit', 'Profile::edit');
+    $routes->post('update', 'Profile::update');
+});
+
+
 // Routes untuk role UNIVERSITAS
 $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($routes) {
     // ROUTES UNTUK ROLES
