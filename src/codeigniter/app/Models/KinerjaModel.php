@@ -6,14 +6,18 @@ use CodeIgniter\Model;
 
 class KinerjaModel extends Model
 {
-    protected $table            = 'mKinerja'; // Sesuai nama tabel di database
+    protected $table            = 'mKinerja';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
-    protected $allowedFields    = ['nama_kinerja', 'jenis', 'satuan']; // Kolom sesuai gambar
+    // Tambahkan field standar_nilai dan status sesuai gambar DB
+    protected $allowedFields    = ['nama_kinerja', 'jenis', 'satuan', 'standar_nilai', 'status'];
 
     public function getKinerjaByJenis($jenis)
     {
-        return $this->where('jenis', $jenis)->findAll();
+        // Hanya ambil indikator yang statusnya Aktif (1)
+        return $this->where('jenis', $jenis)
+                    ->where('status', 1)
+                    ->findAll();
     } 
 }

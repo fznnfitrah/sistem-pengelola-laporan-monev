@@ -119,4 +119,5 @@ $routes->group('fakultas', function ($routes) {
     $routes->get('laporan/input', 'Fakultas\Laporan::input');
     $routes->post('laporan/simpan', 'Fakultas\Laporan::simpan');
     $routes->get('laporan/history', 'Fakultas\Laporan::history');
+    $routes->get('monitoring', 'Fakultas\Monitoring::index');
 });
