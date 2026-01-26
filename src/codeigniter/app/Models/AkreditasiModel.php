@@ -58,4 +58,21 @@ class AkreditasiModel extends Model
         return $builder->orderBy('akreditasi_prodi.tgl_sk_keluar', 'DESC')
                        ->findAll();
     }
+
+    // Fungsi untuk Universitas: Ambil akreditasi terbaru dari SETIAP prodi
+    public function getLatestAkreditasiAll()
+    {
+        return $this->select('akreditasi_prodi.*, mProdi.nama_prodi, mFakultas.nama_fakultas, mFakultas.id as fakultas_id, mLembaga_akreditasi.nama_lembaga, mJenjang.jenjang, user.username as penginput')
+            ->join('mProdi', 'mProdi.id = akreditasi_prodi.fk_prodi')
+            ->join('mFakultas', 'mFakultas.id = mProdi.fk_fakultas')
+            ->join('mJenjang', 'mJenjang.id = mProdi.fk_jenjang', 'left')
+            ->join('mLembaga_akreditasi', 'mLembaga_akreditasi.id = akreditasi_prodi.fk_lembaga_akreditasi')
+            ->join('user', 'user.id = akreditasi_prodi.fk_user')
+            // Subquery untuk memastikan hanya mengambil ID terbaru (row terakhir) per Prodi
+            ->whereIn('akreditasi_prodi.id', function($builder) {
+                return $builder->select('MAX(id)')->from('akreditasi_prodi')->groupBy('fk_prodi');
+            })
+            ->orderBy('mFakultas.nama_fakultas', 'ASC')
+            ->findAll();
+    }
 }

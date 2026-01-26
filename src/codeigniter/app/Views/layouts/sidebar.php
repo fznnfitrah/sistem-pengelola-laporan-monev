@@ -40,7 +40,7 @@
                     <i class="bi bi-clock-history me-2"></i> History Laporan
                 </a>
             </li>
-            <li class="nav-item mt-1">
+            < class="nav-item mt-1">
                 <a href="<?= base_url('fakultas/monitoring') ?>" class="nav-link <?= (uri_string() == 'fakultas/monitoring') ? 'active' : 'text-dark' ?>">
                     <i class="bi bi-eye me-2"></i> Monitoring Laporan
                 </a>
@@ -133,6 +133,11 @@
             <li class="nav-item mt-1">
                 <a href="<?= base_url('univ/monitoring') ?>" class="nav-link <?= (uri_string() == 'univ/monitoring') ? 'active' : 'text-dark' ?>">
                     <i class="bi bi-eye me-2"></i> Monitoring
+                </a>
+            </li>
+            <li class="nav-item mt-1">
+                <a href="<?= base_url('univ/monitoring/akreditasi') ?>" class="nav-link <?= (uri_string() == 'univ/monitoring/akreditasi') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-eye me-2"></i> Monitoring Akreditasi
                 </a>
             </li>
         <?php endif; ?>
