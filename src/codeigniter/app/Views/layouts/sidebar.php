@@ -40,6 +40,10 @@
                     <i class="bi bi-clock-history me-2"></i> History Laporan
                 </a>
             </li>
+            <li class="nav-item mt-1">
+                <a href="<?= base_url('fakultas/monitoring') ?>" class="nav-link <?= (uri_string() == 'fakultas/monitoring') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-eye me-2"></i> Monitoring Laporan
+                </a>
         <?php endif; ?>
 
         <?php if (session()->get('fk_roles') == 3) : ?>

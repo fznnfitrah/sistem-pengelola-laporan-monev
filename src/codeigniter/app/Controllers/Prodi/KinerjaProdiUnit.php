@@ -20,64 +20,62 @@ class KinerjaProdiUnit extends BaseController
         $this->periodeModel = new PeriodeModel();
     }
 
-
     public function index()
     {
-        // 1. Ambil Semua Periode (Untuk Dropdown Filter)
+        // 1. Ambil Semua Periode untuk Dropdown Filter
         $semuaPeriode = $this->periodeModel->orderBy('tahun_akademik', 'DESC')
             ->orderBy('semester', 'DESC')
             ->findAll();
 
-        // 2. Tentukan Periode Mana yang Sedang Dilihat
-        $periodeID = $this->request->getGet('periode'); // Ambil dari URL ?periode=X
+        // 2. Tentukan Periode Mana yang Sedang Dilihat (Filter GET)
+        $periodeID = $this->request->getGet('periode');
 
         if ($periodeID) {
             $periodeTerpilih = $this->periodeModel->find($periodeID);
         } else {
-            // Default ke Periode Aktif jika baru buka
+            // Default ke Periode Aktif
             $periodeTerpilih = $this->periodeModel->getActivePeriode();
         }
 
-        if (!$periodeTerpilih) return view('prodi/laporan/tutup_akses_view');
-
-        // 3. Deteksi Role & Identitas User
-        $isProdi = !empty(session()->get('fk_prodi'));
-
-        $identitasID = null;
-        $jenisKinerja = '';
-
-        if ($isProdi) {
-            $jenisKinerja = 'prodi';
-            // PENTING: Ambil string kode (misal "infor1") sesuai session Anda
-            $identitasID  = session()->get('fk_prodi');
-        } else {
-            $jenisKinerja = 'unit';
-            $identitasID  = session()->get('fk_unit');
+        // Jika tidak ada periode sama sekali, arahkan ke halaman tutup akses
+        if (!$periodeTerpilih) {
+            return view('prodi/laporan/tutup_akses_view', ['title' => 'Akses Tertutup']);
         }
 
-        // 4. Ambil Master Kinerja
+        // 3. Deteksi Role User (Prodi atau Unit) dari Session
+        $isProdi = !empty(session()->get('fk_prodi'));
+        $identitasID = $isProdi ? session()->get('fk_prodi') : session()->get('fk_unit');
+        $jenisKinerja = $isProdi ? 'prodi' : 'unit';
+
+        // 4. Ambil Indikator Kinerja yang AKTIF (Status = 1)
+        // Fungsi getKinerjaByJenis sudah kita update di Model sebelumnya
         $daftarIndikator = $this->mKinerja->getKinerjaByJenis($jenisKinerja);
 
-        // 5. Ambil Data yang SUDAH DIISI pada PERIODE TERPILIH
+        // 5. Ambil Data Capaian yang sudah diisi pada Periode Terpilih
         $columnFilter = $isProdi ? 'fk_prodi' : 'fk_unit';
-
         $dataSudahIsi = $this->transaksiKinerja
             ->where($columnFilter, $identitasID)
-            ->where('fk_setting_periode', $periodeTerpilih['id']) // <-- Filter ID Periode
+            ->where('fk_setting_periode', $periodeTerpilih['id'])
             ->findAll();
 
+        // Mapping data agar mudah dipanggil berdasarkan ID Kinerja di View
         $mappedData = [];
         foreach ($dataSudahIsi as $d) {
             $mappedData[$d['fk_kinerja']] = $d;
         }
 
+        // Ambil status "edit_mode" dari URL, defaultnya false (terkunci)
+        $editMode = $this->request->getGet('mode') == 'edit';
+
         $data = [
-            'title'           => 'Input Kinerja ' . ucfirst($jenisKinerja),
-            'semua_periode'   => $semuaPeriode,    // Data dropdown
-            'periode'         => $periodeTerpilih, // Periode terpilih
+            'title'           => 'Input Capaian Kinerja ' . ucfirst($jenisKinerja),
+            'semua_periode'   => $semuaPeriode,
+            'periode'         => $periodeTerpilih,
             'indikator'       => $daftarIndikator,
             'sudah_isi'       => $mappedData,
-            'is_prodi'        => $isProdi
+            'is_prodi'        => $isProdi,
+            'editMode'        => $editMode, // Kirim status mode ke view
+            'hasData'         => !empty($mappedData) // Cek apakah sudah pernah isi
         ];
 
         return view('prodi/kinerja/input_kinerja_view', $data);
@@ -85,51 +83,54 @@ class KinerjaProdiUnit extends BaseController
 
     public function save()
     {
+        // Ambil ID Periode dari form agar data tersimpan di periode yang tepat
         $periodeID = $this->request->getPost('fk_setting_periode');
+        $inputs    = $this->request->getPost('data'); // Mengambil array data kinerja
 
-        // Ambil input array dari form (karena inputnya banyak sekaligus)
-        // Format input di View nanti: name="data[ID_KINERJA][value]"
-        $inputs = $this->request->getPost('data');
-
-        $isProdi = !empty(session()->get('fk_prodi'));
+        $isProdi  = !empty(session()->get('fk_prodi'));
         $fk_prodi = $isProdi ? session()->get('fk_prodi') : null;
         $fk_unit  = !$isProdi ? session()->get('fk_unit') : null;
         $userID   = session()->get('current_user_id');
 
-        foreach ($inputs as $idKinerja => $val) {
-            // Cek apakah data sudah ada? (Upsert Logic)
-            $existing = $this->transaksiKinerja
-                ->where('fk_kinerja', $idKinerja)
-                ->where('fk_setting_periode', $periodeID)
-                ->groupStart() // Grouping OR query agar aman
-                ->where('fk_prodi', $fk_prodi)
-                ->orWhere('fk_unit', $fk_unit)
-                ->groupEnd()
-                ->first();
+        // Loop setiap indikator yang diinputkan
+        if ($inputs) {
+            foreach ($inputs as $idKinerja => $val) {
+                
+                // Lewati jika nilai (value) kosong untuk menghindari baris sampah di DB
+                if (empty($val['value']) && empty($val['link_bukti'])) continue;
 
-            $dataSimpan = [
-                'fk_kinerja'         => $idKinerja,
-                'fk_setting_periode' => $periodeID,
-                'fk_prodi'           => $fk_prodi,
-                'fk_unit'            => $fk_unit,
-                'fk_user'            => $userID,
-                'value'              => $val['value'],      // Angka
-                'link_bukti'         => $val['link_bukti'], // Link
-                'keterangan'         => $val['keterangan']  // Text
-            ];
+                // Logika Upsert: Cek apakah data sudah ada sebelumnya di periode ini
+                $existing = $this->transaksiKinerja
+                    ->where('fk_kinerja', $idKinerja)
+                    ->where('fk_setting_periode', $periodeID)
+                    ->groupStart()
+                        ->where('fk_prodi', $fk_prodi)
+                        ->orWhere('fk_unit', $fk_unit)
+                    ->groupEnd()
+                    ->first();
 
-            if ($existing) {
-                // UPDATE: Pakai ID transaksi yang lama
-                $dataSimpan['id'] = $existing['id'];
-                $this->transaksiKinerja->save($dataSimpan);
-            } else {
-                // INSERT BARU: Hanya simpan jika value tidak kosong (opsional)
-                if (!empty($val['value']) || !empty($val['link_bukti'])) {
+                $dataSimpan = [
+                    'fk_kinerja'         => $idKinerja,
+                    'fk_setting_periode' => $periodeID,
+                    'fk_prodi'           => $fk_prodi,
+                    'fk_unit'            => $fk_unit,
+                    'fk_user'            => $userID,
+                    'value'              => (int) $val['value'],
+                    'link_bukti'         => $val['link_bukti'],
+                    'keterangan'         => $val['keterangan']
+                ];
+
+                if ($existing) {
+                    // Update data yang sudah ada
+                    $this->transaksiKinerja->update($existing['id'], $dataSimpan);
+                } else {
+                    // Insert data baru
                     $this->transaksiKinerja->insert($dataSimpan);
                 }
             }
         }
 
-        return redirect()->to('prodi/kinerja/input')->with('message', 'Data Kinerja berhasil disimpan!');
+        return redirect()->to("prodi/kinerja/input?periode=$periodeID")
+            ->with('message', 'Capaian Kinerja berhasil disimpan!');
     }
 }

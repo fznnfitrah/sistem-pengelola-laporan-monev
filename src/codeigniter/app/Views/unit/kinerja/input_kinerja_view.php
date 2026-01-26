@@ -2,103 +2,105 @@
 
 <?= $this->section('content') ?>
 <div class="container-fluid py-4">
-
-    <div class="card shadow-sm border-0 mb-4">
-        <div class="card-body py-3 d-flex justify-content-between align-items-center">
+    <div class="card shadow-sm border-0 mb-4" style="border-radius: 15px;">
+        <div class="card-body d-flex justify-content-between align-items-center">
             <div>
-                <h5 class="mb-0 fw-bold text-primary">Laporan Kinerja (<?= ucfirst($is_unit ? 'Unit' : 'Prodi') ?>)</h5>
-                <small class="text-muted">Data Kinerja per Periode Akademik</small>
+                <h5 class="fw-bold text-success mb-0">Laporan Capaian Kinerja (Unit / Lembaga)</h5>
+                <p class="text-muted small mb-0">Data realisasi kinerja berdasarkan indikator yang telah ditetapkan.</p>
             </div>
-
+            
             <form action="" method="get" class="d-flex gap-2">
-                <div class="input-group">
-                    <span class="input-group-text bg-light">Periode:</span>
-                    <select name="periode" class="form-select form-select-sm" onchange="this.form.submit()">
-                        <?php foreach ($semua_periode as $p) : ?>
-                            <option value="<?= $p['id'] ?>" <?= ($p['id'] == $periode['id']) ? 'selected' : '' ?>>
-                                <?= esc($p['tahun_akademik']) ?> (<?= esc($p['semester']) ?>)
-                                <?= ($p['status_aktif'] == 1) ? '✅' : '🔒' ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+                <select name="periode" class="form-select border-2" style="width: 300px; border-radius: 10px;">
+                    <?php foreach ($semua_periode as $p) : ?>
+                        <option value="<?= $p['id'] ?>" <?= ($p['id'] == $periode['id']) ? 'selected' : '' ?>>
+                            <?= esc($p['tahun_akademik']) ?> - <?= esc($p['semester']) ?> 
+                            <?= ($p['status_aktif'] == 1) ? '(Aktif)' : '' ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <button type="submit" class="btn btn-success px-4" style="border-radius: 10px;">Pilih</button>
             </form>
         </div>
     </div>
 
-    <div class="card shadow-sm border-0">
-        <div class="card-header <?= ($periode['status_aktif'] == 1) ? 'bg-success' : 'bg-secondary' ?> text-white">
+
+    <?php 
+        // Logika Kunci Input
+        $lockInput = ($hasData && !$editMode) || ($periode['status_aktif'] == 0); 
+    ?>
+
+    <div class="card shadow-sm border-0" style="border-radius: 15px;">
+        <div class="card-header <?= ($periode['status_aktif'] == 1) ? 'bg-success' : 'bg-secondary' ?> text-white py-3" style="border-radius: 15px 15px 0 0;">
             <div class="d-flex justify-content-between align-items-center">
-                <span>
-                    <i class="bi bi-table me-2"></i> Data Periode:
-                    <strong><?= esc($periode['tahun_akademik']) ?> (<?= esc($periode['semester']) ?>)</strong>
+                <span class="fw-bold">
+                    <i class="bi bi-table me-2"></i> Periode Laporan: <?= esc($periode['tahun_akademik']) ?> (<?= esc($periode['semester']) ?>)
                 </span>
-                <?php if ($periode['status_aktif'] == 0): ?>
+                <?php if($periode['status_aktif'] == 0): ?>
                     <span class="badge bg-warning text-dark"><i class="bi bi-lock-fill"></i> Terkunci (Arsip)</span>
+                <?php elseif($hasData && !$editMode): ?>
+                    <span class="badge bg-light text-success"><i class="bi bi-check-all"></i> Data Tersimpan</span>
                 <?php endif; ?>
             </div>
         </div>
-
-        <div class="card-body">
-            <?php $isLocked = ($periode['status_aktif'] == 0); ?>
-
-            <form action="<?= base_url('prodi/kinerja/save') ?>" method="post">
+        
+        <div class="card-body p-0">
+            <form action="<?= base_url('unit/kinerja/save') ?>" method="post">
                 <?= csrf_field() ?>
                 <input type="hidden" name="fk_setting_periode" value="<?= $periode['id'] ?>">
 
                 <div class="table-responsive">
-                    <table class="table table-bordered align-middle table-hover">
-                        <thead class="table-light text-center">
-                            <tr>
-                                <th width="5%">No</th>
-                                <th width="35%">Indikator Kinerja</th>
-                                <th width="15%">Realisasi</th>
-                                <th>Bukti Dukung</th>
-                                <th>Keterangan</th>
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr class="text-center">
+                                <th width="5%" class="ps-4">No</th>
+                                <th width="30%" class="text-start">Indikator Kinerja</th>
+                                <th width="10%">Standar Univ</th>
+                                <th width="12%">Realisasi</th>
+                                <th width="20%">Bukti Dukung (Link)</th>
+                                <th class="pe-4">Keterangan</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($indikator as $i => $item) : ?>
-                                <?php
-                                $val = $sudah_isi[$item['id']] ?? null;
-                                $nilaiLama = $val ? $val['value'] : '';
-                                $linkLama  = $val ? $val['link_bukti'] : '';
-                                $ketLama   = $val ? $val['keterangan'] : '';
+                                <?php 
+                                    $val = $sudah_isi[$item['id']] ?? null;
                                 ?>
                                 <tr>
-                                    <td class="text-center"><?= $i + 1 ?></td>
+                                    <td class="text-center ps-4"><?= $i + 1 ?></td>
                                     <td>
-                                        <?= esc($item['nama_kinerja']) ?>
-                                        <br>
-                                        <span class="badge bg-light text-dark border mt-1">
-                                            Satuan: <?= esc($item['satuan']) ?>
-                                        </span>
+                                        <p class="fw-bold mb-0 text-dark"><?= esc($item['nama_kinerja']) ?></p>
+                                        <small class="text-muted">Satuan: <?= esc($item['satuan']) ?></small>
                                     </td>
-
-                                    <td>
-                                        <input type="number" step="0.01" class="form-control text-center"
-                                            name="data[<?= $item['id'] ?>][value]"
-                                            value="<?= esc($nilaiLama) ?>"
-                                            <?= $isLocked ? 'disabled' : '' ?>>
+                                    <td class="text-center">
+                                        <span class="badge bg-light text-success border fw-bold" style="font-size: 0.9rem;">
+                                            <?= (int) $item['standar_nilai'] ?> </span>
                                     </td>
                                     <td>
-                                        <?php if ($isLocked && !empty($linkLama)): ?>
-                                            <a href="<?= esc($linkLama) ?>" target="_blank" class="btn btn-sm btn-outline-primary">
-                                                <i class="bi bi-link-45deg"></i> Buka Bukti
+                                        <input type="number" class="form-control text-center border-2 <?= $lockInput ? 'bg-light' : '' ?>" 
+                                            name="data[<?= $item['id'] ?>][value]" 
+                                            value="<?= $val['value'] ?? '' ?>" 
+                                            placeholder="0"
+                                            <?= $lockInput ? 'readonly' : 'required' ?>> 
+                                    </td>
+                                    <td>
+                                        <?php if($lockInput && !empty($val['link_bukti'])): ?>
+                                            <a href="<?= esc($val['link_bukti']) ?>" target="_blank" class="btn btn-sm btn-outline-success w-100">
+                                                <i class="bi bi-box-arrow-up-right me-1"></i> Lihat Bukti
                                             </a>
                                         <?php else: ?>
-                                            <input type="text" class="form-control form-control-sm"
-                                                name="data[<?= $item['id'] ?>][link_bukti]"
-                                                value="<?= esc($linkLama) ?>"
-                                                placeholder="https://"
-                                                <?= $isLocked ? 'disabled' : '' ?>>
+                                            <input type="url" class="form-control form-control-sm border-2 <?= $lockInput ? 'bg-light' : '' ?>" 
+                                                   name="data[<?= $item['id'] ?>][link_bukti]" 
+                                                   value="<?= $val['link_bukti'] ?? '' ?>" 
+                                                   placeholder="https://..."
+                                                   <?= $lockInput ? 'readonly' : '' ?>>
                                         <?php endif; ?>
                                     </td>
-                                    <td>
-                                        <input type="text" class="form-control form-control-sm"
-                                            name="data[<?= $item['id'] ?>][keterangan]"
-                                            value="<?= esc($ketLama) ?>"
-                                            <?= $isLocked ? 'disabled' : '' ?>>
+                                    <td class="pe-4">
+                                        <input type="text" class="form-control form-control-sm border-2 <?= $lockInput ? 'bg-light' : '' ?>" 
+                                               name="data[<?= $item['id'] ?>][keterangan]" 
+                                               value="<?= $val['keterangan'] ?? '' ?>" 
+                                               placeholder="Catatan..."
+                                               <?= $lockInput ? 'readonly' : '' ?>>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -106,13 +108,19 @@
                     </table>
                 </div>
 
-                <?php if (!$isLocked) : ?>
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                        <button type="submit" class="btn btn-success px-4">
-                            <i class="bi bi-save"></i> Simpan Data Kinerja
-                        </button>
-                    </div>
-                <?php endif; ?>
+                <div class="card-footer bg-white py-3 text-end" style="border-radius: 0 0 15px 15px;">
+                    <?php if ($periode['status_aktif'] == 1) : ?>
+                        <?php if ($hasData && !$editMode) : ?>
+                            <a href="?periode=<?= $periode['id'] ?>&mode=edit" class="btn btn-warning px-5 py-2 shadow-sm fw-bold text-white" style="border-radius: 10px;">
+                                <i class="bi bi-pencil-square me-2"></i> Sesuaikan Capaian Kinerja
+                            </a>
+                        <?php elseif (!empty($indikator)) : ?>
+                            <button type="submit" class="btn btn-success px-5 py-2 shadow-sm fw-bold" style="border-radius: 10px;">
+                                <i class="bi bi-save me-2"></i> Simpan Semua Capaian Kinerja
+                            </button>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </div>
             </form>
         </div>
     </div>
