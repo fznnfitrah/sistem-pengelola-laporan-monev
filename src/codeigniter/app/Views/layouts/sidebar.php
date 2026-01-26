@@ -61,6 +61,16 @@
                     <i class="bi bi-speedometer2 me-2"></i> Laporan Kinerja Prodi
                 </a>
             </li>
+            <li class="nav-item mt-2">
+                <a href="<?= base_url('prodi/akreditasi/index') ?>" class="nav-link <?= (uri_string() == 'prodi/akreditasi/index') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-speedometer2 me-2"></i> Akreditasi Prodi
+                </a>
+            </li>
+            <li class="nav-item mt-2">
+                <a href="<?= base_url('prodi/akreditasi/new') ?>" class="nav-link <?= (uri_string() == 'prodi/akreditasi/new') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-speedometer2 me-2"></i> Input Akreditasi Prodi
+                </a>
+            </li>
         <?php endif; ?>
 
         <?php if (session()->get('fk_roles') == 4) : ?>
