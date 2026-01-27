@@ -6,7 +6,7 @@
         <div class="col-md-4 mb-4">
             <div class="card dashboard-card shadow-sm text-center p-4">
                 <div class="mb-3">
-                    <i class="bi bi-people fs-1 text-success"></i>
+                    <i class="bi bi-person-badge fs-1 text-success"></i>
                 </div>
                 <h5 class="mb-2">Kelola Role</h5>
                 <p class="mb-4">Kelola dan atur hak akses Menu.</p>

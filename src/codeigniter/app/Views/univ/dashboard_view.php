@@ -8,7 +8,7 @@
             <div class="card dashboard-card shadow-sm text-center p-4">
                 <div class="mb-3"><i class="bi bi-calendar-check fs-1 text-success"></i></div>
                 <h5 class="mb-2">Setting Periode</h5>
-                <p class="mb-4">Atur periode  untuk seluruh user.</p>
+                <p class="mb-4">Atur periode untuk seluruh user.</p>
                 <a href="<?= base_url('univ/periode') ?>" class="btn btn-custom w-100">Buka</a>
             </div>
         </div>
@@ -59,7 +59,7 @@
         </div>
         <div class="col-md-4 mb-4">
             <div class="card dashboard-card shadow-sm text-center p-4">
-                <div class="mb-3"><i class="bi bi-eye fs-1 text-success"></i></div>
+                <div class="mb-3"><i class="bi bi-patch-check fs-1 text-success"></i></div>
                 <h5 class="mb-2">Monitoring Akreditasi</h5>
                 <p class="mb-4">Pantau progres akreditasi prodi di seluruh fakultas.</p>
                 <a href="<?= base_url('univ/monitoring/akreditasi') ?>" class="btn btn-custom w-100">Buka</a>
