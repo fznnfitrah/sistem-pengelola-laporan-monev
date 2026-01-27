@@ -115,5 +115,4 @@ class Laporan extends BaseController
         return redirect()->to("unit/laporan/input?periode=$periodeID")
             ->with('message', 'Laporan berhasil dikirim!');
     }
-
 }
