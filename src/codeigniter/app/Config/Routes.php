@@ -113,6 +113,9 @@ $routes->group('univ', function ($routes) {
 
     // Fitur Monitoring Laporan
     $routes->get('monitoring', 'Univ\Monitoring::index');
+
+    //Monitoring Akreditasi
+    $routes->get('monitoring/akreditasi', 'Univ\MonitoringAkreditasi::index');
 });
 
 

@@ -28,7 +28,7 @@
         <div class="col-md-4 mb-4">
             <div class="card dashboard-card shadow-sm text-center p-4">
                 <div class="mb-3">
-                    <i class="bi bi-clock-history fs-1 text-success"></i>
+                    <i class="bi bi-eye fs-1 text-success"></i>
                 </div>
                 <h5 class="mb-2">Monitoring Laporan</h5>
                 <p class="mb-4 text-muted small">Memantau progres pengunggahan dokumen Program Studi di lingkup Fakultas.</p>
