@@ -1,0 +1,102 @@
+
+/* --- LAYOUT UTAMA --- */
+.section-header {
+    margin-bottom: 2rem;
+}
+
+/* --- CARD FAKULTAS --- */
+.card-fakultas {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+/* Header Fakultas */
+.fakultas-header {
+    background: #fff;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* GANTI WARNA: Border kiri jadi hijau agar seragam */
+    border-left: 5px solid #198754;
+}
+
+/* Badge Kode Fakultas */
+/* GANTI WARNA: Background jadi Hijau (#198754) */
+.badge-id-fakultas {
+    background-color: #198754;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+/* --- AREA SCROLL PRODI --- */
+.scroll-area-prodi {
+    max-height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.scroll-area-prodi::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scroll-area-prodi::-webkit-scrollbar-track {
+    background: #f9fafb;
+}
+
+.scroll-area-prodi::-webkit-scrollbar-thumb {
+    background-color: #d1d5db;
+    border-radius: 4px;
+}
+
+/* Tabel Prodi */
+.table-prodi {
+    margin-bottom: 0;
+    width: 100%;
+}
+
+.table-prodi thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f9fafb;
+    z-index: 2;
+    color: #6b7280;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.table-prodi tbody td {
+    vertical-align: middle;
+    padding: 0.8rem 1.5rem;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 0.95rem;
+    color: #374151;
+}
+
+.badge-id-prodi {
+    background: #f3f4f6;
+    color: #374151;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.85em;
+    border: 1px solid #e5e7eb;
+}
+
+.empty-prodi {
+    padding: 2rem;
+    text-align: center;
+    color: #9ca3af;
+    background: #f9fafb;
+}

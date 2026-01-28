@@ -4,7 +4,7 @@ namespace App\Controllers\Prodi;
 
 use App\Controllers\BaseController;
 use App\Models\AkreditasiModel;
-use App\Models\LembagaModel;
+use App\Models\LembagaAkreditasiModel;
 
 class Akreditasi extends BaseController
 {
@@ -14,7 +14,7 @@ class Akreditasi extends BaseController
     public function __construct()
     {
         $this->akreditasiModel = new AkreditasiModel();
-        $this->lembagaModel    = new LembagaModel();
+        $this->lembagaModel    = new LembagaAkreditasiModel();
     }
 
     public function index()
@@ -78,6 +78,6 @@ class Akreditasi extends BaseController
         // 3. Simpan ke Database (Insert baru, jadi datanya menumpuk/history)
         $this->akreditasiModel->save($dataSimpan);
 
-        return redirect()->to('prodi/akreditasi')->with('message', 'Data akreditasi berhasil ditambahkan!');
+        return redirect()->to('prodi/akreditasi/akreditasi_view')->with('message', 'Data akreditasi berhasil ditambahkan!');
     }
 }
