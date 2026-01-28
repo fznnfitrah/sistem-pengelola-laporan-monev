@@ -14,38 +14,69 @@
                     <thead class="table-light">
                         <tr>
                             <th width="5%" class="ps-4">No</th>
-                            <th width="15%">Tanggal</th>
+                            <th width="15%">Waktu Upload</th>
                             <th class="text-start">Item Monev</th>
                             <th>Periode</th>
                             <th width="15%">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $no = 1; foreach($laporan as $row): ?>
-                        <tr>
-                            <td class="ps-4"><?= $no++ ?></td>
-                            <td><?= date('d/m/Y', strtotime($row['create_at'])) ?></td>
-                            <td class="text-start">
-                                <span class="fw-bold text-dark"><?= esc($row['nama_monev']) ?></span>
-                            </td>
-                            <td>
-                                <span class="badge bg-light text-success border">
-                                    <?= esc($row['tahun_akademik']) ?> - <?= esc($row['semester']) ?>
-                                </span>
-                            </td>
-                            <td>
-                                <button class="btn btn-sm btn-success px-3 shadow-sm" 
-                                    style="border-radius: 8px;"
-                                    onclick="showDetail('<?= date('d/m/Y', strtotime($row['create_at'])) ?>', '<?= addslashes($row['nama_monev']) ?>', '<?= $row['tahun_akademik'] ?> - <?= $row['semester'] ?>', '<?= addslashes($row['nama_prodi']) ?>', '<?= $row['link_bukti'] ?>', '<?= addslashes($row['keterangan']) ?>')"
-                                    data-bs-toggle="modal" data-bs-target="#modalDetail">
-                                    <i class="bi bi-search me-1"></i> Detail
-                                </button>
-                            </td>
-                        </tr>
+                        <?php $no = 1;
+                        foreach ($laporan as $row): ?>
+                            <tr>
+                                <td class="ps-4"><?= $no++ ?></td>
+
+                                <td>
+                                    <div class="fw-bold text-dark">
+                                        <?= date('d/m/Y', strtotime($row['create_at'])) ?>
+                                    </div>
+                                    <small class="text-muted" style="font-size: 0.75rem;">
+                                        <i class="bi bi-clock me-1"></i>
+                                        <?= date('H:i', strtotime($row['create_at'])) ?> WIB
+                                    </small>
+
+                                    <?php if (!empty($row['update_at']) && $row['update_at'] != $row['create_at']): ?>
+                                        <div class="mt-1 border-top pt-1">
+                                            <small class="text-warning fst-italic" style="font-size: 0.7rem;">
+                                                <i class="bi bi-pencil-fill"></i> Diedit: <br>
+                                                <?= date('d/m H:i', strtotime($row['update_at'])) ?>
+                                            </small>
+                                        </div>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="text-start">
+                                    <span class="fw-bold text-dark"><?= esc($row['nama_monev']) ?></span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-success border">
+                                        <?= esc($row['tahun_akademik']) ?> - <?= esc($row['semester']) ?>
+                                    </span>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-success px-3 shadow-sm"
+                                        style="border-radius: 8px;"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalDetail"
+
+                                        /* Data Tanggal Lengkap Format 24 Jam */
+                                        data-tanggal="<?= date('d/m/Y H:i', strtotime($row['create_at'])) ?> WIB"
+
+                                        data-monev="<?= esc($row['nama_monev']) ?>"
+                                        data-periode="<?= esc($row['tahun_akademik']) ?> - <?= esc($row['semester']) ?>"
+                                        data-prodi="<?= esc($row['nama_prodi']) ?>"
+                                        data-link="<?= esc($row['link_bukti']) ?>"
+                                        data-keterangan="<?= esc($row['keterangan'] ?? '-') ?>">
+
+                                        <i class="bi bi-search me-1"></i> Detail
+                                    </button>
+                                </td>
+                            </tr>
                         <?php endforeach; ?>
-                        
-                        <?php if(empty($laporan)): ?>
-                            <tr><td colspan="5" class="py-5 text-muted italic">Belum ada riwayat pengiriman laporan.</td></tr>
+
+                        <?php if (empty($laporan)): ?>
+                            <tr>
+                                <td colspan="5" class="py-5 text-muted italic">Belum ada riwayat pengiriman laporan.</td>
+                            </tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
@@ -64,7 +95,7 @@
             <div class="modal-body px-4 pb-4">
                 <div class="row g-3">
                     <div class="col-6">
-                        <label class="small text-muted d-block">Tanggal Kirim</label>
+                        <label class="small text-muted d-block">Waktu Kirim</label>
                         <span id="d_tanggal" class="fw-bold text-dark small"></span>
                     </div>
                     <div class="col-6">
@@ -96,13 +127,25 @@
 </div>
 
 <script>
-    function showDetail(tanggal, monev, periode, prodi, link, keterangan) {
-        document.getElementById('d_tanggal').innerText = tanggal;
-        document.getElementById('d_monev').innerText = monev;
-        document.getElementById('d_periode').innerText = periode;
-        document.getElementById('d_prodi').innerText = prodi;
-        document.getElementById('d_keterangan').innerText = keterangan || 'Tidak ada catatan.';
+    var modalDetail = document.getElementById('modalDetail');
+    modalDetail.addEventListener('show.bs.modal', function(event) {
+        var button = event.relatedTarget;
+
+        // Ambil data
+        var tanggal = button.getAttribute('data-tanggal');
+        var monev = button.getAttribute('data-monev');
+        var periode = button.getAttribute('data-periode');
+        var prodi = button.getAttribute('data-prodi');
+        var link = button.getAttribute('data-link');
+        var keterangan = button.getAttribute('data-keterangan');
+
+        // Isi ke modal
+        document.getElementById('d_tanggal').textContent = tanggal;
+        document.getElementById('d_monev').textContent = monev;
+        document.getElementById('d_periode').textContent = periode;
+        document.getElementById('d_prodi').textContent = prodi;
+        document.getElementById('d_keterangan').textContent = keterangan;
         document.getElementById('d_link').href = link;
-    }
+    });
 </script>
 <?= $this->endSection() ?>
