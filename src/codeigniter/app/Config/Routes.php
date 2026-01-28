@@ -116,6 +116,18 @@ $routes->group('univ', function ($routes) {
 
     //Monitoring Akreditasi
     $routes->get('monitoring/akreditasi', 'Univ\MonitoringAkreditasi::index');
+
+    // Fitur Jenjang Prodi
+    $routes->get('jenjang', 'Univ\Jenjang::index');
+    $routes->post('jenjang/simpan', 'Univ\Jenjang::simpan');
+    $routes->post('jenjang/edit', 'Univ\Jenjang::edit');
+    $routes->get('jenjang/hapus/(:num)', 'Univ\Jenjang::hapus/$1');
+
+    // Fitur Lembaga Akreditasi
+    $routes->get('lembaga_akreditasi', 'Univ\LembagaAkreditasi::index');
+    $routes->post('lembaga_akreditasi/simpan', 'Univ\LembagaAkreditasi::simpan');
+    $routes->post('lembaga_akreditasi/edit', 'Univ\LembagaAkreditasi::edit');
+    $routes->get('lembaga_akreditasi/hapus/(:num)', 'Univ\LembagaAkreditasi::hapus/$1');
 });
 
 

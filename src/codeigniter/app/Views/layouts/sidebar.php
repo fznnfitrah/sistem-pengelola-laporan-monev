@@ -111,6 +111,11 @@
                 </a>
             </li>
             <li class="nav-item mt-1">
+                <a href="<?= base_url('univ/jenjang') ?>" class="nav-link <?= (uri_string() == 'univ/jenjang') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-journal-text me-2"></i> Jenjang Prodi
+                </a>
+            </li>
+            <li class="nav-item mt-1">
                 <a href="<?= base_url('univ/master') ?>" class="nav-link <?= (strpos(uri_string(), 'univ/master') !== false || uri_string() == 'univ/fakultas' || uri_string() == 'univ/prodi') ? 'active' : 'text-dark' ?>">
                     <i class="bi bi-diagram-3 me-2"></i> Fakultas & Prodi
                 </a>
@@ -119,9 +124,6 @@
                 <a href="<?= base_url('univ/unit') ?>" class="nav-link <?= (uri_string() == 'univ/unit') ? 'active' : 'text-dark' ?>">
                     <i class="bi bi-building-gear me-2"></i> Unit & Lembaga
                 </a>
-            </li>
-            <li class="nav-item mt-3">
-                <small class="text-uppercase text-muted fw-bold" style="font-size: 0.7rem;">Monitoring & Monev</small>
             </li>
             <li class="nav-item mt-1">
                 <a href="<?= base_url('univ/monev') ?>" class="nav-link <?= (uri_string() == 'univ/monev') ? 'active' : 'text-dark' ?>">
@@ -132,6 +134,14 @@
                 <a href="<?= base_url('univ/kinerja') ?>" class="nav-link <?= (uri_string() == 'univ/kinerja') ? 'active' : 'text-dark' ?>">
                     <i class="bi bi-trophy me-2"></i> Master Kinerja
                 </a>
+            </li>
+            <li class="nav-item mt-1">
+                <a href="<?= base_url('univ/lembaga_akreditasi') ?>" class="nav-link <?= (uri_string() == 'univ/lembaga_akreditasi') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-building me-2"></i> Lembaga Akreditasi
+                </a>
+            </li>
+            <li class="nav-item mt-3">
+                <small class="text-uppercase text-muted fw-bold" style="font-size: 0.7rem;">Monitoring</small>
             </li>
             <li class="nav-item mt-1">
                 <a href="<?= base_url('univ/monitoring') ?>" class="nav-link <?= (uri_string() == 'univ/monitoring') ? 'active' : 'text-dark' ?>">

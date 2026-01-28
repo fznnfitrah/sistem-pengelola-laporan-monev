@@ -19,7 +19,11 @@ class Periode extends BaseController
         $data = [
             'title'    => 'Setting Periode Laporan',
             'username' => session()->get('username'),
-            'periode'  => $this->periodeModel->orderBy('tahun_akademik', 'DESC')->findAll()
+            // Mengurutkan Tahun Akademik terbaru (DESC) 
+            // Lalu mengurutkan Semester secara DESC (Ganjil dulu baru Genap)
+            'periode'  => $this->periodeModel->orderBy('tahun_akademik', 'DESC')
+                                            ->orderBy('semester', 'DESC')
+                                            ->findAll()
         ];
         return view('univ/periode/index', $data);
     }
@@ -56,7 +60,45 @@ class Periode extends BaseController
 
     public function hapus($id)
     {
-        $this->periodeModel->delete($id);
-        return redirect()->back()->with('success', 'Periode berhasil dihapus!');
+        $periode = $this->periodeModel->find($id);
+
+        if (!$periode) {
+            return redirect()->back()->with('error', 'Data periode tidak ditemukan.');
+        }
+
+        // 1. CEK STATUS AKTIF
+        if ($periode['status_aktif'] == 1) {
+            return redirect()->back()->with('error', 'Gagal! Periode AKTIF tidak boleh dihapus. Aktifkan periode lain terlebih dahulu.');
+        }
+
+        try {
+            $db = \Config\Database::connect();
+            $db->transBegin(); // Mulai transaksi database agar aman
+
+            // 2. BERSIHKAN DATA TERKAIT (URUTAN PENTING)
+            
+            // Hapus Capaian Kinerja
+            $db->table('kinerja_prodi_unit')->where('fk_setting_periode', $id)->delete();
+            
+            // Hapus Laporan Dokumen Monev
+            $db->table('laporan_monev')->where('fk_setting_periode', $id)->delete();
+            
+            // Hapus Item Tagihan Monev
+            $db->table('mMonev')->where('fk_setting_periode', $id)->delete();
+
+            // 3. BARU HAPUS PERIODE UTAMA
+            $this->periodeModel->delete($id);
+
+            if ($db->transStatus() === FALSE) {
+                $db->transRollback();
+                return redirect()->back()->with('error', 'Gagal menghapus data. Terjadi kesalahan pada database.');
+            } else {
+                $db->transCommit();
+                return redirect()->back()->with('message', 'Periode dan seluruh data terkait (Laporan & Kinerja) berhasil dibersihkan.');
+            }
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
+        }
     }
 }

@@ -5,130 +5,96 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 class="fw-bold text-dark mb-1">Master Item Monev Per Periode</h2>
-            <p class="text-muted">Atur dokumen wajib berdasarkan periode semester yang aktif.</p>
+            <p class="text-muted small">Atur dokumen wajib berdasarkan periode semester yang aktif.</p>
         </div>
-        <button class="btn btn-success btn-rounded shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">
+        <button class="btn btn-success btn-rounded shadow-sm px-4" data-bs-toggle="modal" data-bs-target="#modalTambah" style="border-radius: 10px;">
             <i class="bi bi-file-earmark-plus me-1"></i> Tambah Item
         </button>
     </div>
 
-    <div class="card border-0 shadow-sm" style="border-radius: 15px;">
-        <div class="card-body p-4">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                    <thead>
+    <?php if (session()->getFlashdata('message')) : ?>
+        <div class="alert alert-success border-0 shadow-sm mb-4" style="border-radius: 10px;">
+            <i class="bi bi-check-circle-fill me-2"></i> <?= session()->getFlashdata('message') ?>
+        </div>
+    <?php endif; ?>
+
+    <?php 
+    $currentPeriode = null; 
+    $isFirst = true;
+
+    foreach($monev as $m): 
+        // Logika Pemisah: Jika ID Periode berubah, buat Card baru
+        if ($currentPeriode !== $m['fk_setting_periode']): 
+            if (!$isFirst) echo '</tbody></table></div></div></div>'; // Tutup tabel sebelumnya
+            $currentPeriode = $m['fk_setting_periode'];
+            $isFirst = false;
+    ?>
+        <div class="card border-0 shadow-sm mb-5" style="border-radius: 15px; overflow: hidden;">
+            <div class="card-header bg-white border-0 pt-4 ps-4">
+                <div class="d-flex align-items-center">
+                    <div class="rounded-3 bg-success text-white d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
+                        <i class="bi bi-calendar3 fs-5"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">Periode <?= esc($m['tahun_akademik']) ?></h5>
+                        <span class="badge bg-light text-success border small"><?= esc($m['semester']) ?></span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0 mt-2">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4" width="5%">No</th>
+                                <th width="45%">Nama Item Monev</th>
+                                <th width="25%">Keterangan</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php $no = 1; endif; ?>
+
                         <tr>
-                            <th>Periode</th>
-                            <th>Nama Item Monev</th>
-                            <th>Keterangan</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach($monev as $m): ?>
-                        <tr>
-                            <td>
-                                <span class="badge bg-light text-primary border">
-                                    <?= $m['tahun_akademik'] ?> - <?= $m['semester'] ?>
-                                </span>
-                            </td>
-                            <td class="fw-bold text-secondary"><?= $m['nama_monev'] ?></td>
-                            <td><small class="text-muted"><?= $m['keterangan'] ?: '-' ?></small></td>
+                            <td class="ps-4 text-muted"><?= $no++ ?></td>
+                            <td class="fw-bold text-dark"><?= esc($m['nama_monev']) ?></td>
+                            <td><small class="text-muted"><?= esc($m['keterangan']) ?: '-' ?></small></td>
                             <td class="text-center">
-                                <?= $m['status'] == 1 ? '<span class="badge bg-success">Aktif</span>' : '<span class="badge bg-danger">Non-Aktif</span>' ?>
+                                <?php if($m['status'] == 1): ?>
+                                    <span class="badge bg-success-soft text-success px-3 py-2">Aktif</span>
+                                <?php else: ?>
+                                    <span class="badge bg-danger-soft text-danger px-3 py-2">Non-Aktif</span>
+                                <?php endif; ?>
                             </td>
                             <td class="text-center">
                                 <button class="btn btn-sm btn-outline-warning border-0" 
-                                        onclick="btnEdit('<?= $m['id'] ?>', '<?= $m['nama_monev'] ?>', '<?= $m['status'] ?>', '<?= $m['keterangan'] ?>', '<?= $m['fk_setting_periode'] ?>')" 
+                                        onclick="btnEdit('<?= $m['id'] ?>', '<?= esc($m['nama_monev']) ?>', '<?= $m['status'] ?>', '<?= esc($m['keterangan']) ?>', '<?= $m['fk_setting_periode'] ?>')" 
                                         data-bs-toggle="modal" data-bs-target="#modalEdit">
                                     <i class="bi bi-pencil-square"></i>
                                 </button>
-                                <a href="<?= base_url('univ/monev/hapus/'.$m['id']) ?>" class="btn btn-sm btn-outline-danger border-0" onclick="return confirm('Hapus?')">
+                                <a href="<?= base_url('univ/monev/hapus/'.$m['id']) ?>" class="btn btn-sm btn-outline-danger border-0" onclick="return confirm('Hapus item ini?')">
                                     <i class="bi bi-trash"></i>
                                 </a>
                             </td>
                         </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+    <?php endforeach; ?>
+    
+    <?php if (!$isFirst) echo '</tbody></table></div></div></div>'; // Tutup card terakhir ?>
+
+    <?php if(empty($monev)): ?>
+        <div class="alert alert-light border text-center p-5">
+            <i class="bi bi-folder2-open display-4 text-muted"></i>
+            <p class="mt-3">Belum ada item monev yang dikonfigurasi.</p>
         </div>
-    </div>
+    <?php endif; ?>
 </div>
 
-<div class="modal fade" id="modalTambah" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow" style="border-radius: 20px;">
-            <form action="<?= base_url('univ/monev/simpan') ?>" method="post">
-                <div class="modal-header border-0 pt-4 px-4">
-                    <h5 class="fw-bold">Tambah Item Monev</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body px-4">
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">PILIH PERIODE</label>
-                        <select name="fk_setting_periode" class="form-select" required>
-                            <?php foreach($periode as $p): ?>
-                                <option value="<?= $p['id'] ?>" <?= $p['status_aktif'] == 1 ? 'selected' : '' ?>>
-                                    <?= $p['tahun_akademik'] ?> - <?= $p['semester'] ?> <?= $p['status_aktif'] == 1 ? '(Aktif)' : '' ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">NAMA DOKUMEN</label>
-                        <input type="text" name="nama_monev" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">KETERANGAN</label>
-                        <textarea name="keterangan" class="form-control" rows="3"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer border-0 pb-4 px-4">
-                    <button type="submit" class="btn btn-success btn-rounded w-100">Simpan Item</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modalEdit" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow" style="border-radius: 20px;">
-            <form action="<?= base_url('univ/monev/edit') ?>" method="post">
-                <div class="modal-body p-4">
-                    <h5 class="fw-bold mb-4">Edit Item Monev</h5>
-                    <input type="hidden" name="id" id="e_id">
-                    <div class="mb-3">
-                        <label class="small fw-bold">PERIODE</label>
-                        <select name="fk_setting_periode" id="e_fk_periode" class="form-select">
-                            <?php foreach($periode as $p): ?>
-                                <option value="<?= $p['id'] ?>"><?= $p['tahun_akademik'] ?> - <?= $p['semester'] ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="small fw-bold">NAMA ITEM</label>
-                        <input type="text" name="nama_monev" id="e_nama" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="small fw-bold">KETERANGAN</label>
-                        <textarea name="keterangan" id="e_keterangan" class="form-control" rows="3"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label class="small fw-bold">STATUS</label>
-                        <select name="status" id="e_status" class="form-select">
-                            <option value="1">Aktif</option>
-                            <option value="0">Non-Aktif</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-warning w-100 btn-rounded text-white mt-2">Update Perubahan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+<style>
+    .bg-success-soft { background-color: #e6fffa; color: #38b2ac; }
+    .bg-danger-soft { background-color: #fff5f5; color: #e53e3e; }
+    .mb-5 { margin-bottom: 3rem !important; }
+</style>
 
 <script>
     function btnEdit(id, nama, status, keterangan, fk_periode) {
