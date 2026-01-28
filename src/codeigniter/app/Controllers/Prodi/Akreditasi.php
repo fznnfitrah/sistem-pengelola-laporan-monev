@@ -78,6 +78,6 @@ class Akreditasi extends BaseController
         // 3. Simpan ke Database (Insert baru, jadi datanya menumpuk/history)
         $this->akreditasiModel->save($dataSimpan);
 
-        return redirect()->to('prodi/akreditasi')->with('message', 'Data akreditasi berhasil ditambahkan!');
+        return redirect()->to('prodi/akreditasi/akreditasi_view')->with('message', 'Data akreditasi berhasil ditambahkan!');
     }
 }

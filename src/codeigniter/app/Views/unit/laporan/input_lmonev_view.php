@@ -5,14 +5,14 @@
     <div class="card shadow-sm border-0 mb-4" style="border-radius: 15px;">
         <div class="card-body d-flex justify-content-between align-items-center">
             <div>
-                <h5 class="fw-bold text-success mb-0">Tagihan Laporan Monev Prodi</h5>
+                <h5 class="fw-bold text-success mb-0">Tagihan Laporan Monev Unit</h5>
                 <p class="text-muted small mb-0">Silakan pilih periode untuk mengisi atau memperbarui laporan.</p>
             </div>
             <form action="" method="get" class="d-flex gap-2">
                 <select name="periode" class="form-select border-2" style="width: 280px; border-radius: 10px;">
                     <?php foreach ($semua_periode as $p) : ?>
                         <option value="<?= $p['id'] ?>" <?= ($p['id'] == $periode_pilih['id']) ? 'selected' : '' ?>>
-                            <?= esc($p['tahun_akademik']) ?> - <?= esc($p['semester']) ?> 
+                            <?= esc($p['tahun_akademik']) ?> - <?= esc($p['semester']) ?>
                             <?= ($p['status_aktif'] == 1) ? '(Aktif)' : '' ?>
                         </option>
                     <?php endforeach; ?>
@@ -42,7 +42,8 @@
                             </tr>
                         <?php endif; ?>
 
-                        <?php $no = 1; foreach ($daftar_monev as $item) : ?>
+                        <?php $no = 1;
+                        foreach ($daftar_monev as $item) : ?>
                             <?php
                             $sudahLapor = array_key_exists($item['id'], $laporan_unit);
                             $dataLaporan = $sudahLapor ? $laporan_unit[$item['id']] : null;
@@ -71,7 +72,7 @@
                                         </div>
 
                                         <div class="collapse mt-2" id="editForm<?= $item['id'] ?>">
-                                            <form action="<?= base_url('prodi/laporan/save') ?>" method="post" class="row g-2 p-2 border rounded bg-white">
+                                            <form action="<?= base_url('unit/laporan/save') ?>" method="post" class="row g-2 p-2 border rounded bg-white">
                                                 <?= csrf_field() ?>
                                                 <input type="hidden" name="fk_monev" value="<?= $item['id'] ?>">
                                                 <input type="hidden" name="fk_setting_periode" value="<?= $periode_pilih['id'] ?>">
@@ -88,11 +89,11 @@
                                         </div>
 
                                     <?php else : ?>
-                                        <form action="<?= base_url('prodi/laporan/save') ?>" method="post" class="row g-2 p-1">
+                                        <form action="<?= base_url('unit/laporan/save') ?>" method="post" class="row g-2 p-1">
                                             <?= csrf_field() ?>
                                             <input type="hidden" name="fk_monev" value="<?= $item['id'] ?>">
                                             <input type="hidden" name="fk_setting_periode" value="<?= $periode_pilih['id'] ?>">
-                                            
+
                                             <div class="col-md-5">
                                                 <input type="url" name="link_bukti" class="form-control form-control-sm border-2" placeholder="Link G-Drive/Dokumen..." required style="border-radius: 8px;">
                                             </div>

@@ -2,7 +2,7 @@
 
 <?= $this->section('content') ?>
 <div class="container-fluid py-4">
-    
+
     <div class="d-flex align-items-center justify-content-between mb-4">
         <div>
             <h4 class="fw-bold text-success mb-1">Input Akreditasi Baru</h4>
@@ -15,7 +15,7 @@
 
     <div class="card border-0 shadow-sm" style="border-radius: 15px;">
         <div class="card-body p-4">
-            
+
             <?php if (session()->has('validation')) : ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="bi bi-exclamation-triangle-fill me-2"></i>
@@ -26,13 +26,13 @@
 
             <form action="<?= base_url('prodi/akreditasi/create') ?>" method="post">
                 <?= csrf_field() ?>
-                
+
                 <div class="row g-4">
                     <div class="col-lg-6 border-end">
                         <h6 class="text-uppercase text-success fw-bold small mb-3 border-bottom pb-2">
                             <i class="bi bi-award me-2"></i>Data Surat Keputusan (SK)
                         </h6>
-                        
+
                         <div class="mb-3">
                             <label class="form-label fw-bold small">Lembaga Akreditasi <span class="text-danger">*</span></label>
                             <select name="fk_lembaga" class="form-select <?= session('validation') && session('validation')->hasError('fk_lembaga') ? 'is-invalid' : '' ?>">
@@ -88,7 +88,7 @@
                         <h6 class="text-uppercase text-secondary fw-bold small mb-3 border-bottom pb-2">
                             <i class="bi bi-folder2-open me-2"></i>Data Pendukung
                         </h6>
-                        
+
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold small">Tahun Penyusunan</label>

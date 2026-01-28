@@ -40,7 +40,7 @@ class Periode extends BaseController
         $this->periodeModel->insert([
             'semester'          => $this->request->getPost('semester'),
             'tahun_akademik'    => $this->request->getPost('tahun_akademik'),
-            'create_by_fk_user' => $userId, // Sekarang data ini tidak akan NULL lagi
+            'create_by_fk_user' => $userId,
             'status_aktif'      => 0
         ]);
         

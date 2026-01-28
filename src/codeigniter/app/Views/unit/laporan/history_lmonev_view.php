@@ -107,16 +107,6 @@
     </div>
 </div>
 
-<!-- <script>
-    function showDetail(tanggal, monev, periode, unit, link, keterangan) {
-        document.getElementById('d_tanggal').innerText = tanggal;
-        document.getElementById('d_monev').innerText = monev;
-        document.getElementById('d_periode').innerText = periode;
-        document.getElementById('d_unit').innerText = unit;
-        document.getElementById('d_keterangan').innerText = keterangan || 'Tidak ada catatan.';
-        document.getElementById('d_link').href = link;
-    }
-</script> -->
 
 <script>
     // Ambil elemen modal

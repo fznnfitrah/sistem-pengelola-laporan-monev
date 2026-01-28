@@ -21,7 +21,7 @@ $routes->group('profile', ['filter' => 'auth'], function ($routes) {
 });
 
 
-// Routes untuk role UNIVERSITAS
+// ROUTES UNTUK ROLE ADMIN
 $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($routes) {
     // ROUTES UNTUK ROLES
     $routes->get('roles', 'Roles::index');
@@ -41,7 +41,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
 });
 
 
-// Routes untuk role prodi
+// ROUTES UNTUK ROLE PRODI
 $routes->group('prodi', ['namespace' => 'App\Controllers\Prodi'], function ($routes) {
     // ROUTES UNTUK MONEV
     $routes->get('laporan/history', 'Laporan::history');
@@ -58,7 +58,7 @@ $routes->group('prodi', ['namespace' => 'App\Controllers\Prodi'], function ($rou
     $routes->post('akreditasi/create', 'Akreditasi::create');
 });
 
-// Routes untuk role unit
+// ROUTES UNTUK ROLE UNIT
 $routes->group('unit', ['namespace' => 'App\Controllers\Unit'], function ($routes) {
 
     // Laporan Monev
@@ -73,7 +73,7 @@ $routes->group('unit', ['namespace' => 'App\Controllers\Unit'], function ($route
 
 
 
-// Routes untuk role universitas
+// ROUTES UNTUK ROLE UNIVERSITAS
 $routes->group('univ', function ($routes) {
     $routes->get('master', 'Univ\Master::index');
 
@@ -131,8 +131,7 @@ $routes->group('univ', function ($routes) {
 });
 
 
-
-// Routes untuk role fakultas
+// ROUTES UNTUK ROLE FAKULTAS
 $routes->group('fakultas', function ($routes) {
     $routes->get('dashboard', 'Fakultas\Dashboard::index');
     $routes->get('laporan/input', 'Fakultas\Laporan::input');
