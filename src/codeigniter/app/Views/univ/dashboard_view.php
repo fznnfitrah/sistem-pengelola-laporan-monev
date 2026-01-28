@@ -65,6 +65,22 @@
                 <a href="<?= base_url('univ/monitoring/akreditasi') ?>" class="btn btn-custom w-100">Buka</a>
             </div>
         </div>
+        <div class="col-md-4 mb-4">
+            <div class="card dashboard-card shadow-sm text-center p-4">
+                <div class="mb-3"><i class="bi bi-journal-text fs-1 text-success"></i></div>
+                <h5 class="mb-2">Jenjang Prodi</h5>
+                <p class="mb-4">Kelola jenjang pendidikan untuk prodi.</p>
+                <a href="<?= base_url('univ/jenjang') ?>" class="btn btn-custom w-100">Buka</a>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card dashboard-card shadow-sm text-center p-4">
+                <div class="mb-3"><i class="bi bi-building fs-1 text-success"></i></div>
+                <h5 class="mb-2">Lembaga Akreditasi</h5>
+                <p class="mb-4">Kelola data lembaga akreditasi prodi.</p>
+                <a href="<?= base_url('univ/lembaga_akreditasi') ?>" class="btn btn-custom w-100">Buka</a>
+            </div>
+        </div>
     </div>
 </div>
 <?= $this->endSection() ?>

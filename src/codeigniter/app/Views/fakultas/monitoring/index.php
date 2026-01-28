@@ -8,11 +8,13 @@
                 <h4 class="fw-bold text-success mb-0">Monitoring Laporan Prodi</h4>
                 <p class="text-muted small mb-0">Memantau progres pengunggahan dokumen Program Studi di lingkup Fakultas.</p>
             </div>
+            
             <form action="" method="get" class="d-flex gap-2">
-                <select name="periode" class="form-select border-2" style="width: 250px; border-radius: 10px;">
-                    <?php foreach($periode as $p): ?>
+                <select name="periode" class="form-select border-2" style="width: 300px; border-radius: 10px;">
+                    <?php foreach ($semua_periode as $p) : ?>
                         <option value="<?= $p['id'] ?>" <?= ($p['id'] == $selectedPeriode) ? 'selected' : '' ?>>
-                            <?= $p['tahun_akademik'] ?> - <?= $p['semester'] ?>
+                            <?= esc($p['tahun_akademik']) ?> - <?= esc($p['semester']) ?> 
+                            <?= ($p['status_aktif'] == 1) ? '(Aktif)' : '' ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -29,15 +31,16 @@
                         <tr>
                             <th class="text-start ps-4" width="25%">Nama Program Studi</th>
                             <?php foreach($tagihan as $t): ?>
-                                <th style="font-size: 0.65rem;"><?= esc($t['nama_monev']) ?></th>
+                                <th style="font-size: 0.7rem;"><?= esc($t['nama_monev']) ?></th>
                             <?php endforeach; ?>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach($prodi as $pr): ?>
                         <tr>
-                            <td class="text-start ps-4 small text-dark fw-bold"><?= esc($pr['nama_prodi']) ?></td>
+                            <td class="text-start ps-4 fw-bold text-dark"><?= esc($pr['nama_prodi']) ?></td>
                             <?php foreach($tagihan as $t): 
+                                // Mencocokkan data prodi & item monev
                                 $key = 'PRO_' . trim($pr['id']) . '_' . $t['id'];
                                 $ada = isset($statusLaporan[$key]);
                             ?>
@@ -55,7 +58,7 @@
                         <?php endforeach; ?>
                         
                         <?php if(empty($prodi)): ?>
-                            <tr><td colspan="<?= count($tagihan) + 1 ?>" class="py-4 text-muted">Tidak ada data prodi di fakultas ini.</td></tr>
+                            <tr><td colspan="<?= count($tagihan) + 1 ?>" class="py-4 text-muted fst-italic">Tidak ada data prodi di fakultas ini.</td></tr>
                         <?php endif; ?>
                     </tbody>
                 </table>

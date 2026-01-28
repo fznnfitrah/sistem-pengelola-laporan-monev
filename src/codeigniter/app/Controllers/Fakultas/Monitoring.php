@@ -16,34 +16,39 @@ class Monitoring extends BaseController
         $laporanModel = new LaporanMonevModel();
         $db = \Config\Database::connect();
 
-        // 1. Ambil ID Fakultas dari Session
+        // 1. Ambil ID Fakultas dari Session user yang login
         $idFakultas = session()->get('fk_fakultas');
 
-        // 2. Filter Periode
+        // 2. Tentukan Periode (Default ke periode aktif jika tidak ada filter)
         $periodeAktif = $periodeModel->where('status_aktif', 1)->first();
         $periodeId = $this->request->getGet('periode') ?: ($periodeAktif['id'] ?? null);
 
-        // 3. Ambil Item Monev periode terpilih
+        // 3. Ambil Item Monev (Header Tabel) untuk periode terpilih
         $tagihanMonev = $monevModel->where('fk_setting_periode', $periodeId)->findAll();
 
-        // 4. Ambil Daftar Prodi khusus Fakultas ini
+        // 4. Ambil Daftar Prodi yang terdaftar di Fakultas ini
         $listProdi = $db->table('mProdi')->where('fk_fakultas', $idFakultas)->get()->getResultArray();
-
-        // 5. Ambil semua laporan prodi pada periode ini
-        $laporanMasuk = $laporanModel->where('fk_setting_periode', $periodeId)
-                                     ->where('fk_fakultas', $idFakultas)
-                                     ->where('fk_prodi !=', null)
-                                     ->findAll();
         
+        // Ambil semua ID prodi untuk filter laporan
+        $prodiIds = array_column($listProdi, 'id');
+
+        // 5. Ambil data laporan masuk
         $statusLaporan = [];
-        foreach ($laporanMasuk as $lp) {
-            $key = 'PRO_' . trim($lp['fk_prodi']) . '_' . $lp['fk_monev'];
-            $statusLaporan[$key] = $lp;
+        if (!empty($prodiIds)) {
+            $laporanMasuk = $laporanModel->where('fk_setting_periode', $periodeId)
+                                         ->whereIn('fk_prodi', $prodiIds) // Filter berdasarkan prodi fakultas ini
+                                         ->findAll();
+            
+            // Mapping data agar mudah dipanggil di View
+            foreach ($laporanMasuk as $lp) {
+                $key = 'PRO_' . trim($lp['fk_prodi']) . '_' . $lp['fk_monev'];
+                $statusLaporan[$key] = $lp;
+            }
         }
 
         $data = [
             'title'           => 'Monitoring Progres Prodi',
-            'periode'         => $periodeModel->findAll(),
+            'semua_periode'   => $periodeModel->findAll(), // Untuk dropdown filter
             'selectedPeriode' => $periodeId,
             'tagihan'         => $tagihanMonev,
             'prodi'           => $listProdi,
