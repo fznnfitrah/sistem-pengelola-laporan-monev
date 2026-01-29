@@ -13,12 +13,12 @@ class Profile extends BaseController
         $this->userModel = new UserModel();
     }
 
-    // --- HALAMAN UTAMA (MENAMPILKAN SEMUA DATA) ---
+    // --- HALAMAN UTAMA (VIEW & EDIT JADI SATU) ---
     public function index()
     {
         $userId = session()->get('current_user_id');
 
-        // WAJIB JOIN: Agar di halaman profil muncul "Perpustakaan", "Teknik Informatika", dll.
+        // JOIN DATA LENGKAP
         $userData = $this->userModel
             ->select('user.*, mProdi.nama_prodi, mUnit.nama_unit, mFakultas.nama_fakultas, roles.nama_roles')
             ->join('mProdi', 'mProdi.id = user.fk_prodi', 'left')
@@ -32,56 +32,67 @@ class Profile extends BaseController
         }
 
         $data = [
-            'title' => 'Profil Saya',
-            'user'  => $userData
+            'title'      => 'Profil Saya',
+            'user'       => $userData,
+            // Kirim validasi ke view untuk menangkap error input (jika ada)
+            'validation' => \Config\Services::validation()
         ];
 
         return view('profile/profile_view', $data);
     }
 
-    // --- HALAMAN EDIT (HANYA YANG BOLEH DIUBAH) ---
-    public function edit()
-    {
-        $userId = session()->get('current_user_id');
-
-        // Cukup ambil data user biasa (tanpa join), karena di form edit kita tidak menampilkan prodi/unit
-        $data = [
-            'title'      => 'Edit Profil Saya',
-            'user'       => $this->userModel->find($userId),
-            'validation' => \Config\Services::validation()
-        ];
-
-        return view('profile/profile_edit_view', $data);
-    }
-
-    // --- PROSES UPDATE (LOGIKA PENYIMPANAN) ---
+    // --- PROSES UPDATE ---
     public function update()
     {
         $userId = session()->get('current_user_id');
 
+        // Validasi input
         $rules = [
-            'username' => 'required|min_length[3]',
-            'email'    => 'required|valid_email',
-            'password' => 'permit_empty|min_length[6]'
+            'username' => [
+                'rules' => 'required|min_length[3]',
+                'errors' => [
+                    'required' => 'Username wajib diisi.',
+                    'min_length' => 'Username minimal 3 karakter.'
+                ]
+            ],
+            'email'    => [
+                'rules' => 'permit_empty|valid_email',
+                'errors' => [
+                    'valid_email' => 'Format email tidak valid.'
+                ]
+            ],
+            'password' => [
+                'rules' => 'permit_empty|min_length[6]',
+                'errors' => [
+                    'min_length' => 'Password baru minimal 6 karakter.'
+                ]
+            ]
         ];
 
         if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('validation', $this->validator);
+            // Jika gagal, kembalikan ke halaman profile (index) dengan input & error
+            return redirect()->to('/profile')->withInput()->with('validation', $this->validator);
         }
+
+        // Siapkan data update
+        $emailInput = $this->request->getPost('email');
 
         $updateData = [
             'username' => $this->request->getPost('username'),
-            'email'    => $this->request->getPost('email'),
+            'email'    => empty($emailInput) ? null : $emailInput,
         ];
 
+        // Cek apakah password diisi?
         $newPassword = $this->request->getPost('password');
         if (!empty($newPassword)) {
-            $updateData['password'] = $newPassword;
+            // Sebaiknya di-hash (jika Anda menggunakan password_hash di sistem login)
+            // $updateData['password'] = password_hash($newPassword, PASSWORD_DEFAULT);
+            $updateData['password'] = $newPassword; // Sesuaikan dengan sistem hash Anda
         }
 
         $this->userModel->update($userId, $updateData);
 
-        // Update session username agar navbar langsung berubah
+        // Update session username agar navbar langsung berubah tanpa logout
         session()->set(['username' => $updateData['username']]);
 
         return redirect()->to('/profile')->with('message', 'Profil berhasil diperbaharui!');

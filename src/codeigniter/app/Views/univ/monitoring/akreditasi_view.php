@@ -42,30 +42,53 @@
                         </thead>
                         <tbody>
                             <?php $no = 1; foreach ($prodis as $p) : 
-                                $tgl_k = strtotime($p['tgl_kadaluarsa']);
-                                $isExpired = $tgl_k < time();
-                                $isWarning = $tgl_k < strtotime("+6 months") && !$isExpired;
+                                // --- LOGIKA BARU ---
+                                // 1. Cek Validitas Tanggal
+                                $tglRaw = $p['tgl_kadaluarsa'];
+                                $hasDate = !empty($tglRaw) && $tglRaw != '0000-00-00';
+                                
+                                // 2. Default Variables
+                                $displayDate = '<span class="text-muted fw-bold">-</span>';
+                                $badgeStatus = '<span class="badge bg-secondary">'.esc($p['tahap']).'</span>'; // Default tampilkan tahap (ex: Persiapan)
+
+                                // 3. Jika tanggal valid, jalankan logika Expired
+                                if ($hasDate) {
+                                    $tgl_k = strtotime($tglRaw);
+                                    $isExpired = $tgl_k < time();
+                                    $isWarning = $tgl_k < strtotime("+6 months") && !$isExpired;
+                                    
+                                    $displayDate = date('d M Y', $tgl_k);
+                                    
+                                    if ($isExpired) {
+                                        $displayDate = '<span class="text-danger fw-bold">'.$displayDate.'</span>';
+                                        $badgeStatus = '<span class="badge bg-danger">Kadaluarsa</span>';
+                                    } elseif ($isWarning) {
+                                        $displayDate = '<span class="text-warning fw-bold">'.$displayDate.'</span>';
+                                        $badgeStatus = '<span class="badge bg-warning text-dark">Hampir Habis</span>';
+                                    } else {
+                                        $displayDate = '<span class="text-success fw-bold">'.$displayDate.'</span>';
+                                        $badgeStatus = '<span class="badge bg-success">Berlaku</span>';
+                                    }
+                                }
                             ?>
                                 <tr>
                                     <td class="text-center"><?= $no++ ?></td>
                                     <td>
                                         <div class="fw-bold text-dark"><?= esc($p['nama_prodi']) ?> (<?= esc($p['jenjang']) ?>)</div>
-                                        <small class="text-muted">SK: <?= esc($p['no_sk_akreditasi']) ?></small>
+                                        <small class="text-muted">SK: <?= esc($p['no_sk_akreditasi'] ?: '-') ?></small>
                                     </td>
                                     <td class="text-center">
-                                        <span class="badge bg-primary fs-6"><?= esc($p['peringkat']) ?></span><br>
+                                        <span class="badge bg-primary fs-6"><?= esc($p['peringkat'] ?: '-') ?></span><br>
                                         <small class="fw-bold">Skor: <?= esc($p['nilai']) ?></small>
                                     </td>
+                                    
                                     <td class="text-center">
-                                        <div class="small fw-bold <?= $isExpired ? 'text-danger' : ($isWarning ? 'text-warning' : 'text-success') ?>">
-                                            <?= date('d M Y', $tgl_k) ?>
+                                        <div class="small mb-1">
+                                            <?= $displayDate ?>
                                         </div>
-                                        <?php if ($isExpired) : ?>
-                                            <span class="badge bg-danger">Kadaluarsa</span>
-                                        <?php elseif ($isWarning) : ?>
-                                            <span class="badge bg-warning text-dark">Hampir Habis</span>
-                                        <?php endif; ?>
+                                        <?= $badgeStatus ?>
                                     </td>
+                                    
                                     <td class="text-center">
                                         <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalDetail<?= $p['id'] ?>">
                                             <i class="bi bi-search"></i> Detail
@@ -81,7 +104,14 @@
     <?php endforeach; ?>
 </div>
 
-<?php foreach ($allData as $p) : ?>
+<?php foreach ($allData as $p) : 
+    // Logic tanggal untuk modal juga perlu diperbaiki
+    $tglTerbitRaw = $p['tgl_sk_keluar'];
+    $tglExpRaw = $p['tgl_kadaluarsa'];
+    
+    $showTerbit = (!empty($tglTerbitRaw) && $tglTerbitRaw != '0000-00-00') ? date('d M Y', strtotime($tglTerbitRaw)) : '-';
+    $showExp = (!empty($tglExpRaw) && $tglExpRaw != '0000-00-00') ? date('d M Y', strtotime($tglExpRaw)) : '-';
+?>
 <div class="modal fade" id="modalDetail<?= $p['id'] ?>" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0 shadow" style="border-radius: 20px;">
@@ -115,16 +145,16 @@
                     <div class="col-md-6">
                         <div class="p-3 bg-light rounded-3 mb-3">
                             <label class="small text-muted mb-0">Nomor SK</label>
-                            <div class="fw-bold"><?= esc($p['no_sk_akreditasi']) ?></div>
+                            <div class="fw-bold"><?= esc($p['no_sk_akreditasi'] ?: 'Belum Ada SK') ?></div>
                         </div>
                         <div class="row g-2">
                             <div class="col-6">
                                 <label class="small text-muted">Tgl Terbit</label>
-                                <div class="fw-bold"><?= date('d M Y', strtotime($p['tgl_sk_keluar'])) ?></div>
+                                <div class="fw-bold"><?= $showTerbit ?></div>
                             </div>
                             <div class="col-6">
                                 <label class="small text-muted">Tgl Kadaluarsa</label>
-                                <div class="fw-bold text-danger"><?= date('d M Y', strtotime($p['tgl_kadaluarsa'])) ?></div>
+                                <div class="fw-bold text-danger"><?= $showExp ?></div>
                             </div>
                         </div>
                         <hr>
@@ -132,10 +162,17 @@
                         <div class="small text-muted">Inputer: <strong><?= esc($p['penginput']) ?></strong></div>
                     </div>
                 </div>
+                
                 <div class="mt-4 d-grid">
-                    <a href="<?= esc($p['link_sertifikat']) ?>" target="_blank" class="btn btn-success py-2 fw-bold" style="border-radius: 10px;">
-                        <i class="bi bi-cloud-arrow-down me-2"></i> Buka Sertifikat Dokumen
-                    </a>
+                    <?php if (!empty($p['link_sertifikat'])): ?>
+                        <a href="<?= esc($p['link_sertifikat']) ?>" target="_blank" class="btn btn-success py-2 fw-bold" style="border-radius: 10px;">
+                            <i class="bi bi-cloud-arrow-down me-2"></i> Buka Sertifikat Dokumen
+                        </a>
+                    <?php else: ?>
+                         <button class="btn btn-secondary py-2 fw-bold" disabled style="border-radius: 10px;">
+                            <i class="bi bi-slash-circle me-2"></i> Sertifikat Tidak Tersedia
+                        </button>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

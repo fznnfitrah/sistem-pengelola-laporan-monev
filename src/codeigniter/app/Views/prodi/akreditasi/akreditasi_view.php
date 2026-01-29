@@ -35,40 +35,52 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php 
+                        <?php
                         $no = 1;
                         $today = new DateTime(); // Waktu sekarang
 
-                        foreach ($riwayat as $row): 
-                            
-                            // 1. HITUNG MUNDUR (COUNTDOWN)
-                            $tglExp = new DateTime($row['tgl_kadaluarsa']);
-                            $interval = $today->diff($tglExp); // Selisih waktu
+                        foreach ($riwayat as $row):
 
-                            // Tentukan warna & teks status
-                            $badgeColor = 'bg-success'; 
-                            $statusText = 'Berlaku';
-                            $countdownText = "";
+                            // --- 1. CEK APAKAH ADA TANGGAL KADALUARSA? ---
+                            $tglKadaluarsa = $row['tgl_kadaluarsa'];
+                            $hasExpiration = !empty($tglKadaluarsa) && $tglKadaluarsa != '0000-00-00';
 
-                            // Logic Warna & Warning
-                            if ($tglExp < $today) {
-                                // SUDAH KADALUARSA
-                                $badgeColor = 'bg-secondary';
-                                $statusText = 'Kadaluarsa';
-                                $countdownText = "Lewat " . $interval->format('%y Thn %m Bln');
-                            } elseif ($interval->days <= 180) { 
-                                // KRITIS (< 6 Bulan)
-                                $badgeColor = 'bg-danger';
-                                $statusText = 'Segera Habis';
-                                $countdownText = $interval->format('%m Bln %d Hari lagi');
-                            } elseif ($interval->days <= 365) { 
-                                // WARNING (< 1 Tahun)
-                                $badgeColor = 'bg-warning text-dark';
-                                $statusText = 'Warning';
-                                $countdownText = $interval->format('%m Bln %d Hari lagi');
-                            } else {
-                                // AMAN
-                                $countdownText = $interval->format('%y Thn %m Bln lagi');
+                            // Default Variables (Jika tidak ada tanggal)
+                            $badgeColor = 'bg-secondary';
+                            $statusText = $row['tahap']; // Ambil status dari tahap (misal: Persiapan)
+                            $countdownText = '-';
+                            $formattedExpDate = '<span class="text-muted">-</span>';
+
+                            // --- 2. JIKA TANGGAL ADA, HITUNG MUNDUR ---
+                            if ($hasExpiration) {
+                                $tglExp = new DateTime($tglKadaluarsa);
+                                $interval = $today->diff($tglExp); // Selisih waktu
+
+                                // Format tampilan tanggal
+                                $formattedExpDate = date('d M Y', strtotime($tglKadaluarsa));
+
+                                // Logic Warna & Warning
+                                if ($tglExp < $today) {
+                                    // SUDAH KADALUARSA
+                                    $badgeColor = 'bg-secondary';
+                                    $statusText = 'Kadaluarsa';
+                                    $countdownText = "Lewat " . $interval->format('%y Thn %m Bln');
+                                } elseif ($interval->days <= 180) {
+                                    // KRITIS (< 6 Bulan)
+                                    $badgeColor = 'bg-danger';
+                                    $statusText = 'Segera Habis';
+                                    $countdownText = $interval->format('%m Bln %d Hari lagi');
+                                } elseif ($interval->days <= 365) {
+                                    // WARNING (< 1 Tahun)
+                                    $badgeColor = 'bg-warning text-dark';
+                                    $statusText = 'Warning';
+                                    $countdownText = $interval->format('%m Bln %d Hari lagi');
+                                } else {
+                                    // AMAN
+                                    $badgeColor = 'bg-success';
+                                    $statusText = 'Berlaku';
+                                    $countdownText = $interval->format('%y Thn %m Bln lagi');
+                                }
                             }
                         ?>
                             <tr>
@@ -76,28 +88,32 @@
                                 <td class="text-start">
                                     <div class="fw-bold text-dark"><?= esc($row['nama_lembaga']) ?></div>
                                     <div class="small text-muted" style="font-size: 0.75rem;">
-                                        No SK: <?= esc($row['no_sk_akreditasi']) ?>
+                                        No SK: <?= esc($row['no_sk_akreditasi'] ?: '-') ?>
                                     </div>
                                     <div class="small text-muted" style="font-size: 0.75rem;">
-                                        Tgl Terbit: <?= date('d M Y', strtotime($row['tgl_sk_keluar'])) ?>
+                                        Tgl Terbit: <?= (!empty($row['tgl_sk_keluar']) && $row['tgl_sk_keluar'] != '0000-00-00') ? date('d M Y', strtotime($row['tgl_sk_keluar'])) : '-' ?>
                                     </div>
                                 </td>
                                 <td>
-                                    <?php if(!empty($row['peringkat'])): ?>
+                                    <?php if (!empty($row['peringkat'])): ?>
                                         <span class="fw-bold text-primary"><?= esc($row['peringkat']) ?></span>
                                     <?php else: ?>
                                         <span class="text-muted">-</span>
                                     <?php endif; ?>
                                 </td>
                                 <td><?= esc($row['nilai'] ?? '-') ?></td>
+
                                 <td>
                                     <div class="fw-bold text-dark">
-                                        <?= date('d M Y', strtotime($row['tgl_kadaluarsa'])) ?>
+                                        <?= $formattedExpDate ?>
                                     </div>
-                                    <small class="<?= ($tglExp < $today) ? 'text-danger' : 'text-success' ?> fw-bold" style="font-size: 0.75rem;">
-                                        <i class="bi bi-clock me-1"></i><?= $countdownText ?>
-                                    </small>
+                                    <?php if ($hasExpiration): ?>
+                                        <small class="<?= ($tglExp < $today) ? 'text-danger' : 'text-success' ?> fw-bold" style="font-size: 0.75rem;">
+                                            <i class="bi bi-clock me-1"></i><?= $countdownText ?>
+                                        </small>
+                                    <?php endif; ?>
                                 </td>
+
                                 <td>
                                     <span class="badge <?= $badgeColor ?> rounded-pill" style="font-size: 0.65rem;">
                                         <?= $statusText ?>
@@ -105,10 +121,10 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-success" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#modalDetail<?= $row['id'] ?>"
-                                                title="Lihat Detail">
+                                        <button type="button" class="btn btn-sm btn-outline-success"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalDetail<?= $row['id'] ?>"
+                                            title="Lihat Detail">
                                             <i class="bi bi-eye"></i> Detail
                                         </button>
                                     </div>
@@ -125,7 +141,7 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body p-4">
-                                            
+
                                             <div class="row g-4">
                                                 <div class="col-md-6 border-end">
                                                     <div class="mb-3">
@@ -154,30 +170,44 @@
                                                 <div class="col-md-6 ps-md-4">
                                                     <div class="p-3 bg-light rounded-3 mb-3 border">
                                                         <label class="small text-muted fw-bold d-block mb-1">Nomor SK</label>
-                                                        <span class="fw-bold text-dark text-break"><?= esc($row['no_sk_akreditasi']) ?></span>
+                                                        <span class="fw-bold text-dark text-break"><?= esc($row['no_sk_akreditasi'] ?: '-') ?></span>
                                                     </div>
 
                                                     <div class="row mb-3">
                                                         <div class="col-6">
                                                             <label class="small text-muted fw-bold">Tanggal Terbit</label>
-                                                            <div class="fw-bold"><?= date('d M Y', strtotime($row['tgl_sk_keluar'])) ?></div>
+                                                            <div class="fw-bold">
+                                                                <?= (!empty($row['tgl_sk_keluar']) && $row['tgl_sk_keluar'] != '0000-00-00') ? date('d M Y', strtotime($row['tgl_sk_keluar'])) : '-' ?>
+                                                            </div>
                                                         </div>
                                                         <div class="col-6">
                                                             <label class="small text-muted fw-bold text-danger">Tanggal Kadaluarsa</label>
-                                                            <div class="fw-bold text-danger"><?= date('d M Y', strtotime($row['tgl_kadaluarsa'])) ?></div>
+                                                            <div class="fw-bold text-danger">
+                                                                <?= $hasExpiration ? date('d M Y', strtotime($row['tgl_kadaluarsa'])) : '-' ?>
+                                                            </div>
                                                         </div>
                                                     </div>
 
-                                                    <div class="alert <?= ($tglExp < $today) ? 'alert-secondary' : 'alert-success' ?> d-flex align-items-center mb-0" role="alert">
-                                                        <i class="bi bi-hourglass-split me-2 fs-4"></i>
-                                                        <div>
-                                                            <small class="d-block fw-bold">Sisa Masa Berlaku:</small>
-                                                            <?= ($tglExp < $today) ? 'Sudah Berakhir' : $interval->format('%y Tahun, %m Bulan, %d Hari') ?>
+                                                    <?php if ($hasExpiration): ?>
+                                                        <div class="alert <?= ($tglExp < $today) ? 'alert-secondary' : 'alert-success' ?> d-flex align-items-center mb-0" role="alert">
+                                                            <i class="bi bi-hourglass-split me-2 fs-4"></i>
+                                                            <div>
+                                                                <small class="d-block fw-bold">Sisa Masa Berlaku:</small>
+                                                                <?= ($tglExp < $today) ? 'Sudah Berakhir' : $interval->format('%y Tahun, %m Bulan, %d Hari') ?>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    <?php else: ?>
+                                                        <div class="alert alert-light border d-flex align-items-center mb-0 text-muted">
+                                                            <i class="bi bi-info-circle me-2 fs-4"></i>
+                                                            <div>
+                                                                <small class="d-block fw-bold">Status:</small>
+                                                                Tidak ada masa berlaku (<?= esc($row['tahap']) ?>)
+                                                            </div>
+                                                        </div>
+                                                    <?php endif; ?>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="mt-4 pt-3 border-top">
                                                 <label class="small text-muted fw-bold mb-2">Informasi Lainnya:</label>
                                                 <div class="row small text-secondary">
@@ -196,7 +226,7 @@
                                         </div>
                                         <div class="modal-footer bg-light border-0">
                                             <button type="button" class="btn btn-light text-secondary" data-bs-dismiss="modal">Tutup</button>
-                                            
+
                                             <?php if (!empty($row['link_sertifikat'])): ?>
                                                 <a href="<?= esc($row['link_sertifikat']) ?>" target="_blank" class="btn btn-success shadow-sm">
                                                     <i class="bi bi-file-earmark-pdf-fill me-2"></i>Buka Sertifikat
@@ -208,7 +238,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <?php endforeach; ?>
+                        <?php endforeach; ?>
 
                         <?php if (empty($riwayat)): ?>
                             <tr>

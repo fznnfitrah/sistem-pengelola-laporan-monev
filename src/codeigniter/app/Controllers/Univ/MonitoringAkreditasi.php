@@ -7,16 +7,22 @@ use App\Models\AkreditasiModel;
 
 class MonitoringAkreditasi extends BaseController
 {
+    protected $model;
+
+    public function __construct()
+    {
+        $this->model = new AkreditasiModel();
+    }
+
     public function index()
     {
-        $model = new \App\Models\AkreditasiModel();
-        $allData = $model->getLatestAkreditasiAll();
+        $allData = $this->model->getLatestAkreditasiAll();
 
         $groupedData = [];
         $stats = [
             'total_prodi' => count($allData),
             'kadaluarsa'  => 0,
-            'akan_habis'  => 0 
+            'akan_habis'  => 0
         ];
 
         foreach ($allData as $row) {
@@ -26,7 +32,7 @@ class MonitoringAkreditasi extends BaseController
             // PERBAIKAN DI SINI: Hilangkan spasi pada nama variabel
             $kadaluarsa = strtotime($row['tgl_kadaluarsa']);
             $enamBulanLagi = strtotime("+6 months");
-            
+
             if ($kadaluarsa < time()) {
                 $stats['kadaluarsa']++;
             } elseif ($kadaluarsa < $enamBulanLagi) {
