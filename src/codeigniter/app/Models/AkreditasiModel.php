@@ -78,4 +78,35 @@ class AkreditasiModel extends Model
             ->orderBy('mFakultas.nama_fakultas', 'ASC')
             ->findAll();
     }
+    public function getRekapSemuaProdi()
+    {
+        // Mengambil dasar dari mProdi agar semua prodi muncul
+        return $this->db->table('mProdi')
+            ->select('
+                mProdi.nama_prodi, 
+                mProdi.id as prodi_id,
+                mJenjang.jenjang, 
+                mFakultas.nama_fakultas,
+                akreditasi_prodi.peringkat,
+                akreditasi_prodi.nilai,
+                akreditasi_prodi.no_sk_akreditasi,
+                akreditasi_prodi.tgl_kadaluarsa,
+                akreditasi_prodi.biaya,
+                akreditasi_prodi.tahap,
+                akreditasi_prodi.tahun_penyusunan,
+                akreditasi_prodi.ts,
+                akreditasi_prodi.ts-1,
+                akreditasi_prodi.ts-2,
+                akreditasi_prodi.link_sertifikat,
+                mLembaga_akreditasi.nama_lembaga,
+                mLembaga_akreditasi.jenis_lembaga
+            ')
+            ->join('mFakultas', 'mFakultas.id = mProdi.fk_fakultas')
+            ->join('mJenjang', 'mJenjang.id = mProdi.fk_jenjang', 'left')
+            // Join ke subquery akreditasi terbaru per prodi
+            ->join('(SELECT * FROM akreditasi_prodi WHERE id IN (SELECT MAX(id) FROM akreditasi_prodi GROUP BY fk_prodi)) as akreditasi_prodi', 'akreditasi_prodi.fk_prodi = mProdi.id', 'left')
+            ->join('mLembaga_akreditasi', 'mLembaga_akreditasi.id = akreditasi_prodi.fk_lembaga_akreditasi', 'left')
+            ->orderBy('mFakultas.nama_fakultas', 'ASC')
+            ->get()->getResultArray();
+    }
 }

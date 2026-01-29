@@ -23,6 +23,22 @@
         </div>
     </div>
 
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm border-0 p-3 bg-light" style="border-radius: 15px; border-left: 5px solid #198754 !important;">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="fw-bold text-dark mb-1">Laporan Rekapitulasi Akreditasi</h6>
+                        <p class="text-muted small mb-0">Klik tombol di samping untuk melihat rincian biaya, tahun penyusunan, dan data TS secara lengkap.</p>
+                    </div>
+                    <a href="<?= base_url('univ/monitoring/rekap') ?>" class="btn btn-success px-4 py-2 shadow-sm fw-bold" style="border-radius: 10px;">
+                        <i class="bi bi-file-earmark-bar-graph-fill me-2"></i> Lihat Rekap Report Keseluruhan
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <?php foreach ($groupedData as $fakultas => $prodis) : ?>
         <div class="card shadow-sm border-0 mb-4" style="border-radius: 15px;">
             <div class="card-header bg-white py-3">
@@ -30,9 +46,9 @@
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
+                    <table class="table table-hover align-middle mb-0 text-center">
                         <thead class="table-light">
-                            <tr class="text-center">
+                            <tr>
                                 <th width="5%">No</th>
                                 <th class="text-start">Program Studi</th>
                                 <th>Peringkat / Skor</th>
@@ -42,54 +58,47 @@
                         </thead>
                         <tbody>
                             <?php $no = 1; foreach ($prodis as $p) : 
-                                // --- LOGIKA BARU ---
-                                // 1. Cek Validitas Tanggal
+                                // --- LOGIKA TANGGAL ---
                                 $tglRaw = $p['tgl_kadaluarsa'];
                                 $hasDate = !empty($tglRaw) && $tglRaw != '0000-00-00';
                                 
-                                // 2. Default Variables
                                 $displayDate = '<span class="text-muted fw-bold">-</span>';
-                                $badgeStatus = '<span class="badge bg-secondary">'.esc($p['tahap']).'</span>'; // Default tampilkan tahap (ex: Persiapan)
+                                $badgeStatus = '<span class="badge bg-secondary">'.esc($p['tahap']).'</span>';
 
-                                // 3. Jika tanggal valid, jalankan logika Expired
                                 if ($hasDate) {
                                     $tgl_k = strtotime($tglRaw);
                                     $isExpired = $tgl_k < time();
                                     $isWarning = $tgl_k < strtotime("+6 months") && !$isExpired;
                                     
-                                    $displayDate = date('d M Y', $tgl_k);
+                                    $formattedDate = date('d M Y', $tgl_k);
                                     
                                     if ($isExpired) {
-                                        $displayDate = '<span class="text-danger fw-bold">'.$displayDate.'</span>';
+                                        $displayDate = '<span class="text-danger fw-bold">'.$formattedDate.'</span>';
                                         $badgeStatus = '<span class="badge bg-danger">Kadaluarsa</span>';
                                     } elseif ($isWarning) {
-                                        $displayDate = '<span class="text-warning fw-bold">'.$displayDate.'</span>';
+                                        $displayDate = '<span class="text-warning fw-bold">'.$formattedDate.'</span>';
                                         $badgeStatus = '<span class="badge bg-warning text-dark">Hampir Habis</span>';
                                     } else {
-                                        $displayDate = '<span class="text-success fw-bold">'.$displayDate.'</span>';
+                                        $displayDate = '<span class="text-success fw-bold">'.$formattedDate.'</span>';
                                         $badgeStatus = '<span class="badge bg-success">Berlaku</span>';
                                     }
                                 }
                             ?>
                                 <tr>
-                                    <td class="text-center"><?= $no++ ?></td>
-                                    <td>
+                                    <td><?= $no++ ?></td>
+                                    <td class="text-start">
                                         <div class="fw-bold text-dark"><?= esc($p['nama_prodi']) ?> (<?= esc($p['jenjang']) ?>)</div>
                                         <small class="text-muted">SK: <?= esc($p['no_sk_akreditasi'] ?: '-') ?></small>
                                     </td>
-                                    <td class="text-center">
+                                    <td>
                                         <span class="badge bg-primary fs-6"><?= esc($p['peringkat'] ?: '-') ?></span><br>
                                         <small class="fw-bold">Skor: <?= esc($p['nilai']) ?></small>
                                     </td>
-                                    
-                                    <td class="text-center">
-                                        <div class="small mb-1">
-                                            <?= $displayDate ?>
-                                        </div>
+                                    <td>
+                                        <div class="small mb-1"><?= $displayDate ?></div>
                                         <?= $badgeStatus ?>
                                     </td>
-                                    
-                                    <td class="text-center">
+                                    <td>
                                         <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalDetail<?= $p['id'] ?>">
                                             <i class="bi bi-search"></i> Detail
                                         </button>
@@ -104,8 +113,7 @@
     <?php endforeach; ?>
 </div>
 
-<?php foreach ($allData as $p) : 
-    // Logic tanggal untuk modal juga perlu diperbaiki
+<?php foreach ($rekap as $p) : 
     $tglTerbitRaw = $p['tgl_sk_keluar'];
     $tglExpRaw = $p['tgl_kadaluarsa'];
     
