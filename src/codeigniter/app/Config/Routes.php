@@ -74,60 +74,60 @@ $routes->group('unit', ['namespace' => 'App\Controllers\Unit'], function ($route
 
 
 // ROUTES UNTUK ROLE UNIVERSITAS
-$routes->group('univ', function ($routes) {
-    $routes->get('master', 'Univ\Master::index');
+$routes->group('univ', ['namespace' => 'App\Controllers\Univ'], function ($routes) {
+    $routes->get('master', 'Master::index');
 
     // Fitur Fakultas
-    $routes->post('master/simpanFakultas', 'Univ\Master::simpanFakultas');
-    $routes->post('master/editFakultas', 'Univ\Master::editFakultas');
-    $routes->get('master/hapusFakultas/(:any)', 'Univ\Master::hapusFakultas/$1');
+    $routes->post('master/simpanFakultas', 'Master::simpanFakultas');
+    $routes->post('master/editFakultas', 'Master::editFakultas');
+    $routes->get('master/hapusFakultas/(:any)', 'Master::hapusFakultas/$1');
 
     // Fitur Prodi
-    $routes->post('master/simpanProdi', 'Univ\Master::simpanProdi');
-    $routes->post('master/editProdi', 'Univ\Master::editProdi');
-    $routes->get('master/hapusProdi/(:any)', 'Univ\Master::hapusProdi/$1');
+    $routes->post('master/simpanProdi', 'Master::simpanProdi');
+    $routes->post('master/editProdi', 'Master::editProdi');
+    $routes->get('master/hapusProdi/(:any)', 'Master::hapusProdi/$1');
 
     // Fitur Unit & Lembaga
-    $routes->get('unit', 'Univ\Unit::index');
-    $routes->post('unit/simpan', 'Univ\Unit::simpan');
-    $routes->post('unit/edit', 'Univ\Unit::edit');
-    $routes->get('unit/hapus/(:any)', 'Univ\Unit::hapus/$1');
+    $routes->get('unit', 'Unit::index');
+    $routes->post('unit/simpan', 'Unit::simpan');
+    $routes->post('unit/edit', 'Unit::edit');
+    $routes->get('unit/hapus/(:any)', 'Unit::hapus/$1');
 
     // Fitur Periode
-    $routes->get('periode', 'Univ\Periode::index');
-    $routes->post('periode/simpan', 'Univ\Periode::simpan');
-    $routes->get('periode/setAktif/(:num)', 'Univ\Periode::setAktif/$1');
-    $routes->get('periode/hapus/(:num)', 'Univ\Periode::hapus/$1');
+    $routes->get('periode', 'Periode::index');
+    $routes->post('periode/simpan', 'Periode::simpan');
+    $routes->get('periode/setAktif/(:num)', 'Periode::setAktif/$1');
+    $routes->get('periode/hapus/(:num)', 'Periode::hapus/$1');
 
     // Fitur Master Monev
-    $routes->get('monev', 'Univ\Monev::index');
-    $routes->post('monev/simpan', 'Univ\Monev::simpan');
-    $routes->post('monev/edit', 'Univ\Monev::edit');
-    $routes->get('monev/hapus/(:num)', 'Univ\Monev::hapus/$1');
+    $routes->get('monev', 'Monev::index');
+    $routes->post('monev/simpan', 'Monev::simpan');
+    $routes->post('monev/edit', 'Monev::edit');
+    $routes->get('monev/hapus/(:num)', 'Monev::hapus/$1');
 
     // Fitur Master Kinerja
-    $routes->get('kinerja', 'Univ\Kinerja::index');
-    $routes->post('kinerja/simpan', 'Univ\Kinerja::simpan');
-    $routes->post('kinerja/edit', 'Univ\Kinerja::edit');
-    $routes->get('kinerja/hapus/(:num)', 'Univ\Kinerja::hapus/$1');
+    $routes->get('kinerja', 'Kinerja::index');
+    $routes->post('kinerja/simpan', 'Kinerja::simpan');
+    $routes->post('kinerja/edit', 'Kinerja::edit');
+    $routes->get('kinerja/hapus/(:num)', 'Kinerja::hapus/$1');
 
     // Fitur Monitoring Laporan
-    $routes->get('monitoring', 'Univ\Monitoring::index');
+    $routes->get('monitoring', 'Monitoring::index');
 
     //Monitoring Akreditasi
-    $routes->get('monitoring/akreditasi', 'Univ\MonitoringAkreditasi::index');
+    $routes->get('monitoring/akreditasi', 'MonitoringAkreditasi::index');
 
     // Fitur Jenjang Prodi
-    $routes->get('jenjang', 'Univ\Jenjang::index');
-    $routes->post('jenjang/simpan', 'Univ\Jenjang::simpan');
-    $routes->post('jenjang/edit', 'Univ\Jenjang::edit');
-    $routes->get('jenjang/hapus/(:num)', 'Univ\Jenjang::hapus/$1');
+    $routes->get('jenjang', 'Jenjang::index');
+    $routes->post('jenjang/simpan', 'Jenjang::simpan');
+    $routes->post('jenjang/edit', 'Jenjang::edit');
+    $routes->get('jenjang/hapus/(:num)', 'Jenjang::hapus/$1');
 
     // Fitur Lembaga Akreditasi
-    $routes->get('lembaga_akreditasi', 'Univ\LembagaAkreditasi::index');
-    $routes->post('lembaga_akreditasi/simpan', 'Univ\LembagaAkreditasi::simpan');
-    $routes->post('lembaga_akreditasi/edit', 'Univ\LembagaAkreditasi::edit');
-    $routes->get('lembaga_akreditasi/hapus/(:num)', 'Univ\LembagaAkreditasi::hapus/$1');
+    $routes->get('lembaga_akreditasi', 'LembagaAkreditasi::index');
+    $routes->post('lembaga_akreditasi/simpan', 'LembagaAkreditasi::simpan');
+    $routes->post('lembaga_akreditasi/edit', 'LembagaAkreditasi::edit');
+    $routes->get('lembaga_akreditasi/hapus/(:num)', 'LembagaAkreditasi::hapus/$1');
 });
 
 

@@ -1,6 +1,8 @@
 <?= $this->extend('layouts/template') ?>
 
 <?= $this->section('content') ?>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <style>
     .card-unit { border: none; border-radius: 15px; transition: 0.3s; }
     .table thead th { background-color: #f8f9fa; color: #495057; font-weight: 600; }
@@ -14,14 +16,7 @@
             <h2 class="fw-bold text-dark mb-1">Unit & Lembaga</h2>
             <p class="text-muted">Kelola daftar unit kerja non-akademik (Contoh: LPPM, Perpustakaan)</p>
         </div>
-        <div>
-            <?php if (session()->getFlashdata('success')) : ?>
-                <div class="alert alert-success border-0 shadow-sm py-2 px-4 mb-0 animate__animated animate__fadeIn">
-                    <i class="bi bi-check-circle-fill me-2"></i><?= session()->getFlashdata('success') ?>
-                </div>
-            <?php endif; ?>
         </div>
-    </div>
 
     <div class="card card-unit shadow-sm">
         <div class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
@@ -49,9 +44,9 @@
                                 <button class="btn btn-sm btn-outline-warning border-0" onclick="btnEdit('<?= $u['id'] ?>', '<?= $u['nama_unit'] ?>')" data-bs-toggle="modal" data-bs-target="#modalEdit">
                                     <i class="bi bi-pencil-square"></i>
                                 </button>
-                                <a href="<?= base_url('univ/unit/hapus/'.$u['id']) ?>" class="btn btn-sm btn-outline-danger border-0" onclick="return confirm('Hapus unit <?= $u['nama_unit'] ?>?')">
+                                <button class="btn btn-sm btn-outline-danger border-0" onclick="konfirmasiHapus('<?= base_url('univ/unit/hapus/'.$u['id']) ?>')">
                                     <i class="bi bi-trash"></i>
-                                </a>
+                                </button>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -73,11 +68,11 @@
                 <div class="modal-body px-4">
                     <div class="mb-3">
                         <label class="form-label small fw-bold">KODE UNIT (ID)</label>
-                        <input type="text" name="id" class="form-control border-2" placeholder="Contoh: LPPM, PERPUS" required style="border-radius: 12px;">
+                        <input type="text" name="id" class="form-control border-2" placeholder="Contoh: LPPM, PERPUS" value="<?= old('id') ?>" required style="border-radius: 12px;">
                     </div>
                     <div class="mb-3">
                         <label class="form-label small fw-bold">NAMA UNIT</label>
-                        <input type="text" name="nama_unit" class="form-control border-2" placeholder="Masukkan nama lengkap unit" required style="border-radius: 12px;">
+                        <input type="text" name="nama_unit" class="form-control border-2" placeholder="Masukkan nama lengkap unit" value="<?= old('nama_unit') ?>" required style="border-radius: 12px;">
                     </div>
                 </div>
                 <div class="modal-footer border-0 pb-4 px-4">
@@ -115,6 +110,56 @@
         document.getElementById('e_id_lama').value = id;
         document.getElementById('e_id').value = id;
         document.getElementById('e_nama').value = nama;
+    }
+
+    // --- LOGIKA SWEETALERT ---
+
+    // 1. Notifikasi SUKSES
+    <?php if (session()->getFlashdata('success')) : ?>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '<?= session()->getFlashdata('success') ?>',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    <?php endif; ?>
+
+    // 2. Notifikasi ERROR (Validasi / Database)
+    <?php if (session()->getFlashdata('errors')) : ?>
+        <?php 
+            $errors = session()->getFlashdata('errors');
+            $htmlError = '<ul class="text-start">';
+            foreach($errors as $e) {
+                $htmlError .= '<li>'.esc($e).'</li>';
+            }
+            $htmlError .= '</ul>';
+        ?>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal Menyimpan!',
+            html: '<?= $htmlError ?>',
+            confirmButtonText: 'Tutup',
+            confirmButtonColor: '#d33'
+        });
+    <?php endif; ?>
+
+    // 3. Konfirmasi HAPUS
+    function konfirmasiHapus(url) {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Unit yang dihapus tidak bisa dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        })
     }
 </script>
 <?= $this->endSection() ?>
