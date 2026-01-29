@@ -274,6 +274,7 @@
             <form action="<?= base_url('univ/master/editProdi') ?>" method="post">
                 <div class="modal-body px-4">
                     <input type="hidden" name="id_lama" id="p_id_lama">
+
                     <div class="mb-3">
                         <label class="form-label small fw-bold">PILIH FAKULTAS</label>
                         <select name="fk_fakultas" id="p_fk" class="form-select form-select-lg border-2" required style="border-radius: 12px;">
@@ -282,14 +283,40 @@
                             <?php endforeach; ?>
                         </select>
                     </div>
+
                     <div class="mb-3">
                         <label class="form-label small fw-bold">KODE PRODI (ID)</label>
                         <input type="text" name="id" id="p_id" class="form-control form-control-lg border-2" required style="border-radius: 12px;">
                     </div>
+
                     <div class="mb-3">
                         <label class="form-label small fw-bold">NAMA PROGRAM STUDI</label>
                         <input type="text" name="nama_prodi" id="p_nama" class="form-control form-control-lg border-2" required style="border-radius: 12px;">
                     </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">JENJANG PENDIDIKAN</label>
+                        <select name="fk_jenjang" id="p_jenjang" class="form-select form-select-lg border-2" required style="border-radius: 12px;">
+                            <option value="">-- Pilih Jenjang --</option>
+                            <?php foreach ($mjenjang as $j): ?>
+                                <option value="<?= $j['id'] ?>"><?= $j['jenjang'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label small fw-bold">NO. SK PENDIRIAN</label>
+                            <input type="text" name="no_sk_pendirian" id="p_no_sk" class="form-control form-control-lg border-2"
+                                style="border-radius: 12px;">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label small fw-bold">TGL. SK PENDIRIAN</label>
+                            <input type="date" name="tgl_sk_pendirian" id="p_tgl_sk" class="form-control form-control-lg border-2"
+                                style="border-radius: 12px;">
+                        </div>
+                    </div>
+
                 </div>
                 <div class="modal-footer border-0 pb-4 px-4">
                     <button type="button" class="btn btn-light btn-rounded" data-bs-dismiss="modal">Batal</button>
@@ -313,6 +340,10 @@
         document.getElementById('p_id').value = id;
         document.getElementById('p_fk').value = fk;
         document.getElementById('p_nama').value = nama;
+
+        document.getElementById('p_jenjang').value = jenjang; // Dropdown otomatis terpilih
+        document.getElementById('p_no_sk').value = no_sk;
+        document.getElementById('p_tgl_sk').value = tgl_sk;
     }
 
     // --- LOGIKA SWEETALERT ---
