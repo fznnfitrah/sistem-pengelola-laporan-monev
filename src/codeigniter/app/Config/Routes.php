@@ -114,6 +114,9 @@ $routes->group('univ', ['namespace' => 'App\Controllers\Univ'], function ($route
     // Fitur Monitoring Laporan
     $routes->get('monitoring', 'Monitoring::index');
 
+    $routes->get('akreditasi/input', 'Akreditasi::input');
+    $routes->post('akreditasi/simpan', 'Akreditasi::simpan');
+
     //Monitoring Akreditasi
     $routes->get('monitoring/akreditasi', 'MonitoringAkreditasi::index');
     $routes->get('monitoring/rekap', 'MonitoringAkreditasi::rekap');

@@ -23,7 +23,7 @@ class AkreditasiModel extends Model
         'tgl_kadaluarsa',
         'tahun_penyusunan',
         'biaya',
-        'tahap_pengajuan', // TS-1, TS-2, dll
+        'status', // TS-1, TS-2, dll
         'ts',
         'ts-1',
         'ts-2',
