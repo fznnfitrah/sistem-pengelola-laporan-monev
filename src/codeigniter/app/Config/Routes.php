@@ -116,6 +116,7 @@ $routes->group('univ', ['namespace' => 'App\Controllers\Univ'], function ($route
 
     //Monitoring Akreditasi
     $routes->get('monitoring/akreditasi', 'MonitoringAkreditasi::index');
+    $routes->get('monitoring/rekap', 'MonitoringAkreditasi::rekap');
 
     // Fitur Jenjang Prodi
     $routes->get('jenjang', 'Jenjang::index');
@@ -128,6 +129,8 @@ $routes->group('univ', ['namespace' => 'App\Controllers\Univ'], function ($route
     $routes->post('lembaga_akreditasi/simpan', 'LembagaAkreditasi::simpan');
     $routes->post('lembaga_akreditasi/edit', 'LembagaAkreditasi::edit');
     $routes->get('lembaga_akreditasi/hapus/(:num)', 'LembagaAkreditasi::hapus/$1');
+
+
 });
 
 
