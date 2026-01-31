@@ -25,7 +25,7 @@
                     <label class="form-label fw-bold text-primary"><i class="bi bi-building me-2"></i>PILIH PROGRAM STUDI <span class="text-danger">*</span></label>
                     <select name="fk_prodi" class="form-select form-select-lg" required>
                         <option value="">-- Cari / Pilih Prodi --</option>
-                        <?php foreach($prodi as $p): ?>
+                        <?php foreach ($prodi as $p): ?>
                             <option value="<?= $p['id'] ?>" <?= (old('fk_prodi') == $p['id']) ? 'selected' : '' ?>>
                                 <?= $p['nama_prodi'] ?> - <?= $p['nama_jenjang'] ?? '' ?>
                             </option>
@@ -52,7 +52,7 @@
                             <label class="form-label fw-bold">Lembaga Akreditasi <span class="text-danger">*</span></label>
                             <select name="fk_lembaga" id="fk_lembaga" class="form-select" required>
                                 <option value="" data-biaya="0">-- Pilih Lembaga --</option>
-                                <?php foreach($lembaga as $l): ?>
+                                <?php foreach ($lembaga as $l): ?>
                                     <option value="<?= $l['id'] ?>" data-biaya="<?= $l['biaya'] ?>" <?= (old('fk_lembaga') == $l['id']) ? 'selected' : '' ?>>
                                         <?= $l['nama_lembaga'] ?>
                                     </option>
@@ -157,7 +157,7 @@
         ];
 
         function checkStatus() {
-            if(statusSelect.value === 'Selesai') {
+            if (statusSelect.value === 'Selesai') {
                 targetFields.forEach(field => {
                     field.removeAttribute('disabled');
                     field.required = true;
@@ -165,7 +165,7 @@
             } else {
                 targetFields.forEach(field => {
                     field.setAttribute('disabled', 'disabled');
-                    field.required = false; 
+                    field.required = false;
                     // Optional: field.value = ''; jika ingin mereset saat status berubah
                 });
             }

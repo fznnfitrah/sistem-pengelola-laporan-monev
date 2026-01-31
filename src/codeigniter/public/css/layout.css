@@ -78,6 +78,30 @@
     transition: all 0.3s;
 }
 
+/* Overlay: Layar gelap background */
+#sidebarOverlay {
+    display: none; /* Sembunyi default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Hitam transparan */
+    z-index: 1040; /* Harus di bawah sidebar tapi di atas konten */
+    transition: all 0.3s;
+}
+
+/* Saat aktif (muncul) */
+#sidebarOverlay.active {
+    display: block;
+}
+
+/* Pastikan Sidebar z-index nya lebih tinggi dari overlay */
+.sidebar {
+    /* ... style lama ... */
+    z-index: 1050; /* Pastikan ini ada dan tinggi */
+}
+
 /* Penyesuaian untuk HP (Tablet kebawah) */
 @media (max-width: 768px) {
     #sidebar {

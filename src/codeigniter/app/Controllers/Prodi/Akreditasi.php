@@ -38,7 +38,7 @@ class Akreditasi extends BaseController
             'validation' => \Config\Services::validation()
         ];
 
-        return view('prodi/akreditasi/akreditasi_add_view', $data);
+        return view('prodi/akreditasi/input_akreditasi_view', $data);
     }
 
     // --- FITUR BARU: PROSES SIMPAN ---
