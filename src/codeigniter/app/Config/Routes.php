@@ -114,6 +114,7 @@ $routes->group('univ', ['namespace' => 'App\Controllers\Univ'], function ($route
     // Fitur Monitoring Laporan
     $routes->get('monitoring', 'Monitoring::index');
 
+    //Fitur Input Akreditasi Prodi
     $routes->get('akreditasi/input', 'Akreditasi::input');
     $routes->post('akreditasi/simpan', 'Akreditasi::simpan');
 
