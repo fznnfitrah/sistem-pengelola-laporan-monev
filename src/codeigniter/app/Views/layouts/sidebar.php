@@ -141,6 +141,13 @@
                 </a>
             </li>
             <li class="nav-item mt-3">
+                <small class="text-uppercase text-muted fw-bold" style="font-size: 0.7rem;">Menu Akreditasi</small>
+            </li>
+            <li class="nav-item mt-1">
+                <a href="<?= base_url('univ/akreditasi/input') ?>" class="nav-link <?= (uri_string() == 'univ/akreditasi/input') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-eye me-2"></i> Input Akreditasi
+                </a>
+            <li class="nav-item mt-3">
                 <small class="text-uppercase text-muted fw-bold" style="font-size: 0.7rem;">Monitoring</small>
             </li>
             <li class="nav-item mt-1">
