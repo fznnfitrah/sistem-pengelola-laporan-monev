@@ -133,7 +133,10 @@ class Master extends BaseController
                 'fk_jenjang'       => $this->request->getPost('fk_jenjang'),
                 'no_sk_pendirian'  => $this->request->getPost('no_sk_pendirian'),
                 'tgl_sk_pendirian' => $this->request->getPost('tgl_sk_pendirian'),
+
+                'link_sk_pendirian' => $this->request->getPost('link_sk_pendirian'),
             ]);
+
             return redirect()->back()->with('success', 'Program Studi baru berhasil ditambahkan!');
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('errors', ['database' => 'Terjadi kesalahan saat menyimpan data Prodi.']);
@@ -154,12 +157,14 @@ class Master extends BaseController
                 'fk_jenjang'       => $this->request->getPost('fk_jenjang'),
                 'no_sk_pendirian'  => $this->request->getPost('no_sk_pendirian'),
                 'tgl_sk_pendirian' => $this->request->getPost('tgl_sk_pendirian'),
+
+                'link_sk_pendirian' => $this->request->getPost('link_sk_pendirian'),
             ];
-            // Catatan: Jika mengubah ID menjadi ID yang sudah ada, akan error di sini.
-            // Sebaiknya tambahkan validasi unik manual seperti di editFakultas jika perlu.
             $this->prodiModel->update($id_lama, $data);
+
             return redirect()->back()->with('success', 'Data Program Studi berhasil diperbarui!');
         } catch (\Exception $e) {
+
             return redirect()->back()->withInput()->with('errors', ['database' => 'Gagal Update: ID mungkin duplikat.']);
         }
     }

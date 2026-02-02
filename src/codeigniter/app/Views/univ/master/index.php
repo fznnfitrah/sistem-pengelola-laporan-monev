@@ -110,6 +110,12 @@
                                                                         <?= date('d M Y', strtotime($p['tgl_sk_pendirian'])) ?>
                                                                     </span>
                                                                 <?php endif; ?>
+
+                                                                <?php if (!empty($p['link_sk_pendirian'])): ?>
+                                                                    <a href="<?= $p['link_sk_pendirian'] ?>" target="_blank" class="badge bg-primary bg-opacity-10 text-primary border border-primary mt-1 text-decoration-none" style="width: fit-content;">
+                                                                        <i class="bi bi-link-45deg"></i> Lihat SK
+                                                                    </a>
+                                                                <?php endif; ?>
                                                             </div>
                                                         <?php else: ?>
                                                             <span class="text-muted small italic">Data SK belum diisi</span>
@@ -125,7 +131,8 @@
                                                                     '<?= $p['nama_prodi'] ?>',
                                                                     '<?= $p['fk_jenjang'] ?>',
                                                                     '<?= $p['no_sk_pendirian'] ?>',
-                                                                    '<?= $p['tgl_sk_pendirian'] ?>'
+                                                                    '<?= $p['tgl_sk_pendirian'] ?>',
+                                                                    '<?= $p['link_sk_pendirian'] ?>'
                                                                 )"
                                                                 data-bs-toggle="modal" data-bs-target="#modalEditProdi" title="Edit Data">
                                                                 <i class="bi bi-pencil-fill"></i>
@@ -212,6 +219,7 @@
                 <h5 class="fw-bold">Tambah Program Studi Baru</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
+
             <form action="<?= base_url('univ/master/simpanProdi') ?>" method="post">
                 <div class="modal-body px-4">
                     <div class="mb-3">
@@ -223,14 +231,17 @@
                             <?php endforeach; ?>
                         </select>
                     </div>
+
                     <div class="mb-3">
                         <label class="form-label small fw-bold">KODE PRODI (ID)</label>
                         <input type="text" name="id" class="form-control form-control-lg border-2" placeholder="Contoh: INF, AKT" value="<?= old('id') ?>" required style="border-radius: 12px;">
                     </div>
+
                     <div class="mb-3">
                         <label class="form-label small fw-bold">NAMA PROGRAM STUDI</label>
                         <input type="text" name="nama_prodi" class="form-control form-control-lg border-2" placeholder="Nama Prodi" value="<?= old('nama_prodi') ?>" required style="border-radius: 12px;">
                     </div>
+
                     <div class="mb-3">
                         <label class="form-label small fw-bold">JENJANG PENDIDIKAN</label>
                         <select name="fk_jenjang" class="form-select form-select-lg border-2" required style="border-radius: 12px;">
@@ -242,6 +253,7 @@
                             <?php endforeach; ?>
                         </select>
                     </div>
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label small fw-bold">NO. SK PENDIRIAN</label>
@@ -254,12 +266,19 @@
                                 value="<?= old('tgl_sk_pendirian') ?>" style="border-radius: 12px;">
                         </div>
                     </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">LINK SK PENDIRIAN (G-Drive/PDF)</label>
+                        <input type="url" name="link_sk_pendirian" class="form-control form-control-lg border-2" placeholder="https://..." style="border-radius: 12px;">
+                    </div>
+
                 </div>
                 <div class="modal-footer border-0 pb-4 px-4">
                     <button type="button" class="btn btn-light btn-rounded" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-primary btn-rounded px-4">Simpan Prodi</button>
                 </div>
             </form>
+
         </div>
     </div>
 </div>
@@ -315,6 +334,10 @@
                             <input type="date" name="tgl_sk_pendirian" id="p_tgl_sk" class="form-control form-control-lg border-2"
                                 style="border-radius: 12px;">
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">LINK SK PENDIRIAN</label>
+                            <input type="url" name="link_sk_pendirian" id="p_link_sk" class="form-control form-control-lg border-2" placeholder="https://..." style="border-radius: 12px;">
+                        </div>
                     </div>
 
                 </div>
@@ -344,6 +367,8 @@
         document.getElementById('p_jenjang').value = jenjang; // Dropdown otomatis terpilih
         document.getElementById('p_no_sk').value = no_sk;
         document.getElementById('p_tgl_sk').value = tgl_sk;
+
+        document.getElementById('p_link_sk').value = link;
     }
 
     // --- LOGIKA SWEETALERT ---

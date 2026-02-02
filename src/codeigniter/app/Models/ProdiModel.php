@@ -16,6 +16,7 @@ class ProdiModel extends Model
         'fk_jenjang',
         'no_sk_pendirian',
         'tgl_sk_pendirian',
+        'link_sk_pendirian',
     ];
 
     
