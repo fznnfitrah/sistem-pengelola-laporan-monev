@@ -80,7 +80,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Nomor SK</label>
+                            <label class="form-label fw-bold">Nomor SK Akreditasi</label>
                             <input type="text" name="no_sk" id="no_sk" class="form-control" placeholder="Nomor Surat Keputusan" value="<?= old('no_sk') ?>">
                         </div>
                     </div>

@@ -85,6 +85,10 @@ class AkreditasiModel extends Model
             ->select('
                 mProdi.nama_prodi, 
                 mProdi.id as prodi_id,
+                
+                mProdi.no_sk_pendirian,
+                mProdi.tgl_sk_pendirian,
+
                 mJenjang.jenjang, 
                 mFakultas.nama_fakultas,
                 akreditasi_prodi.peringkat,
@@ -103,7 +107,6 @@ class AkreditasiModel extends Model
             ')
             ->join('mFakultas', 'mFakultas.id = mProdi.fk_fakultas')
             ->join('mJenjang', 'mJenjang.id = mProdi.fk_jenjang', 'left')
-            // Join ke subquery akreditasi terbaru per prodi
             ->join('(SELECT * FROM akreditasi_prodi WHERE id IN (SELECT MAX(id) FROM akreditasi_prodi GROUP BY fk_prodi)) as akreditasi_prodi', 'akreditasi_prodi.fk_prodi = mProdi.id', 'left')
             ->join('mLembaga_akreditasi', 'mLembaga_akreditasi.id = akreditasi_prodi.fk_lembaga_akreditasi', 'left')
             ->orderBy('mFakultas.nama_fakultas', 'ASC')

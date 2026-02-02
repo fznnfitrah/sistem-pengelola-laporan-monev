@@ -131,7 +131,7 @@
                                                                     '<?= $p['nama_prodi'] ?>',
                                                                     '<?= $p['fk_jenjang'] ?>',
                                                                     '<?= $p['no_sk_pendirian'] ?>',
-                                                                    '<?= $p['tgl_sk_pendirian'] ?>',
+                                                                    '<?= (!empty($p['tgl_sk_pendirian']) && $p['tgl_sk_pendirian'] != '0000-00-00') ? date('Y-m-d', strtotime($p['tgl_sk_pendirian'])) : '' ?>',
                                                                     '<?= $p['link_sk_pendirian'] ?>'
                                                                 )"
                                                                 data-bs-toggle="modal" data-bs-target="#modalEditProdi" title="Edit Data">
@@ -261,7 +261,7 @@
                                 placeholder="Nomor SK" value="<?= old('no_sk_pendirian') ?>" style="border-radius: 12px;">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label small fw-bold">TGL. SK PENDIRIAN</label>
+                            <label class="form-label small fw-bold">TANGGAL PENETAPAN</label>
                             <input type="date" name="tgl_sk_pendirian" class="form-control form-control-lg border-2"
                                 value="<?= old('tgl_sk_pendirian') ?>" style="border-radius: 12px;">
                         </div>
@@ -330,7 +330,7 @@
                                 style="border-radius: 12px;">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label small fw-bold">TGL. SK PENDIRIAN</label>
+                            <label class="form-label small fw-bold">TANGGAL PENETAPAN</label>
                             <input type="date" name="tgl_sk_pendirian" id="p_tgl_sk" class="form-control form-control-lg border-2"
                                 style="border-radius: 12px;">
                         </div>
@@ -351,24 +351,27 @@
 </div>
 
 <script>
-    // --- FUNGSI MODAL ---
     function btnEditFakultas(id, nama) {
         document.getElementById('f_id_lama').value = id;
         document.getElementById('f_id').value = id;
         document.getElementById('f_nama').value = nama;
     }
 
-    function btnEditProdi(id, fk, nama) {
+    function btnEditProdi(id, fk, nama, jenjang, no_sk, tgl_sk, link) {
         document.getElementById('p_id_lama').value = id;
         document.getElementById('p_id').value = id;
         document.getElementById('p_fk').value = fk;
         document.getElementById('p_nama').value = nama;
 
-        document.getElementById('p_jenjang').value = jenjang; // Dropdown otomatis terpilih
-        document.getElementById('p_no_sk').value = no_sk;
-        document.getElementById('p_tgl_sk').value = tgl_sk;
+        let dropdownJenjang = document.getElementById('p_jenjang');
+        if (dropdownJenjang) {
+            dropdownJenjang.value = jenjang;
+        }
 
-        document.getElementById('p_link_sk').value = link;
+        // Gunakan (str || '') untuk mencegah error jika datanya null/undefined
+        document.getElementById('p_no_sk').value = no_sk || '';
+        document.getElementById('p_tgl_sk').value = tgl_sk || '';
+        document.getElementById('p_link_sk').value = link || '';
     }
 
     // --- LOGIKA SWEETALERT ---
