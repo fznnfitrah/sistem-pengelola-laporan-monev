@@ -6,7 +6,7 @@
     <div class="card border-0 shadow-sm">
         <div class="card-header bg-white py-3">
             <h5 class="fw-bold mb-0">Input Akreditasi Baru</h5>
-            <small class="text-muted">Tambahkan riwayat akreditasi prodi.</small>
+            <small class="text-muted">Tambahkan riwayat akreditasi prodi (Opsional).</small>
         </div>
         <div class="card-body p-4">
 
@@ -17,8 +17,8 @@
                         <h6 class="text-success fw-bold mb-3"><i class="bi bi-file-earmark-text me-2"></i>DATA SK & STATUS</h6>
 
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Status Saat Ini <span class="text-danger">*</span></label>
-                            <select name="tahap" id="status_saat_ini" class="form-select bg-light border-success" required>
+                            <label class="form-label fw-bold">Status Saat Ini</label>
+                            <select name="tahap" id="status_saat_ini" class="form-select bg-light border-success">
                                 <option value="">-- Pilih Status --</option>
                                 <option value="Persiapan">Persiapan</option>
                                 <option value="Pengajuan">Pengajuan</option>
@@ -30,14 +30,12 @@
 
                         <input type="hidden" name="tahap_pengajuan" value="TS-1">
 
-
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Lembaga Akreditasi (Nasional) <span class="text-danger">*</span></label>
-                             <select name="fk_lembaga" id="fk_lembaga" class="form-select" required>
+                            <label class="form-label fw-bold">Lembaga Akreditasi (Nasional)</label>
+                             <select name="fk_lembaga" id="fk_lembaga" class="form-select">
                                 <option value="" data-biaya="0">-- Pilih Lembaga Nasional --</option>
                                 <?php foreach ($lembaga as $l): ?>
-                                    <?php if ($l['jenis_lembaga'] == 'Nasional'): // Filter Nasional 
-                                    ?>
+                                    <?php if ($l['jenis_lembaga'] == 'Nasional'): ?>
                                         <option value="<?= $l['id'] ?>" data-biaya="<?= $l['biaya'] ?>">
                                             <?= $l['nama_lembaga'] ?>
                                         </option>
@@ -53,15 +51,13 @@
                             <select name="fk_lembaga_internasional" id="fk_lembaga_inter" class="form-select border-primary bg-primary bg-opacity-10">
                                 <option value="">-- Tidak Ada / Kosongkan --</option>
                                 <?php foreach ($lembaga as $l): ?>
-                                    <?php if ($l['jenis_lembaga'] == 'Internasional'): 
-                                    ?>
+                                    <?php if ($l['jenis_lembaga'] == 'Internasional'): ?>
                                         <option value="<?= $l['id'] ?>">
                                             <?= $l['nama_lembaga'] ?>
                                         </option>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
                             </select>
-                            <div class="form-text text-muted">Silakan pilih jika Prodi memiliki akreditasi internasional.</div>
                         </div>
 
                         <div class="row">
@@ -92,7 +88,6 @@
                     <div class="col-md-6 ps-4">
                         <h6 class="text-success fw-bold mb-3"><i class="bi bi-calendar-event me-2"></i>PERIODE BERLAKU</h6>
 
-
                         <div class="mb-3">
                             <label class="form-label fw-bold text-danger">Tgl. Kadaluarsa</label>
                             <input type="date" name="tgl_kadaluarsa" id="tgl_kadaluarsa" class="form-control border-danger" disabled>
@@ -102,20 +97,22 @@
                         <hr>
 
                         <h6 class="text-success fw-bold mb-3 mt-4"><i class="bi bi-bar-chart-fill me-2"></i>DATA TAHUN PENGAJUAN AKREDITASI (TS)</h6>
+                        
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label class="form-label fw-bold small">TS <span class="text-muted">(Saat Ini)</span></label>
-                                <input type="number" name="ts" class="form-control bg-light" placeholder="Thn" required>
+                                <input type="number" name="ts" class="form-control bg-light" placeholder="Thn">
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label class="form-label fw-bold small">TS-1 <span class="text-muted">(1 Thn Lalu)</span></label>
-                                <input type="number" name="ts_1" class="form-control" placeholder="Thn" required>
+                                <input type="number" name="ts_1" class="form-control" placeholder="Thn">
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label class="form-label fw-bold small">TS-2 <span class="text-muted">(2 Thn Lalu)</span></label>
-                                <input type="number" name="ts_2" class="form-control" placeholder="Thn" required>
+                                <input type="number" name="ts_2" class="form-control" placeholder="Thn">
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-6 mb-3">
                                 <label class="form-label fw-bold">Tahun Penyusunan</label>
@@ -136,7 +133,7 @@
 
                 <div class="mt-4 text-end">
                     <a href="<?= base_url('prodi/akreditasi') ?>" class="btn btn-light border me-2">Kembali</a>
-                    <button type="submit" class="btn btn-success"><i class="bi bi-save me-2"></i>Simpan Data Akreditasi</button>
+                    <button type="submit" class="btn btn-success"><i class="bi bi-save me-2"></i>Simpan Data (Opsional)</button>
                 </div>
 
             </form>
@@ -149,11 +146,9 @@
         // --- 1. LOGIKA STATUS SELESAI ---
         const statusSelect = document.getElementById('status_saat_ini');
 
-        // Perhatikan: Baris tgl_sk_terbit sudah dikomentari agar tidak error
         const targetFields = [
             document.getElementById('peringkat'),
             document.getElementById('nilai_angka'),
-            // document.getElementById('tgl_sk_terbit'), 
             document.getElementById('tgl_kadaluarsa'),
             document.getElementById('no_sk')
         ];
@@ -161,18 +156,19 @@
         function checkStatus() {
             if (statusSelect.value === 'Selesai') {
                 targetFields.forEach(field => {
-                    // Cek safety: hanya proses jika elemennya ada (tidak null)
                     if (field) {
+                        // Hanya buka kuncinya, JANGAN set required = true
                         field.removeAttribute('disabled');
-                        field.required = true;
                     }
                 });
             } else {
                 targetFields.forEach(field => {
                     if (field) {
+                        // Kunci kembali jika status bukan selesai
                         field.setAttribute('disabled', 'disabled');
-                        field.required = false;
                         field.value = ''; // Reset nilai
+                        
+                        // JANGAN set required = false (karena defaultnya memang sudah false)
                     }
                 });
             }

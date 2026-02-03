@@ -6,7 +6,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 class="fw-bold text-dark mb-1">Input Akreditasi (Admin Univ)</h2>
-            <p class="text-muted">Bantu input data akreditasi untuk Program Studi.</p>
+            <p class="text-muted">Bantu input data akreditasi untuk Program Studi (Opsional).</p>
         </div>
     </div>
 
@@ -31,15 +31,16 @@
                             </option>
                         <?php endforeach; ?>
                     </select>
-                    <div class="form-text">Pilih prodi yang datanya akan Anda inputkan.</div>
+                    <div class="form-text">Pilih prodi yang datanya akan Anda inputkan (Wajib Diisi).</div>
                 </div>
+
                 <div class="row">
                     <div class="col-md-6 border-end">
                         <h6 class="text-success fw-bold mb-3"><i class="bi bi-file-earmark-text me-2"></i>DATA SK & STATUS</h6>
 
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Status Saat Ini <span class="text-danger">*</span></label>
-                            <select name="tahap" id="status_saat_ini" class="form-select bg-light border-success" required>
+                            <label class="form-label fw-bold">Status Saat Ini</label>
+                            <select name="tahap" id="status_saat_ini" class="form-select bg-light border-success">
                                 <option value="">-- Pilih Status --</option>
                                 <option value="Persiapan" <?= old('tahap') == 'Persiapan' ? 'selected' : '' ?>>Persiapan</option>
                                 <option value="Pengajuan" <?= old('tahap') == 'Pengajuan' ? 'selected' : '' ?>>Pengajuan</option>
@@ -49,13 +50,12 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Lembaga Akreditasi (Nasional) <span class="text-danger">*</span></label>
-                            <select name="fk_lembaga" id="fk_lembaga" class="form-select" required>
+                            <label class="form-label fw-bold">Lembaga Akreditasi (Nasional)</label>
+                            <select name="fk_lembaga" id="fk_lembaga" class="form-select">
                                 <option value="" data-biaya="0">-- Pilih Lembaga Nasional --</option>
                                 <?php foreach ($lembaga as $l): ?>
-                                    <?php if ($l['jenis_lembaga'] == 'Nasional'): // Filter Nasional 
-                                    ?>
-                                        <option value="<?= $l['id'] ?>" data-biaya="<?= $l['biaya'] ?>">
+                                    <?php if ($l['jenis_lembaga'] == 'Nasional'): ?>
+                                        <option value="<?= $l['id'] ?>" data-biaya="<?= $l['biaya'] ?>" <?= (old('fk_lembaga') == $l['id']) ? 'selected' : '' ?>>
                                             <?= $l['nama_lembaga'] ?>
                                         </option>
                                     <?php endif; ?>
@@ -70,9 +70,8 @@
                             <select name="fk_lembaga_internasional" id="fk_lembaga_inter" class="form-select border-primary bg-primary bg-opacity-10">
                                 <option value="">-- Tidak Ada / Kosongkan --</option>
                                 <?php foreach ($lembaga as $l): ?>
-                                    <?php if ($l['jenis_lembaga'] == 'Internasional'): // Filter Internasional 
-                                    ?>
-                                        <option value="<?= $l['id'] ?>">
+                                    <?php if ($l['jenis_lembaga'] == 'Internasional'): ?>
+                                        <option value="<?= $l['id'] ?>" <?= (old('fk_lembaga_internasional') == $l['id']) ? 'selected' : '' ?>>
                                             <?= $l['nama_lembaga'] ?>
                                         </option>
                                     <?php endif; ?>
@@ -86,12 +85,12 @@
                                 <label class="form-label fw-bold">Peringkat</label>
                                 <select name="peringkat" id="peringkat" class="form-select" disabled>
                                     <option value="">-- Pilih Peringkat --</option>
-                                    <option value="Unggul">Unggul</option>
-                                    <option value="Baik Sekali">Baik Sekali</option>
-                                    <option value="Baik">Baik</option>
-                                    <option value="A">A</option>
-                                    <option value="B">B</option>
-                                    <option value="C">C</option>
+                                    <option value="Unggul" <?= old('peringkat') == 'Unggul' ? 'selected' : '' ?>>Unggul</option>
+                                    <option value="Baik Sekali" <?= old('peringkat') == 'Baik Sekali' ? 'selected' : '' ?>>Baik Sekali</option>
+                                    <option value="Baik" <?= old('peringkat') == 'Baik' ? 'selected' : '' ?>>Baik</option>
+                                    <option value="A" <?= old('peringkat') == 'A' ? 'selected' : '' ?>>A</option>
+                                    <option value="B" <?= old('peringkat') == 'B' ? 'selected' : '' ?>>B</option>
+                                    <option value="C" <?= old('peringkat') == 'C' ? 'selected' : '' ?>>C</option>
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
@@ -102,7 +101,7 @@
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Nomor SK Akreditasi</label>
-                            <input type="text" name="no_sk" id="no_sk" class="form-control" placeholder="Nomor Surat Keputusan" value="<?= old('no_sk') ?>">
+                            <input type="text" name="no_sk" id="no_sk" class="form-control" placeholder="Nomor Surat Keputusan" value="<?= old('no_sk') ?>" disabled>
                         </div>
                     </div>
 
@@ -120,15 +119,15 @@
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label class="form-label fw-bold small">TS (Thn)</label>
-                                <input type="number" name="ts" class="form-control bg-light" placeholder="Saat Ini" value="<?= old('ts') ?>" required>
+                                <input type="number" name="ts" class="form-control bg-light" placeholder="Saat Ini" value="<?= old('ts') ?>">
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label class="form-label fw-bold small">TS-1 (Thn)</label>
-                                <input type="number" name="ts_1" class="form-control" placeholder="-1 Tahun" value="<?= old('ts_1') ?>" required>
+                                <input type="number" name="ts_1" class="form-control" placeholder="-1 Tahun" value="<?= old('ts_1') ?>">
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label class="form-label fw-bold small">TS-2 (Thn)</label>
-                                <input type="number" name="ts_2" class="form-control" placeholder="-2 Tahun" value="<?= old('ts_2') ?>" required>
+                                <input type="number" name="ts_2" class="form-control" placeholder="-2 Tahun" value="<?= old('ts_2') ?>">
                             </div>
                         </div>
 
@@ -167,7 +166,6 @@
         const targetFields = [
             document.getElementById('peringkat'),
             document.getElementById('nilai_angka'),
-            // document.getElementById('tgl_sk_terbit'),
             document.getElementById('tgl_kadaluarsa'),
             document.getElementById('no_sk')
         ];
@@ -175,35 +173,37 @@
         function checkStatus() {
             if (statusSelect.value === 'Selesai') {
                 targetFields.forEach(field => {
-                    field.removeAttribute('disabled');
-                    if (field.id === 'nilai_angka') {
-                        field.required = false;
-                    } else {
-                        field.required = true;
-                    }
-                    // field.required = true;
+                    // Hanya buka kunci disabled, JANGAN set required = true
+                    if (field) field.removeAttribute('disabled');
                 });
             } else {
                 targetFields.forEach(field => {
-                    field.setAttribute('disabled', 'disabled');
-                    field.required = false;
-                    field.value = ''; // jika ingin mereset saat status berubah
+                    if (field) {
+                        // Kunci kembali
+                        field.setAttribute('disabled', 'disabled');
+                        field.value = ''; 
+                    }
                 });
             }
         }
-        statusSelect.addEventListener('change', checkStatus);
-        checkStatus(); // Run on load
+        
+        if (statusSelect) {
+            statusSelect.addEventListener('change', checkStatus);
+            checkStatus(); // Run on load
+        }
 
         // --- 2. LOGIKA BIAYA LEMBAGA ---
         const selectLembaga = document.getElementById('fk_lembaga');
         const inputBiaya = document.getElementById('biaya');
 
-        selectLembaga.addEventListener('change', function() {
-            const selectedOption = this.options[this.selectedIndex];
-            const biayaDefault = selectedOption.getAttribute('data-biaya');
-            if (biayaDefault) inputBiaya.value = biayaDefault;
-            else inputBiaya.value = 0;
-        });
+        if (selectLembaga && inputBiaya) {
+            selectLembaga.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const biayaDefault = selectedOption.getAttribute('data-biaya');
+                if (biayaDefault) inputBiaya.value = biayaDefault;
+                else inputBiaya.value = 0;
+            });
+        }
     });
 </script>
 

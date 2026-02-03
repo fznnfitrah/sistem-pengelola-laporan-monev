@@ -46,26 +46,24 @@ class Akreditasi extends BaseController
         // A. AMBIL STATUS
         $status = $this->request->getPost('tahap');
 
-        // B. SETTING VALIDASI DINAMIS
+        // B. SETTING VALIDASI (SEMUA DIBUAT OPTIONAL / PERMIT_EMPTY)
         $rules = [
-            'fk_lembaga'      => 'required',
-            'tahun'           => 'required|numeric',
-            'tahap'           => 'required',
-            'tahap_pengajuan' => 'required',
-            'ts'   => 'required|numeric',
-            'ts_1' => 'required|numeric',
-            'ts_2' => 'required|numeric',
+            'fk_lembaga'      => 'permit_empty',
+            'tahun'           => 'permit_empty|numeric',
+            'tahap'           => 'permit_empty',
+            'tahap_pengajuan' => 'permit_empty',
+            'ts'              => 'permit_empty|numeric',
+            'ts_1'            => 'permit_empty|numeric',
+            'ts_2'            => 'permit_empty|numeric',
         ];
 
-        // Validasi Tambahan jika Selesai
+        // Validasi Tambahan: Hapus 'required' jika ingin benar-benar optional
         if ($status == 'Selesai') {
-            $rules['peringkat']      = 'required';
-
-            $rules['fk_lembaga_internasional'] = 'permit_empty';
-            
+            // Ubah 'required' jadi 'permit_empty' agar sesuai request (bisa kosong)
+            $rules['peringkat']      = 'permit_empty';
             $rules['nilai']          = 'permit_empty|numeric';
-            $rules['no_sk']          = 'required';
-            $rules['tgl_kadaluarsa'] = 'required|valid_date';
+            $rules['no_sk']          = 'permit_empty';
+            $rules['tgl_kadaluarsa'] = 'permit_empty|valid_date';
             $rules['link']           = 'permit_empty|valid_url';
         }
 
@@ -74,47 +72,57 @@ class Akreditasi extends BaseController
             return redirect()->back()->withInput()->with('validation', $this->validator);
         }
 
+        // --- HELPER KHUSUS: UBAH STRING KOSONG JADI NULL ---
+        // Ini kuncinya agar tidak error "Incorrect integer value"
+        $getPost = function ($field) {
+            $val = $this->request->getPost($field);
+            return ($val === '' || $val === null) ? null : $val;
+        };
+
         // D. PERSIAPAN DATA
         $dataSimpan = [
-            'fk_user'               => session()->get('current_user_id'),
-            'fk_prodi'              => session()->get('fk_prodi'),
+            // Hanya 2 ini yang WAJIB (diambil dari session)
+            'fk_user'  => session()->get('current_user_id'),
+            'fk_prodi' => session()->get('fk_prodi'),
 
-            'fk_lembaga_akreditasi' => $this->request->getPost('fk_lembaga'),
+            // Gunakan helper $getPost(...) untuk data yang boleh kosong
+            'fk_lembaga_akreditasi'    => $getPost('fk_lembaga'),
+            'fk_lembaga_internasional' => $getPost('fk_lembaga_internasional'),
+            'tahun_penyusunan'         => $getPost('tahun'),
 
-            'fk_lembaga_internasional' => $this->request->getPost('fk_lembaga_internasional'),
+            // Biaya: Jika kosong anggap 0, atau pakai $getPost('biaya') jika mau NULL
+            'biaya'                    => $this->request->getPost('biaya') ?: 0,
 
-            'tahun_penyusunan'      => $this->request->getPost('tahun'),
-            'biaya'                 => $this->request->getPost('biaya'),
-            'tahap_pengajuan'       => $this->request->getPost('tahap_pengajuan'),
-            'tahap'                 => $status,
+            'tahap_pengajuan'          => $getPost('tahap_pengajuan'),
+            'tahap'                    => $getPost('tahap'),
 
             // Data TS
-            'ts'   => $this->request->getPost('ts'),
-            'ts-1' => $this->request->getPost('ts_1'),
-            'ts-2' => $this->request->getPost('ts_2'),
+            'ts'   => $getPost('ts'),
+            'ts-1' => $getPost('ts_1'),
+            'ts-2' => $getPost('ts_2'),
         ];
 
-        // E. FILTER DATA (DATA CLEANING)
+        // E. FILTER DATA (LOGIKA SELESAI)
         if ($status == 'Selesai') {
-            $dataSimpan['peringkat']        = $this->request->getPost('peringkat');
+            $dataSimpan['peringkat']        = $getPost('peringkat');
 
-            // Logic agar nilai 0 tersimpan jika kosong
+            // Logic nilai: jika kosong jadi 0 (atau null jika mau)
             $valNilai = $this->request->getPost('nilai');
             $dataSimpan['nilai']            = empty($valNilai) ? 0 : $valNilai;
 
-            $dataSimpan['no_sk_akreditasi'] = $this->request->getPost('no_sk');
-            $dataSimpan['tgl_kadaluarsa']   = $this->request->getPost('tgl_kadaluarsa');
-            $dataSimpan['link_sertifikat']  = $this->request->getPost('link');
+            $dataSimpan['no_sk_akreditasi'] = $getPost('no_sk');
+            $dataSimpan['tgl_kadaluarsa']   = $getPost('tgl_kadaluarsa');
+            $dataSimpan['link_sertifikat']  = $getPost('link');
         } else {
+            // Jika belum selesai, kosongkan/null-kan
             $dataSimpan['peringkat']        = null;
             $dataSimpan['nilai']            = 0;
             $dataSimpan['no_sk_akreditasi'] = null;
             $dataSimpan['tgl_kadaluarsa']   = null;
-            $dataSimpan['link_sertifikat']  = $this->request->getPost('link');
+            $dataSimpan['link_sertifikat']  = $getPost('link');
         }
 
         // 3. Simpan
-        // dd($dataSimpan); // Hapus atau komentari ini jika sudah benar
         $this->akreditasiModel->save($dataSimpan);
 
         return redirect()->to('prodi/akreditasi/index')->with('message', 'Data akreditasi berhasil ditambahkan!');
