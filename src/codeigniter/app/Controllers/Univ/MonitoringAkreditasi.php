@@ -21,20 +21,34 @@ class MonitoringAkreditasi extends BaseController
         $stats = [
             'total_prodi' => count($allData),
             'kadaluarsa'  => 0,
-            'akan_habis'  => 0
+            'akan_habis'  => 0,
+            // Tambahkan 3 status baru ini
+            'persiapan'   => 0,
+            'pengajuan'   => 0,
+            'asesmen'     => 0
         ];
 
         foreach ($allData as $row) {
             $fakultasName = $row['nama_fakultas'];
             $groupedData[$fakultasName][] = $row;
 
+            // Logika statistik lama (berdasarkan tanggal)
             $kadaluarsa = strtotime($row['tgl_kadaluarsa']);
             $enamBulanLagi = strtotime("+6 months");
 
-            if ($kadaluarsa < time()) {
+            if ($kadaluarsa < time() && !empty($row['tgl_kadaluarsa'])) {
                 $stats['kadaluarsa']++;
-            } elseif ($kadaluarsa < $enamBulanLagi) {
+            } elseif ($kadaluarsa < $enamBulanLagi && !empty($row['tgl_kadaluarsa'])) {
                 $stats['akan_habis']++;
+            }
+
+            // Logika statistik baru (berdasarkan kolom tahap)
+            if ($row['tahap'] == 'Persiapan') {
+                $stats['persiapan']++;
+            } elseif ($row['tahap'] == 'Pengajuan') {
+                $stats['pengajuan']++;
+            } elseif ($row['tahap'] == 'Asesmen Lapangan') {
+                $stats['asesmen']++;
             }
         }
 

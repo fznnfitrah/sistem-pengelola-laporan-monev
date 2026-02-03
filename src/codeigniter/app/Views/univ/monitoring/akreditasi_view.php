@@ -3,23 +3,42 @@
 <?= $this->section('content') ?>
 <div class="container-fluid py-4">
 
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <div class="card shadow-sm border-0 bg-success text-white p-3" style="border-radius: 15px;">
-                <h6 class="small fw-bold">TOTAL PRODI TERPANTAU</h6>
+    <div class="row mb-4 g-3">
+        <div class="col-6 col-md-4">
+            <div class="card shadow-sm border-0 bg-success text-white p-3 h-100" onclick="showDetail('total_prodi', <?= htmlspecialchars(json_encode($allData)) ?>)" style="border-radius: 15px;">
+                <h6 class="small fw-bold text-uppercase" style="font-size: 0.7rem;">Total Terpantau</h6>
                 <h2 class="mb-0 fw-bold"><?= $stats['total_prodi'] ?></h2>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card shadow-sm border-0 bg-warning text-dark p-3" style="border-radius: 15px;">
-                <h6 class="small fw-bold">MASA BERLAKU < 6 BULAN</h6>
-                        <h2 class="mb-0 fw-bold"><?= $stats['akan_habis'] ?></h2>
+        <div class="col-6 col-md-4">
+            <div class="card shadow-sm border-0 bg-warning text-dark p-3 h-100" onclick="showDetail('akan_habis', <?= htmlspecialchars(json_encode($allData)) ?>)" style="border-radius: 15px;">
+                <h6 class="small fw-bold text-uppercase" style="font-size: 0.7rem;">Masa Berlaku < 6 bln</h6>
+                <h2 class="mb-0 fw-bold"><?= $stats['akan_habis'] ?></h2>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card shadow-sm border-0 bg-danger text-white p-3" style="border-radius: 15px;">
-                <h6 class="small fw-bold">SUDAH KADALUARSA</h6>
+        <div class="col-6 col-md-4">
+            <div class="card shadow-sm border-0 bg-danger text-white p-3 h-100" onclick="showDetail('kadaluarsa', <?= htmlspecialchars(json_encode($allData)) ?>)" style="border-radius: 15px;">
+                <h6 class="small fw-bold text-uppercase" style="font-size: 0.7rem;">Sudah Kadaluarsa</h6>
                 <h2 class="mb-0 fw-bold"><?= $stats['kadaluarsa'] ?></h2>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4">
+            <div class="card shadow-sm border-0 bg-info text-white p-3 h-100" onclick="showDetail('persiapan', <?= htmlspecialchars(json_encode($allData)) ?>)" style="border-radius: 15px;">
+                <h6 class="small fw-bold text-uppercase" style="font-size: 0.7rem;">Sedang Persiapan</h6>
+                <h2 class="mb-0 fw-bold"><?= $stats['persiapan'] ?></h2>
+            </div>
+        </div>
+        <div class="col-6 col-md-4">
+            <div class="card shadow-sm border-0 bg-primary text-white p-3 h-100" onclick="showDetail('pengajuan', <?= htmlspecialchars(json_encode($allData)) ?>)" style="border-radius: 15px;">
+                <h6 class="small fw-bold text-uppercase" style="font-size: 0.7rem;">Tahap Pengajuan</h6>
+                <h2 class="mb-0 fw-bold"><?= $stats['pengajuan'] ?></h2>
+            </div>
+        </div>
+        <div class="col-6 col-md-4">
+            <div class="card shadow-sm border-0 bg-secondary text-white p-3 h-100" onclick="showDetail('asesmen', <?= htmlspecialchars(json_encode($allData)) ?>)" style="border-radius: 15px;">
+                <h6 class="small fw-bold text-uppercase" style="font-size: 0.7rem;">Asesmen Lapangan</h6>
+                <h2 class="mb-0 fw-bold"><?= $stats['asesmen'] ?></h2>
             </div>
         </div>
     </div>
@@ -251,9 +270,32 @@
         </div>
     </div>
 </div>
-
+<div class="modal fade" id="modalDetailStatistik" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 15px;">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold" id="modalTitle">Detail Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Prodi</th>
+                                <th>Peringkat</th>
+                                <th>Status/Tgl</th>
+                            </tr>
+                        </thead>
+                        <tbody id="isiDetailTable">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="<?= base_url('js/detail_akreditasi.js') ?>"></script>
-
-
 
 <?= $this->endSection() ?>
