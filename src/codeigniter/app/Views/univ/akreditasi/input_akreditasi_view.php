@@ -49,15 +49,36 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Lembaga Akreditasi <span class="text-danger">*</span></label>
+                            <label class="form-label fw-bold">Lembaga Akreditasi (Nasional) <span class="text-danger">*</span></label>
                             <select name="fk_lembaga" id="fk_lembaga" class="form-select" required>
-                                <option value="" data-biaya="0">-- Pilih Lembaga --</option>
+                                <option value="" data-biaya="0">-- Pilih Lembaga Nasional --</option>
                                 <?php foreach ($lembaga as $l): ?>
-                                    <option value="<?= $l['id'] ?>" data-biaya="<?= $l['biaya'] ?>" <?= (old('fk_lembaga') == $l['id']) ? 'selected' : '' ?>>
-                                        <?= $l['nama_lembaga'] ?>
-                                    </option>
+                                    <?php if ($l['jenis_lembaga'] == 'Nasional'): // Filter Nasional 
+                                    ?>
+                                        <option value="<?= $l['id'] ?>" data-biaya="<?= $l['biaya'] ?>">
+                                            <?= $l['nama_lembaga'] ?>
+                                        </option>
+                                    <?php endif; ?>
                                 <?php endforeach; ?>
                             </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-primary">
+                                <i class="bi bi-globe me-1"></i> Lembaga Akreditasi Internasional (Opsional)
+                            </label>
+                            <select name="fk_lembaga_internasional" id="fk_lembaga_inter" class="form-select border-primary bg-primary bg-opacity-10">
+                                <option value="">-- Tidak Ada / Kosongkan --</option>
+                                <?php foreach ($lembaga as $l): ?>
+                                    <?php if ($l['jenis_lembaga'] == 'Internasional'): // Filter Internasional 
+                                    ?>
+                                        <option value="<?= $l['id'] ?>">
+                                            <?= $l['nama_lembaga'] ?>
+                                        </option>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </select>
+                            <div class="form-text text-muted">Silakan pilih jika Prodi memiliki akreditasi internasional.</div>
                         </div>
 
                         <div class="row">
@@ -161,10 +182,10 @@
                 targetFields.forEach(field => {
                     field.removeAttribute('disabled');
                     if (field.id === 'nilai_angka') {
-                            field.required = false;
-                        } else {
-                            field.required = true;
-                        }
+                        field.required = false;
+                    } else {
+                        field.required = true;
+                    }
                     // field.required = true;
                 });
             } else {

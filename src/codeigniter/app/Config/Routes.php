@@ -55,7 +55,7 @@ $routes->group('prodi', ['namespace' => 'App\Controllers\Prodi'], function ($rou
     // ROUTES UNTUK AKREDITASI PRODI
     $routes->get('akreditasi/index', 'Akreditasi::index');
     $routes->get('akreditasi/new', 'Akreditasi::new');
-    $routes->post('akreditasi/create', 'Akreditasi::create');
+    $routes->post('akreditasi/simpan', 'Akreditasi::simpan');
 });
 
 // ROUTES UNTUK ROLE UNIT

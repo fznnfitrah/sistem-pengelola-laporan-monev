@@ -64,7 +64,9 @@ class Akreditasi extends BaseController
         // Validasi Tambahan jika Selesai
         if ($status == 'Selesai') {
             $rules['peringkat']      = 'required';
-            // Nilai boleh kosong, tapi jika diisi harus angka
+
+            $rules['fk_lembaga_internasional'] = 'permit_empty';
+
             $rules['nilai']          = 'permit_empty|numeric';
             $rules['no_sk']          = 'required';
             $rules['tgl_kadaluarsa'] = 'required|valid_date';
@@ -80,6 +82,9 @@ class Akreditasi extends BaseController
             'fk_user'               => session()->get('current_user_id'),
             'fk_prodi'              => $this->request->getPost('fk_prodi'),
             'fk_lembaga_akreditasi' => $this->request->getPost('fk_lembaga'),
+
+            'fk_lembaga_internasional' => $this->request->getPost('fk_lembaga_internasional'),
+
             'tahun_penyusunan'      => $this->request->getPost('tahun'),
             'biaya'                 => $this->request->getPost('biaya'),
 

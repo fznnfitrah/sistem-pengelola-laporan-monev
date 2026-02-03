@@ -42,7 +42,7 @@ class Akreditasi extends BaseController
     }
 
     // --- FITUR BARU: PROSES SIMPAN ---
-    public function create()
+    public function simpan()
     {
         // A. AMBIL STATUS
         $status = $this->request->getPost('tahap');

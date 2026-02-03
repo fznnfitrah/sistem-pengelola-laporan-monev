@@ -16,6 +16,7 @@ class AkreditasiModel extends Model
         'fk_user',
         'fk_prodi',
         'fk_lembaga_akreditasi',
+        'fk_lembaga_internasional',
         'nilai',
         'peringkat', // Pastikan kolom ini sudah ditambahkan di DB
         'no_sk_akreditasi',
