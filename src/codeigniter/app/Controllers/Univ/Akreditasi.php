@@ -46,12 +46,12 @@ class Akreditasi extends BaseController
     // --- PROSES SIMPAN DATA ---
     public function simpan()
     {
-        // 1. Ambil Status
+        // 1. Ambil Status (Selesai/Persiapan/dll)
         $status = $this->request->getPost('tahap');
 
         // 2. Setting Validasi
         $rules = [
-            'fk_prodi'        => 'required', // <--- PENTING: Univ Wajib Pilih Prodi
+            'fk_prodi'        => 'required',
             'fk_lembaga'      => 'required',
             'tahun'           => 'required|numeric',
             'tahap'           => 'required',
@@ -64,57 +64,59 @@ class Akreditasi extends BaseController
         // Validasi Tambahan jika Selesai
         if ($status == 'Selesai') {
             $rules['peringkat']      = 'required';
-            $rules['nilai']          = 'required|numeric';
+            // Nilai boleh kosong, tapi jika diisi harus angka
+            $rules['nilai']          = 'permit_empty|numeric';
             $rules['no_sk']          = 'required';
-            $rules['tgl_sk']         = 'required|valid_date';
             $rules['tgl_kadaluarsa'] = 'required|valid_date';
-            $rules['link']           = 'required|valid_url';
+            $rules['link']           = 'permit_empty|valid_url';
         }
 
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('validation', $this->validator);
         }
 
-        // 3. Persiapan Data
+        // 3. Persiapan Data Dasar
         $dataSimpan = [
             'fk_user'               => session()->get('current_user_id'),
-
-            // PERBEDAAN UTAMA: Ambil ID Prodi dari Input Form (Bukan Session)
             'fk_prodi'              => $this->request->getPost('fk_prodi'),
-
             'fk_lembaga_akreditasi' => $this->request->getPost('fk_lembaga'),
             'tahun_penyusunan'      => $this->request->getPost('tahun'),
             'biaya'                 => $this->request->getPost('biaya'),
-            'status'                => $this->request->getPost('status'), 
-            'tahap'                 => $status,
+
+            // [KOREKSI] Ubah 'status' jadi 'tahap_pengajuan' sesuai input hidden di View
+            'tahap_pengajuan'       => $this->request->getPost('tahap_pengajuan'),
+
+            'tahap'                 => $status, // Persiapan, Selesai, dll
 
             // Data TS
             'ts'   => $this->request->getPost('ts'),
-            'ts_1' => $this->request->getPost('ts_1'),
-            'ts_2' => $this->request->getPost('ts_2'),
+            'ts-1' => $this->request->getPost('ts_1'),
+            'ts-2' => $this->request->getPost('ts_2'),
         ];
 
-        // 4. Filter Data (Bersihkan jika belum selesai)
+        // 4. Filter Data (Khusus Status Selesai)
         if ($status == 'Selesai') {
             $dataSimpan['peringkat']        = $this->request->getPost('peringkat');
-            $dataSimpan['nilai']            = $this->request->getPost('nilai');
+
+            // [PERBAIKAN UTAMA] Cek jika nilai kosong, simpan 0.
+            $inputNilai = $this->request->getPost('nilai');
+            $dataSimpan['nilai']            = empty($inputNilai) ? 0 : $inputNilai;
+
             $dataSimpan['no_sk_akreditasi'] = $this->request->getPost('no_sk');
-            $dataSimpan['tgl_sk_keluar']    = $this->request->getPost('tgl_sk');
             $dataSimpan['tgl_kadaluarsa']   = $this->request->getPost('tgl_kadaluarsa');
             $dataSimpan['link_sertifikat']  = $this->request->getPost('link');
         } else {
+            // Jika belum selesai, kosongkan data hasil
             $dataSimpan['peringkat']        = null;
             $dataSimpan['nilai']            = 0;
             $dataSimpan['no_sk_akreditasi'] = null;
-            $dataSimpan['tgl_sk_keluar']    = null;
             $dataSimpan['tgl_kadaluarsa']   = null;
-            $dataSimpan['link_sertifikat']  = $this->request->getPost('link');
+            $dataSimpan['link_sertifikat']  = $this->request->getPost('link'); // Link tetap boleh disimpan jika ada (draft)
         }
 
         // 5. Simpan ke Database
         $this->akreditasiModel->save($dataSimpan);
 
-        // Redirect ke halaman monitoring atau history univ
         return redirect()->to('univ/monitoring/akreditasi')->with('success', 'Data akreditasi prodi berhasil ditambahkan!');
     }
 }

@@ -65,9 +65,9 @@ class Akreditasi extends BaseController
             $rules['peringkat']      = 'required';
             $rules['nilai']          = 'required|numeric';
             $rules['no_sk']          = 'required';
-            $rules['tgl_sk']         = 'required|valid_date';
+            // $rules['tgl_sk']         = 'required|valid_date';
             $rules['tgl_kadaluarsa'] = 'required|valid_date';
-            $rules['link']           = 'required|valid_url';
+            $rules['link']           = 'permit_empty|valid_url';
         }
 
         // C. JALANKAN VALIDASI
@@ -88,8 +88,8 @@ class Akreditasi extends BaseController
             // --- [BARU] Masukkan ke Array Simpan ---
             // Pastikan nama di getPost('...') sama dengan name="..." di HTML View Anda
             'ts'   => $this->request->getPost('ts'),
-            'ts_1' => $this->request->getPost('ts_1'),
-            'ts_2' => $this->request->getPost('ts_2'),
+            'ts-1' => $this->request->getPost('ts_1'),
+            'ts-2' => $this->request->getPost('ts_2'),
         ];
 
         // E. FILTER DATA (DATA CLEANING)
@@ -97,14 +97,14 @@ class Akreditasi extends BaseController
             $dataSimpan['peringkat']        = $this->request->getPost('peringkat');
             $dataSimpan['nilai']            = $this->request->getPost('nilai');
             $dataSimpan['no_sk_akreditasi'] = $this->request->getPost('no_sk');
-            $dataSimpan['tgl_sk_keluar']    = $this->request->getPost('tgl_sk');
+            // $dataSimpan['tgl_sk_keluar']    = $this->request->getPost('tgl_sk');
             $dataSimpan['tgl_kadaluarsa']   = $this->request->getPost('tgl_kadaluarsa');
             $dataSimpan['link_sertifikat']  = $this->request->getPost('link');
         } else {
             $dataSimpan['peringkat']        = null;
             $dataSimpan['nilai']            = 0;
             $dataSimpan['no_sk_akreditasi'] = null;
-            $dataSimpan['tgl_sk_keluar']    = null;
+            // $dataSimpan['tgl_sk_keluar']    = null;
             $dataSimpan['tgl_kadaluarsa']   = null;
             $dataSimpan['link_sertifikat']  = $this->request->getPost('link');
         }

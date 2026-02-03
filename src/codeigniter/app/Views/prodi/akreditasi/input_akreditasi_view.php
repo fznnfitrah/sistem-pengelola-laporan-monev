@@ -70,10 +70,10 @@
                     <div class="col-md-6 ps-4">
                         <h6 class="text-success fw-bold mb-3"><i class="bi bi-calendar-event me-2"></i>PERIODE BERLAKU</h6>
 
-                        <div class="mb-3">
+                        <!-- <div class="mb-3">
                             <label class="form-label fw-bold">Tgl. SK Terbit</label>
                             <input type="date" name="tgl_sk" id="tgl_sk_terbit" class="form-control" disabled>
-                        </div>
+                        </div> -->
 
                         <div class="mb-3">
                             <label class="form-label fw-bold text-danger">Tgl. Kadaluarsa</label>
@@ -126,6 +126,56 @@
     </div>
 </div>
 
-<script src=" <?= base_url('js/input_akreditasi.js') ?> "></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // --- 1. LOGIKA STATUS SELESAI ---
+        const statusSelect = document.getElementById('status_saat_ini');
 
+        // Perhatikan: Baris tgl_sk_terbit sudah dikomentari agar tidak error
+        const targetFields = [
+            document.getElementById('peringkat'),
+            document.getElementById('nilai_angka'),
+            // document.getElementById('tgl_sk_terbit'), 
+            document.getElementById('tgl_kadaluarsa'),
+            document.getElementById('no_sk')
+        ];
+
+        function checkStatus() {
+            if (statusSelect.value === 'Selesai') {
+                targetFields.forEach(field => {
+                    // Cek safety: hanya proses jika elemennya ada (tidak null)
+                    if (field) {
+                        field.removeAttribute('disabled');
+                        field.required = true;
+                    }
+                });
+            } else {
+                targetFields.forEach(field => {
+                    if (field) {
+                        field.setAttribute('disabled', 'disabled');
+                        field.required = false;
+                        field.value = ''; // Reset nilai
+                    }
+                });
+            }
+        }
+
+        if (statusSelect) {
+            statusSelect.addEventListener('change', checkStatus);
+            checkStatus(); // Jalankan saat halaman dimuat
+        }
+
+        // --- 2. LOGIKA BIAYA LEMBAGA ---
+        const selectLembaga = document.getElementById('fk_lembaga');
+        const inputBiaya = document.getElementById('biaya');
+
+        if (selectLembaga && inputBiaya) {
+            selectLembaga.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const biayaDefault = selectedOption.getAttribute('data-biaya');
+                inputBiaya.value = biayaDefault ? biayaDefault : 0;
+            });
+        }
+    });
+</script>
 <?= $this->endSection() ?>

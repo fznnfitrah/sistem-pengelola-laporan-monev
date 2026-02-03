@@ -88,10 +88,10 @@
                     <div class="col-md-6 ps-4">
                         <h6 class="text-success fw-bold mb-3"><i class="bi bi-calendar-event me-2"></i>PERIODE BERLAKU</h6>
 
-                        <div class="mb-3">
+                        <!-- <div class="mb-3">
                             <label class="form-label fw-bold">Tgl. SK Terbit</label>
                             <input type="date" name="tgl_sk" id="tgl_sk_terbit" class="form-control" value="<?= old('tgl_sk') ?>" disabled>
-                        </div>
+                        </div> -->
 
                         <div class="mb-3">
                             <label class="form-label fw-bold text-danger">Tgl. Kadaluarsa</label>
@@ -151,7 +151,7 @@
         const targetFields = [
             document.getElementById('peringkat'),
             document.getElementById('nilai_angka'),
-            document.getElementById('tgl_sk_terbit'),
+            // document.getElementById('tgl_sk_terbit'),
             document.getElementById('tgl_kadaluarsa'),
             document.getElementById('no_sk')
         ];
@@ -160,13 +160,18 @@
             if (statusSelect.value === 'Selesai') {
                 targetFields.forEach(field => {
                     field.removeAttribute('disabled');
-                    field.required = true;
+                    if (field.id === 'nilai_angka') {
+                            field.required = false;
+                        } else {
+                            field.required = true;
+                        }
+                    // field.required = true;
                 });
             } else {
                 targetFields.forEach(field => {
                     field.setAttribute('disabled', 'disabled');
                     field.required = false;
-                    // Optional: field.value = ''; jika ingin mereset saat status berubah
+                    field.value = ''; // jika ingin mereset saat status berubah
                 });
             }
         }

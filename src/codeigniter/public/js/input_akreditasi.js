@@ -4,7 +4,7 @@ const statusSelect = document.getElementById('status_saat_ini');
 
 const fieldPeringkat = document.getElementById('peringkat');
 const fieldNilai = document.getElementById('nilai_angka');
-const fieldTglTerbit = document.getElementById('tgl_sk_terbit');
+// const fieldTglTerbit = document.getElementById('tgl_sk_terbit');
 const fieldTglKadaluarsa = document.getElementById('tgl_kadaluarsa');
 const fieldNoSk = document.getElementById('no_sk');
 
