@@ -2,7 +2,7 @@
 
 <?= $this->section('content') ?>
 <div class="container-fluid py-4">
-    
+
     <div class="row mb-4">
         <div class="col-md-4">
             <div class="card shadow-sm border-0 bg-success text-white p-3" style="border-radius: 15px;">
@@ -13,7 +13,7 @@
         <div class="col-md-4">
             <div class="card shadow-sm border-0 bg-warning text-dark p-3" style="border-radius: 15px;">
                 <h6 class="small fw-bold">MASA BERLAKU < 6 BULAN</h6>
-                <h2 class="mb-0 fw-bold"><?= $stats['akan_habis'] ?></h2>
+                        <h2 class="mb-0 fw-bold"><?= $stats['akan_habis'] ?></h2>
             </div>
         </div>
         <div class="col-md-4">
@@ -58,28 +58,29 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $no = 1; foreach ($prodis as $p) : 
+                            <?php $no = 1;
+                            foreach ($prodis as $p) :
                                 // --- LOGIKA TANGGAL (UNTUK TAMPILAN TABEL) ---
                                 $tglRaw = $p['tgl_kadaluarsa'];
                                 $hasDate = !empty($tglRaw) && $tglRaw != '0000-00-00';
-                                
+
                                 $displayDate = '<span class="text-muted fw-bold">-</span>';
-                                $badgeStatus = '<span class="badge bg-secondary">'.esc($p['tahap']).'</span>';
+                                $badgeStatus = '<span class="badge bg-secondary">' . esc($p['tahap']) . '</span>';
 
                                 if ($hasDate) {
                                     $tgl_k = strtotime($tglRaw);
                                     $isExpired = $tgl_k < time();
                                     $isWarning = $tgl_k < strtotime("+6 months") && !$isExpired;
                                     $formattedDate = date('d M Y', $tgl_k);
-                                    
+
                                     if ($isExpired) {
-                                        $displayDate = '<span class="text-danger fw-bold">'.$formattedDate.'</span>';
+                                        $displayDate = '<span class="text-danger fw-bold">' . $formattedDate . '</span>';
                                         $badgeStatus = '<span class="badge bg-danger">Kadaluarsa</span>';
                                     } elseif ($isWarning) {
-                                        $displayDate = '<span class="text-warning fw-bold">'.$formattedDate.'</span>';
+                                        $displayDate = '<span class="text-warning fw-bold">' . $formattedDate . '</span>';
                                         $badgeStatus = '<span class="badge bg-warning text-dark">Hampir Habis</span>';
                                     } else {
-                                        $displayDate = '<span class="text-success fw-bold">'.$formattedDate.'</span>';
+                                        $displayDate = '<span class="text-success fw-bold">' . $formattedDate . '</span>';
                                         $badgeStatus = '<span class="badge bg-success">Berlaku</span>';
                                     }
                                 }
@@ -99,13 +100,13 @@
                                         <?= $badgeStatus ?>
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-outline-success" 
+                                        <button class="btn btn-sm btn-outline-success"
                                             onclick="btnDetail(
                                                 '<?= esc($p['nama_prodi']) ?>',
                                                 '<?= esc($p['jenjang']) ?>',
                                                 '<?= esc($p['tahap']) ?>', 
-                                                '<?= esc($p['nama_lembaga']) ?>',
-                                                '<?= isset($p['fk_lembaga_internasional']) ? esc($p['fk_lembaga_internasional']) : '-' ?>',
+                                                '<?= esc($p['nama_lembaga_nasional']) ?>',
+                                                '<?= !empty($p['nama_lembaga_internasional']) ? esc($p['nama_lembaga_internasional']) : '-' ?>',
                                                 '<?= esc($p['peringkat']) ?>',
                                                 '<?= esc($p['nilai']) ?>',
                                                 '<?= esc($p['no_sk_akreditasi']) ?>',
@@ -117,7 +118,7 @@
                                                 '<?= esc($p['ts-2']) ?>',              
                                                 '<?= !empty($p['link_sertifikat']) ? $p['link_sertifikat'] : '#' ?>'
                                             )"
-                                            data-bs-toggle="modal" 
+                                            data-bs-toggle="modal"
                                             data-bs-target="#modalDetail">
                                             <i class="bi bi-search"></i> Detail
                                         </button>
@@ -133,9 +134,9 @@
 </div>
 
 <div class="modal fade" id="modalDetail" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg"> 
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow" style="border-radius: 15px;">
-            
+
             <div class="modal-header border-0 pb-0">
                 <h5 class="modal-title fw-bold text-success">
                     <i class="bi bi-patch-check-fill me-2"></i>Detail Akreditasi Prodi
@@ -144,7 +145,7 @@
             </div>
 
             <div class="modal-body p-4">
-                
+
                 <div class="d-flex align-items-center mb-4 p-3 bg-light rounded-3">
                     <div class="me-3">
                         <i class="bi bi-mortarboard-fill fs-1 text-success opacity-50"></i>
@@ -159,7 +160,7 @@
                 <div class="row g-4">
                     <div class="col-md-6 border-end">
                         <h6 class="fw-bold text-secondary small mb-3">DATA AKREDITASI</h6>
-                        
+
                         <div class="mb-3">
                             <label class="d-block text-muted small">Lembaga Akreditasi</label>
                             <span class="fw-bold fs-5 text-dark" id="d_lembaga">-</span>

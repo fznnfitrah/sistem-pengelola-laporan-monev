@@ -115,7 +115,7 @@
                                             '<?= esc($row['jenjang']) ?>',
                                             '<?= esc($row['tahap']) ?>', 
                                             '<?= esc($row['nama_lembaga']) ?>',
-                                            '<?= isset($row['fk_lembaga_internasional']) ? esc($row['fk_lembaga_internasional']) : '-' ?>',
+                                            '<?= !empty($row['nama_lembaga_internasional']) ? esc($row['nama_lembaga_internasional']) : '-' ?>',
                                             '<?= esc($row['peringkat']) ?>',
                                             '<?= esc($row['nilai']) ?>',
                                             '<?= esc($row['no_sk_akreditasi']) ?>',

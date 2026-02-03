@@ -3,9 +3,9 @@
 namespace App\Controllers\Univ;
 
 use App\Controllers\BaseController;
-use App\Models\AkreditasiModel; // Pastikan Model ini sudah ada
-use App\Models\ProdiModel;      // Model untuk mengambil daftar Prodi
-use App\Models\LembagaAkreditasiModel; // Model untuk data lembaga
+use App\Models\AkreditasiModel;
+use App\Models\ProdiModel;
+use App\Models\LembagaAkreditasiModel;
 
 class Akreditasi extends BaseController
 {
@@ -35,8 +35,8 @@ class Akreditasi extends BaseController
 
         $data = [
             'title'   => 'Input Data Akreditasi (Admin Univ)',
-            'prodi'   => $dataProdi,   // Dikirim ke View
-            'lembaga' => $dataLembaga, // Dikirim ke View
+            'prodi'   => $dataProdi,
+            'lembaga' => $dataLembaga,
             'validation' => \Config\Services::validation()
         ];
 
@@ -55,7 +55,7 @@ class Akreditasi extends BaseController
             'fk_lembaga'      => 'required',
             'tahun'           => 'required|numeric',
             'tahap'           => 'required',
-            // Validasi TS
+
             'ts'   => 'required|numeric',
             'ts_1' => 'required|numeric',
             'ts_2' => 'required|numeric',
@@ -103,7 +103,6 @@ class Akreditasi extends BaseController
         if ($status == 'Selesai') {
             $dataSimpan['peringkat']        = $this->request->getPost('peringkat');
 
-            // [PERBAIKAN UTAMA] Cek jika nilai kosong, simpan 0.
             $inputNilai = $this->request->getPost('nilai');
             $dataSimpan['nilai']            = empty($inputNilai) ? 0 : $inputNilai;
 
@@ -111,15 +110,16 @@ class Akreditasi extends BaseController
             $dataSimpan['tgl_kadaluarsa']   = $this->request->getPost('tgl_kadaluarsa');
             $dataSimpan['link_sertifikat']  = $this->request->getPost('link');
         } else {
-            // Jika belum selesai, kosongkan data hasil
+
             $dataSimpan['peringkat']        = null;
             $dataSimpan['nilai']            = 0;
             $dataSimpan['no_sk_akreditasi'] = null;
             $dataSimpan['tgl_kadaluarsa']   = null;
-            $dataSimpan['link_sertifikat']  = $this->request->getPost('link'); // Link tetap boleh disimpan jika ada (draft)
+            $dataSimpan['link_sertifikat']  = $this->request->getPost('link');
         }
 
         // 5. Simpan ke Database
+
         $this->akreditasiModel->save($dataSimpan);
 
         return redirect()->to('univ/monitoring/akreditasi')->with('success', 'Data akreditasi prodi berhasil ditambahkan!');

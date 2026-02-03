@@ -41,7 +41,6 @@ class Akreditasi extends BaseController
         return view('prodi/akreditasi/input_akreditasi_view', $data);
     }
 
-    // --- FITUR BARU: PROSES SIMPAN ---
     public function simpan()
     {
         // A. AMBIL STATUS
@@ -53,8 +52,6 @@ class Akreditasi extends BaseController
             'tahun'           => 'required|numeric',
             'tahap'           => 'required',
             'tahap_pengajuan' => 'required',
-
-            // Sesuaikan 'numeric' jika isinya angka, atau hapus jika teks biasa.
             'ts'   => 'required|numeric',
             'ts_1' => 'required|numeric',
             'ts_2' => 'required|numeric',
@@ -63,9 +60,11 @@ class Akreditasi extends BaseController
         // Validasi Tambahan jika Selesai
         if ($status == 'Selesai') {
             $rules['peringkat']      = 'required';
-            $rules['nilai']          = 'required|numeric';
+
+            $rules['fk_lembaga_internasional'] = 'permit_empty';
+            
+            $rules['nilai']          = 'permit_empty|numeric';
             $rules['no_sk']          = 'required';
-            // $rules['tgl_sk']         = 'required|valid_date';
             $rules['tgl_kadaluarsa'] = 'required|valid_date';
             $rules['link']           = 'permit_empty|valid_url';
         }
@@ -79,14 +78,17 @@ class Akreditasi extends BaseController
         $dataSimpan = [
             'fk_user'               => session()->get('current_user_id'),
             'fk_prodi'              => session()->get('fk_prodi'),
+
             'fk_lembaga_akreditasi' => $this->request->getPost('fk_lembaga'),
+
+            'fk_lembaga_internasional' => $this->request->getPost('fk_lembaga_internasional'),
+
             'tahun_penyusunan'      => $this->request->getPost('tahun'),
             'biaya'                 => $this->request->getPost('biaya'),
             'tahap_pengajuan'       => $this->request->getPost('tahap_pengajuan'),
             'tahap'                 => $status,
 
-            // --- [BARU] Masukkan ke Array Simpan ---
-            // Pastikan nama di getPost('...') sama dengan name="..." di HTML View Anda
+            // Data TS
             'ts'   => $this->request->getPost('ts'),
             'ts-1' => $this->request->getPost('ts_1'),
             'ts-2' => $this->request->getPost('ts_2'),
@@ -95,21 +97,24 @@ class Akreditasi extends BaseController
         // E. FILTER DATA (DATA CLEANING)
         if ($status == 'Selesai') {
             $dataSimpan['peringkat']        = $this->request->getPost('peringkat');
-            $dataSimpan['nilai']            = $this->request->getPost('nilai');
+
+            // Logic agar nilai 0 tersimpan jika kosong
+            $valNilai = $this->request->getPost('nilai');
+            $dataSimpan['nilai']            = empty($valNilai) ? 0 : $valNilai;
+
             $dataSimpan['no_sk_akreditasi'] = $this->request->getPost('no_sk');
-            // $dataSimpan['tgl_sk_keluar']    = $this->request->getPost('tgl_sk');
             $dataSimpan['tgl_kadaluarsa']   = $this->request->getPost('tgl_kadaluarsa');
             $dataSimpan['link_sertifikat']  = $this->request->getPost('link');
         } else {
             $dataSimpan['peringkat']        = null;
             $dataSimpan['nilai']            = 0;
             $dataSimpan['no_sk_akreditasi'] = null;
-            // $dataSimpan['tgl_sk_keluar']    = null;
             $dataSimpan['tgl_kadaluarsa']   = null;
             $dataSimpan['link_sertifikat']  = $this->request->getPost('link');
         }
 
         // 3. Simpan
+        // dd($dataSimpan); // Hapus atau komentari ini jika sudah benar
         $this->akreditasiModel->save($dataSimpan);
 
         return redirect()->to('prodi/akreditasi/index')->with('message', 'Data akreditasi berhasil ditambahkan!');

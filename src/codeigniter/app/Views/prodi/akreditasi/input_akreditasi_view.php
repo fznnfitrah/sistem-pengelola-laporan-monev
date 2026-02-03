@@ -30,21 +30,10 @@
 
                         <input type="hidden" name="tahap_pengajuan" value="TS-1">
 
-                        <!-- <div class="mb-3">
-                            <label class="form-label fw-bold">Lembaga Akreditasi <span class="text-danger">*</span></label>
-                            <select name="fk_lembaga" id="fk_lembaga" class="form-select" required>
-                                <option value="" data-biaya="0">-- Pilih Lembaga --</option>
-                                <?php foreach ($lembaga as $l): ?>
-                                    <option value="<?= $l['id'] ?>" data-biaya="<?= $l['biaya'] ?>">
-                                        <?= $l['nama_lembaga'] ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div> -->
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Lembaga Akreditasi (Nasional) <span class="text-danger">*</span></label>
-                            <select name="fk_lembaga" id="fk_lembaga" class="form-select" required>
+                             <select name="fk_lembaga" id="fk_lembaga" class="form-select" required>
                                 <option value="" data-biaya="0">-- Pilih Lembaga Nasional --</option>
                                 <?php foreach ($lembaga as $l): ?>
                                     <?php if ($l['jenis_lembaga'] == 'Nasional'): // Filter Nasional 
@@ -64,7 +53,7 @@
                             <select name="fk_lembaga_internasional" id="fk_lembaga_inter" class="form-select border-primary bg-primary bg-opacity-10">
                                 <option value="">-- Tidak Ada / Kosongkan --</option>
                                 <?php foreach ($lembaga as $l): ?>
-                                    <?php if ($l['jenis_lembaga'] == 'Internasional'): // Filter Internasional 
+                                    <?php if ($l['jenis_lembaga'] == 'Internasional'): 
                                     ?>
                                         <option value="<?= $l['id'] ?>">
                                             <?= $l['nama_lembaga'] ?>
