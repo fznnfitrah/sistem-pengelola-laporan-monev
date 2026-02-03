@@ -43,40 +43,49 @@ class MonitoringAkreditasi extends BaseController
             'groupedData' => $groupedData,
             'stats'       => $stats,
             'rekap'       => $allData,
-            'allData'     => $allData 
+            'allData'     => $allData
         ]);
     }
+
 
     public function rekap()
     {
         $allData = $this->model->getRekapSemuaProdi();
         $rekapData = [];
 
-        // Inisialisasi hitungan untuk tabel tabulasi
+        // Inisialisasi hitungan
         $tabulasi = [
-            'A' => 0, 'B' => 0, 'C' => 0, 
-            'Unggul' => 0, 'Baik Sekali' => 0, 'Baik' => 0, 
+            'A' => 0,
+            'B' => 0,
+            'C' => 0,
+            'Unggul' => 0,
+            'Baik Sekali' => 0,
+            'Baik' => 0,
             'Belum Terakreditasi' => 0
         ];
 
         foreach ($allData as $row) {
             $row['sisa_bulan'] = '-';
             $row['tgl_persiapan'] = '-';
+
             $row['akre_internasional'] = '-';
 
-            // 1. Logika Akreditasi Internasional
-            if ($row['jenis_lembaga'] == 'Internasional') {
-                $row['akre_internasional'] = 'Ya';
+            if (!empty($row['nama_lembaga_inter_text'])) {
+                $row['akre_internasional'] = $row['nama_lembaga_inter_text'];
             }
 
             // 2. Hitung Tanggal & Sisa Bulan
             if (!empty($row['tgl_kadaluarsa']) && $row['tgl_kadaluarsa'] != '0000-00-00') {
                 $tglKadaluarsa = new \DateTime($row['tgl_kadaluarsa']);
                 $sekarang = new \DateTime();
-                $diff = $sekarang->diff($tglKadaluarsa);
+                $diff = $sekarang->diff($tglKadaluarsa); // Hitung selisih
+
                 $totalBulan = ($diff->y * 12) + $diff->m;
-                if ($tglKadaluarsa < $sekarang) $totalBulan *= -1;
-                
+
+                if ($tglKadaluarsa < $sekarang) {
+                    $totalBulan *= -1;
+                }
+
                 $row['sisa_bulan'] = $totalBulan;
 
                 $tglPersiapan = clone $tglKadaluarsa;
@@ -92,7 +101,7 @@ class MonitoringAkreditasi extends BaseController
                 $tabulasi[$p]++;
             }
 
-            $rekapData[] = $row; // Masukkan ke array satu kali saja agar tidak duplikat
+            $rekapData[] = $row;
         }
 
         return view('univ/monitoring/rekap_akreditasi_view', [
@@ -100,7 +109,7 @@ class MonitoringAkreditasi extends BaseController
             'rekap'      => $rekapData,
             'tabulasi'   => $tabulasi,
             'total'      => count($allData),
-            'tgl_update' => date('d F Y') // Update harian otomatis
+            'tgl_update' => date('d F Y')
         ]);
     }
 }

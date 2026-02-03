@@ -26,6 +26,7 @@
                             <th rowspan="2">Kadaluarsa</th>
                             <th rowspan="2">Sisa (Bulan)</th>
                             <th rowspan="2">Persiapan H-6</th>
+                            <th rowspan="2">Status</th>
                             <th rowspan="2">Lembaga</th>
                             <th rowspan="2">Biaya</th>
                             <th colspan="3">Data Tahun Pengajuan (TS)</th>
@@ -67,6 +68,25 @@
                                 </td>
 
                                 <td class="text-primary fw-bold"><?= $r['tgl_persiapan'] ?></td>
+                                <td class="text-center">
+                                    <?php
+                                    // Logika Warna Badge Sederhana
+                                    $badgeWarna = 'bg-secondary'; // Default (Abu-abu)
+
+                                    if ($r['tahap'] == 'Selesai') {
+                                        $badgeWarna = 'bg-success'; // Hijau
+                                    } elseif ($r['tahap'] == 'Persiapan') {
+                                        $badgeWarna = 'bg-warning text-dark'; // Kuning
+                                    } elseif ($r['tahap'] == 'Pengajuan') {
+                                        $badgeWarna = 'bg-info text-dark'; // Biru Muda
+                                    } elseif ($r['tahap'] == 'Asesmen Lapangan') {
+                                        $badgeWarna = 'bg-primary'; // Biru Tua
+                                    }
+                                    ?>
+                                    <span class="badge <?= $badgeWarna ?> rounded-pill">
+                                        <?= esc($r['tahap']) ?>
+                                    </span>
+                                </td>
                                 <td><?= esc($r['nama_lembaga'] ?: '-') ?></td>
                                 <td><?= $r['biaya'] ? number_format($r['biaya'], 0, ',', '.') : '-' ?></td>
                                 <td><?= esc($r['ts'] ?: '-') ?></td>

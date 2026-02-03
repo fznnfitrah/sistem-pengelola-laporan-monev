@@ -113,11 +113,9 @@ class AkreditasiModel extends Model
                 akreditasi_prodi.ts-2,
                 akreditasi_prodi.link_sertifikat,
                 
-                // JOIN 1: Nasional
                 L1.nama_lembaga as nama_lembaga,
                 L1.jenis_lembaga,
 
-                // JOIN 2: Internasional
                 L2.nama_lembaga as nama_lembaga_inter_text
             ')
             ->join('mFakultas', 'mFakultas.id = mProdi.fk_fakultas')
