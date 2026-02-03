@@ -11,86 +11,96 @@ class AkreditasiModel extends Model
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
 
-    // Pastikan semua nama kolom di sini sama persis dengan di database
     protected $allowedFields    = [
         'fk_user',
         'fk_prodi',
         'fk_lembaga_akreditasi',
+        'fk_lembaga_internasional',
         'nilai',
-        'peringkat', // Pastikan kolom ini sudah ditambahkan di DB
+        'peringkat',
         'no_sk_akreditasi',
         'tgl_sk_keluar',
         'tgl_kadaluarsa',
         'tahun_penyusunan',
         'biaya',
-        'status', // TS-1, TS-2, dll
+        'status',
         'ts',
         'ts-1',
         'ts-2',
         'link_sertifikat',
-        'tahap' // Persiapan, Pengajuan, dll
+        'tahap',
     ];
 
-    // Mengaktifkan fitur timestamp otomatis (create_at & update_at)
+
     protected $useTimestamps = true;
     protected $createdField  = 'create_at';
     protected $updatedField  = 'update_at';
 
-    /**
-     * Fungsi custom untuk mengambil data lengkap dengan Nama Prodi & Lembaga
-     */
+
     public function getRiwayat($kodeProdi = null)
     {
-        // Start Query
-        $builder = $this->select('akreditasi_prodi.*, 
-                                  mProdi.nama_prodi, 
-                                  mJenjang.jenjang, 
-                                  mLembaga_akreditasi.nama_lembaga,
-                                  user.username as penginput')
+        $builder = $this->select('
+                akreditasi_prodi.*, 
+                mProdi.nama_prodi, 
+                mJenjang.jenjang, 
+                
+                L1.nama_lembaga as nama_lembaga,
+
+                L2.nama_lembaga as nama_lembaga_internasional, 
+
+                user.username as penginput
+            ')
             ->join('mProdi', 'mProdi.id = akreditasi_prodi.fk_prodi')
             ->join('mJenjang', 'mJenjang.id = mProdi.fk_jenjang', 'left')
-            ->join('mLembaga_akreditasi', 'mLembaga_akreditasi.id = akreditasi_prodi.fk_lembaga_akreditasi')
+            ->join('mLembaga_akreditasi as L1', 'L1.id = akreditasi_prodi.fk_lembaga_akreditasi', 'left')
+            ->join('mLembaga_akreditasi as L2', 'L2.id = akreditasi_prodi.fk_lembaga_internasional', 'left')
             ->join('user', 'user.id = akreditasi_prodi.fk_user');
 
-        // Jika ada parameter kodeProdi, filter berdasarkan prodi tersebut
         if ($kodeProdi != null) {
             $builder->where('akreditasi_prodi.fk_prodi', $kodeProdi);
         }
 
-        // Urutkan dari yang terbaru (berdasarkan tanggal SK)
-        return $builder->orderBy('akreditasi_prodi.tgl_sk_keluar', 'DESC')
-            ->findAll();
+        return $builder->orderBy('akreditasi_prodi.tgl_sk_keluar', 'DESC')->findAll();
     }
 
-    // Fungsi untuk Universitas: Ambil akreditasi terbaru dari SETIAP prodi
+
     public function getLatestAkreditasiAll()
     {
-        return $this->select('akreditasi_prodi.*, mProdi.nama_prodi, mFakultas.nama_fakultas, mFakultas.id as fakultas_id, mLembaga_akreditasi.nama_lembaga, mJenjang.jenjang, user.username as penginput')
+        return $this->select('
+                akreditasi_prodi.*, 
+                mProdi.nama_prodi, 
+                mFakultas.nama_fakultas, 
+                mJenjang.jenjang, 
+                L1.nama_lembaga as nama_lembaga_nasional, 
+                L2.nama_lembaga as nama_lembaga_internasional,
+                user.username as penginput
+            ')
             ->join('mProdi', 'mProdi.id = akreditasi_prodi.fk_prodi')
             ->join('mFakultas', 'mFakultas.id = mProdi.fk_fakultas')
             ->join('mJenjang', 'mJenjang.id = mProdi.fk_jenjang', 'left')
-            ->join('mLembaga_akreditasi', 'mLembaga_akreditasi.id = akreditasi_prodi.fk_lembaga_akreditasi')
+            ->join('mLembaga_akreditasi as L1', 'L1.id = akreditasi_prodi.fk_lembaga_akreditasi', 'left')
+            ->join('mLembaga_akreditasi as L2', 'L2.id = akreditasi_prodi.fk_lembaga_internasional', 'left')
             ->join('user', 'user.id = akreditasi_prodi.fk_user')
-            // Subquery untuk memastikan hanya mengambil ID terbaru (row terakhir) per Prodi
             ->whereIn('akreditasi_prodi.id', function ($builder) {
                 return $builder->select('MAX(id)')->from('akreditasi_prodi')->groupBy('fk_prodi');
             })
             ->orderBy('mFakultas.nama_fakultas', 'ASC')
             ->findAll();
     }
+
+
     public function getRekapSemuaProdi()
     {
-        // Mengambil dasar dari mProdi agar semua prodi muncul
         return $this->db->table('mProdi')
             ->select('
                 mProdi.nama_prodi, 
                 mProdi.id as prodi_id,
-                
                 mProdi.no_sk_pendirian,
                 mProdi.tgl_sk_pendirian,
-
+                
                 mJenjang.jenjang, 
                 mFakultas.nama_fakultas,
+                
                 akreditasi_prodi.peringkat,
                 akreditasi_prodi.nilai,
                 akreditasi_prodi.no_sk_akreditasi,
@@ -102,13 +112,20 @@ class AkreditasiModel extends Model
                 akreditasi_prodi.ts-1,
                 akreditasi_prodi.ts-2,
                 akreditasi_prodi.link_sertifikat,
-                mLembaga_akreditasi.nama_lembaga,
-                mLembaga_akreditasi.jenis_lembaga
+                
+                L1.nama_lembaga as nama_lembaga,
+                L1.jenis_lembaga,
+
+                L2.nama_lembaga as nama_lembaga_inter_text
             ')
             ->join('mFakultas', 'mFakultas.id = mProdi.fk_fakultas')
             ->join('mJenjang', 'mJenjang.id = mProdi.fk_jenjang', 'left')
+
             ->join('(SELECT * FROM akreditasi_prodi WHERE id IN (SELECT MAX(id) FROM akreditasi_prodi GROUP BY fk_prodi)) as akreditasi_prodi', 'akreditasi_prodi.fk_prodi = mProdi.id', 'left')
-            ->join('mLembaga_akreditasi', 'mLembaga_akreditasi.id = akreditasi_prodi.fk_lembaga_akreditasi', 'left')
+
+            ->join('mLembaga_akreditasi as L1', 'L1.id = akreditasi_prodi.fk_lembaga_akreditasi', 'left')
+            ->join('mLembaga_akreditasi as L2', 'L2.id = akreditasi_prodi.fk_lembaga_internasional', 'left')
+
             ->orderBy('mFakultas.nama_fakultas', 'ASC')
             ->get()->getResultArray();
     }
