@@ -109,11 +109,6 @@
                     <div class="col-md-6 ps-4">
                         <h6 class="text-success fw-bold mb-3"><i class="bi bi-calendar-event me-2"></i>PERIODE BERLAKU</h6>
 
-                        <!-- <div class="mb-3">
-                            <label class="form-label fw-bold">Tgl. SK Terbit</label>
-                            <input type="date" name="tgl_sk" id="tgl_sk_terbit" class="form-control" value="<?= old('tgl_sk') ?>" disabled>
-                        </div> -->
-
                         <div class="mb-3">
                             <label class="form-label fw-bold text-danger">Tgl. Kadaluarsa</label>
                             <input type="date" name="tgl_kadaluarsa" id="tgl_kadaluarsa" class="form-control border-danger" value="<?= old('tgl_kadaluarsa') ?>" disabled>
@@ -121,7 +116,7 @@
 
                         <hr>
 
-                        <h6 class="text-success fw-bold mb-3 mt-4"><i class="bi bi-bar-chart-fill me-2"></i>DATA MAHASISWA (TS)</h6>
+                        <h6 class="text-success fw-bold mb-3 mt-4"><i class="bi bi-bar-chart-fill me-2"></i>DATA TAHUN PENGAJUAN AKREDITASI (TS)</h6>
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label class="form-label fw-bold small">TS (Thn)</label>

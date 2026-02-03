@@ -92,10 +92,6 @@
                     <div class="col-md-6 ps-4">
                         <h6 class="text-success fw-bold mb-3"><i class="bi bi-calendar-event me-2"></i>PERIODE BERLAKU</h6>
 
-                        <!-- <div class="mb-3">
-                            <label class="form-label fw-bold">Tgl. SK Terbit</label>
-                            <input type="date" name="tgl_sk" id="tgl_sk_terbit" class="form-control" disabled>
-                        </div> -->
 
                         <div class="mb-3">
                             <label class="form-label fw-bold text-danger">Tgl. Kadaluarsa</label>
