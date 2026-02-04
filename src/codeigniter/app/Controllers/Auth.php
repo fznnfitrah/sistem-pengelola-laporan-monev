@@ -6,18 +6,15 @@ use App\Models\UserModel;
 
 class Auth extends BaseController
 {
-    // 1. Definisikan Property Model agar bisa diakses seluruh method
     protected $userModel;
 
-    // 2. Inisialisasi Model di Constructor
     public function __construct()
     {
-        $this->userModel  = new UserModel();
+        $this->userModel = new UserModel();
     }
 
     public function index()
     {
-        // Cek jika sudah login, lempar ke dashboard
         if (session()->get('isLoggedIn')) {
             return redirect()->to('/dashboard');
         }
@@ -30,13 +27,13 @@ class Auth extends BaseController
         $password = $this->request->getPost('password');
         $email    = $this->request->getPost('email');
 
-
         // JALUR 1: Login dengan Email (Prioritas)
         if (!empty($email)) {
             $users = $this->userModel->where('email', $email)->findAll();
 
             if ($users) {
-                // Ambil user pertama & simpan session
+                // Catatan: Jika email digunakan login, pastikan verifikasi password 
+                // juga ditambahkan di sini jika email tersebut bersifat privat.
                 $user = $users[0];
                 $this->setSession($user, $users);
                 return redirect()->to('/dashboard');
@@ -46,10 +43,19 @@ class Auth extends BaseController
         else {
             $user = $this->userModel->where('username', $username)->first();
 
-            // Verifikasi Password (sementara plain text sesuai DB Anda)
-            if ($user && $password == $user['password']) {
-                $this->setSession($user, [$user]);
-                return redirect()->to('/dashboard');
+            if ($user) {
+                // --- KONFIGURASI VERIFIKASI PASSWORD ---
+                
+                // Mode A: Plain Text (AKTIF untuk Masa Percobaan)
+                $isPasswordValid = ($password == $user['password']);
+
+                // Mode B: Password Hash (NONAKTIF untuk Produksi)
+                // $isPasswordValid = password_verify($password, $user['password']);
+
+                if ($isPasswordValid) {
+                    $this->setSession($user, [$user]);
+                    return redirect()->to('/dashboard');
+                }
             }
         }
 
@@ -58,19 +64,15 @@ class Auth extends BaseController
 
     private function setSession($user, $allRoles)
     {
-        // Langsung set session:
         session()->set([
             'isLoggedIn'      => true,
             'current_user_id' => $user['id'],
             'username'        => $user['username'],
             'email'           => $user['email'],
             'fk_roles'        => $user['fk_roles'],
-
-            // SIMPAN APA ADANYA (String "infor1", "teknik1", dll)
             'fk_prodi'        => $user['fk_prodi'],
             'fk_unit'         => $user['fk_unit'],
             'fk_fakultas'     => $user['fk_fakultas'],
-
             'available_roles' => $allRoles
         ]);
     }
@@ -80,7 +82,6 @@ class Auth extends BaseController
         $targetUser = $this->userModel->find($id);
 
         if ($targetUser && $targetUser['email'] == session()->get('email')) {
-
             $allRoles = $this->userModel->where('email', session()->get('email'))->findAll();
             $this->setSession($targetUser, $allRoles);
         }

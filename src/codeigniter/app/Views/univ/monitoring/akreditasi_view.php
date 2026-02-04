@@ -310,6 +310,6 @@
         </div>
     </div>
 </div>
-<script src="<?= base_url('js/detail_akreditasi.js') ?>"></script>
+<script src="<?= base_url('js/detail_akreditasi.js') ?>?v=<?= time() ?>"></script>
 
 <?= $this->endSection() ?>

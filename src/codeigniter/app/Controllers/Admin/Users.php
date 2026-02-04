@@ -62,10 +62,11 @@ class Users extends BaseController
         $fkProdi    = $this->request->getPost('fk_prodi');
         $fkUnit     = $this->request->getPost('fk_unit');
 
-
+        // --- KONFIGURASI PASSWORD ---
         $passwordRaw = $this->request->getPost('password');
         
-        $passwordFinal = $passwordRaw;
+        // Pilih salah satu:
+        $passwordFinal = $passwordRaw; // <--- AKTIF (Plain Text untuk Percobaan)
         // $passwordFinal = password_hash($passwordRaw, PASSWORD_DEFAULT); // <--- NONAKTIF (Enkripsi untuk Produksi)
 
         $this->userModel->save([
