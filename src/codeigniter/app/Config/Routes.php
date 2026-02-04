@@ -102,8 +102,9 @@ $routes->group('univ', ['namespace' => 'App\Controllers\Univ'], function ($route
     // Fitur Master Monev
     $routes->get('monev', 'Monev::index');
     $routes->post('monev/simpan', 'Monev::simpan');
-    $routes->post('monev/edit', 'Monev::edit');
+    $routes->post('monev/update', 'Monev::update'); // Pastikan ini 'update' sesuai nama method di controller
     $routes->get('monev/hapus/(:num)', 'Monev::hapus/$1');
+    $routes->post('monev/copy', 'Monev::copy');    
 
     // Fitur Master Kinerja
     $routes->get('kinerja', 'Kinerja::index');

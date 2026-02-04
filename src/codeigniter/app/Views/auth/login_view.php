@@ -13,8 +13,8 @@
 <div class="container vh-100 d-flex align-items-center justify-content-center">
     <div class="row w-100 align-items-center">
         <div class="col-md-6 mb-5 mb-md-0 text-center text-md-start">
-            <h1 class="fw-bold display-5 text-dark">SISTEM PENGELOLA</h1>
-            <h1 class="fw-bold display-5 text-dark mb-4">LAPORAN MONEV</h1>
+            <h1 class="fw-bold display-5 text-dark">SILAP MONEV</h1>
+            <h1 class="fw-bold display-5 text-dark mb-4">V.1</h1>
             <p class="text-secondary lead">
                 Aplikasi untuk mengelola laporan monitoring dan evaluasi prodi <br>
                 Universitas Trunodjoyo Madura

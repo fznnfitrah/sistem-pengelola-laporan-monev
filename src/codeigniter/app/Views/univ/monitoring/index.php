@@ -34,7 +34,7 @@
                         <tr>
                             <th class="text-start ps-4">Nama Fakultas</th>
                             <?php foreach($tagihan as $t): ?>
-                                <th style="font-size: 0.7rem;"><?= esc($t['nama_monev']) ?></th>
+                                <th style="font-size: 0.9rem; min-width: 120px;"><?= esc($t['nama_monev']) ?></th>
                             <?php endforeach; ?>
                         </tr>
                     </thead>
@@ -83,7 +83,7 @@
                         <tr>
                             <th class="text-start ps-4" width="25%">Program Studi</th>
                             <?php foreach($tagihan as $t): ?>
-                                <th style="font-size: 0.65rem;"><?= esc($t['nama_monev']) ?></th>
+                                <th style="font-size: 0.9rem; min-width: 120px;"><?= esc($t['nama_monev']) ?></th>
                             <?php endforeach; ?>
                         </tr>
                     </thead>
@@ -136,7 +136,7 @@
                         <tr>
                             <th class="text-start ps-4" width="25%">Nama Unit / Lembaga</th>
                             <?php foreach($tagihan as $t): ?>
-                                <th style="font-size: 0.65rem;"><?= esc($t['nama_monev']) ?></th>
+                                <th style="font-size: 0.9rem; min-width: 120px;"><?= esc($t['nama_monev']) ?></th>
                             <?php endforeach; ?>
                         </tr>
                     </thead>

@@ -1,7 +1,7 @@
 <div id="sidebar" class="sidebar d-flex flex-column flex-shrink-0 p-3 shadow-sm bg-white">
     <a href="<?= base_url('dashboard') ?>" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-decoration-none">
         <i class="bi bi-layout-wtf fs-3 me-2" style="color: #025964;"></i>
-        <span class="judul">Sistem Monev</span>
+        <span class="judul">SILAP MONEV</span>
     </a>
     <hr class="text-secondary">
 

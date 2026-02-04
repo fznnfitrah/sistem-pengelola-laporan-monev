@@ -7,9 +7,14 @@
             <h2 class="fw-bold text-dark mb-1">Master Item Monev Per Periode</h2>
             <p class="text-muted small">Atur dokumen wajib berdasarkan periode semester yang aktif.</p>
         </div>
-        <button class="btn btn-success btn-rounded shadow-sm px-4" onclick="btnAddItem()">
-            <i class="bi bi-file-earmark-plus me-1"></i> Tambah Item
-        </button>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-success rounded-pill shadow-sm px-4 fw-bold small" data-bs-toggle="modal" data-bs-target="#modalCopy">
+                <i class="bi bi-layers me-1"></i> Salin dari Periode Lain
+            </button>
+            <button class="btn btn-success rounded-pill shadow-sm px-4 fw-bold small" onclick="btnAddItem()">
+                <i class="bi bi-file-earmark-plus me-1"></i> Tambah Item
+            </button>
+        </div>
     </div>
 
     <?php if (session()->getFlashdata('message')) : ?>
@@ -23,6 +28,7 @@
     $isFirst = true;
 
     foreach($monev as $m): 
+        // Jika periode berubah, buat Card (container) baru
         if ($currentPeriode !== $m['fk_setting_periode']): 
             if (!$isFirst) echo '</tbody></table></div></div></div>'; 
             $currentPeriode = $m['fk_setting_periode'];
@@ -41,9 +47,9 @@
                 </div>
             </div>
             <div class="card-body p-0 mt-2">
-                <div class="table-responsive">
+                <div class="table-responsive text-start">
                     <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
+                        <thead class="table-light text-uppercase small fw-bold">
                             <tr>
                                 <th class="ps-4" width="5%">No</th>
                                 <th width="45%">Nama Item Monev</th>
@@ -56,11 +62,11 @@
                         <?php $no = 1; endif; ?>
 
                         <tr>
-                            <td class="ps-4 text-muted"><?= $no++ ?></td>
-                            <td class="fw-bold text-dark text-start"><?= esc($m['nama_monev']) ?></td>
-                            <td class="text-start"><small class="text-muted"><?= esc($m['keterangan']) ?: '-' ?></small></td>
+                            <td class="ps-4 text-muted small"><?= $no++ ?></td>
+                            <td class="fw-bold text-dark"><?= esc($m['nama_monev']) ?></td>
+                            <td><small class="text-muted"><?= esc($m['keterangan']) ?: '-' ?></small></td>
                             <td class="text-center">
-                                <span class="badge rounded-pill <?= $m['status'] == 1 ? 'bg-success' : 'bg-danger' ?> bg-opacity-10 text-<?= $m['status'] == 1 ? 'success' : 'danger' ?> border px-3 py-2">
+                                <span class="badge rounded-pill <?= $m['status'] == 1 ? 'bg-success' : 'bg-danger' ?> bg-opacity-10 text-<?= $m['status'] == 1 ? 'success' : 'danger' ?> border px-3 py-2 small">
                                     <?= $m['status'] == 1 ? 'Aktif' : 'Non-Aktif' ?>
                                 </span>
                             </td>
@@ -120,7 +126,7 @@
 
                     <div class="mb-3">
                         <label class="form-label small fw-bold">Keterangan</label>
-                        <textarea name="keterangan" id="m_keterangan" class="form-control bg-light border-0 py-2" rows="3" placeholder="Opsional..."></textarea>
+                        <textarea name="keterangan" id="m_keterangan" class="form-control bg-light border-0 py-2" rows="3" placeholder="Deskripsi singkat item..."></textarea>
                     </div>
 
                     <div class="mb-0">
@@ -141,18 +147,64 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalCopy" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-success">
+                    <i class="bi bi-layers-fill me-2"></i>Duplikasi Item Monev
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            
+            <form action="<?= base_url('univ/monev/copy') ?>" method="post">
+                <?= csrf_field() ?>
+                <div class="modal-body p-4 text-start">
+                    <div class="alert alert-info border-0 small mb-4">
+                        <i class="bi bi-info-circle me-2"></i>Fitur ini menyalin <strong>seluruh item</strong> dari periode lama ke periode baru sekaligus.
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Salin DARI (Periode Lama):</label>
+                        <select name="dari_periode" class="form-select bg-light border-0 py-2" required>
+                            <option value="" disabled selected>-- Pilih Sumber --</option>
+                            <?php foreach($periodes as $p): ?>
+                                <option value="<?= $p['id'] ?>"><?= $p['tahun_akademik'] ?> - <?= $p['semester'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="mb-0">
+                        <label class="form-label small fw-bold">Salin KE (Periode Baru):</label>
+                        <select name="ke_periode" class="form-select bg-light border-0 py-2" required>
+                            <option value="" disabled selected>-- Pilih Tujuan --</option>
+                            <?php foreach($periodes as $p): ?>
+                                <option value="<?= $p['id'] ?>"><?= $p['tahun_akademik'] ?> - <?= $p['semester'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold small" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success rounded-pill px-5 shadow-sm fw-bold small">Proses Salin</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
     let monevModal;
 
     document.addEventListener('DOMContentLoaded', function() {
-        // Inisialisasi Modal Bootstrap
         monevModal = new bootstrap.Modal(document.getElementById('modalMonev'));
     });
 
     function btnAddItem() {
         document.getElementById('modalMonevTitle').querySelector('span').innerText = "Tambah Item Monev";
         const form = document.getElementById('formMonev');
-        form.action = "<?= base_url('univ/monev/simpan') ?>"; // Sesuaikan URL simpan Anda
+        form.action = "<?= base_url('univ/monev/simpan') ?>";
         form.reset();
         document.getElementById('m_id').value = "";
         monevModal.show();
@@ -161,16 +213,20 @@
     function btnEdit(data) {
         document.getElementById('modalMonevTitle').querySelector('span').innerText = "Edit Item Monev";
         const form = document.getElementById('formMonev');
-        form.action = "<?= base_url('univ/monev/update') ?>"; // Sesuaikan URL update Anda
+        form.action = "<?= base_url('univ/monev/update') ?>";
         
-        // Isi data ke dalam form
         document.getElementById('m_id').value = data.id;
         document.getElementById('m_nama').value = data.nama_monev;
         document.getElementById('m_status').value = data.status;
-        document.getElementById('m_keterangan').value = data.keterangan;
+        document.getElementById('m_keterangan').value = data.keterangan || "";
         document.getElementById('m_periode').value = data.fk_setting_periode;
         
         monevModal.show();
     }
 </script>
+
+<style>
+    .bg-opacity-10 { --bs-bg-opacity: 0.1; }
+    .btn-outline-warning:hover { color: #000; }
+</style>
 <?= $this->endSection() ?>
