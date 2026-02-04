@@ -12,8 +12,8 @@
 
             <form action="<?= base_url('prodi/akreditasi/simpan') ?>" method="post" enctype="multipart/form-data">
 
-                <div class="row">
-                    <div class="col-md-6 border-end">
+                <div class="row g-4">
+                    <div class="col-12 col-md-6 border-md-end">
                         <h6 class="text-success fw-bold mb-3"><i class="bi bi-file-earmark-text me-2"></i>DATA SK & STATUS</h6>
 
                         <div class="mb-3">
@@ -86,7 +86,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6 ps-4">
+                    <div class="col-12 col-md-6 ps-md-4">
                         <h6 class="text-success fw-bold mb-3"><i class="bi bi-calendar-event me-2"></i>PERIODE BERLAKU</h6>
 
                         <div class="mb-3">
@@ -133,7 +133,7 @@
 
                 <div class="mt-4 text-end">
                     <a href="<?= base_url('prodi/akreditasi') ?>" class="btn btn-light border me-2">Kembali</a>
-                    <button type="submit" class="btn btn-success"><i class="bi bi-save me-2"></i>Simpan Data (Opsional)</button>
+                    <button type="submit" class="btn btn-success"><i class="bi bi-save me-2"></i>Simpan Data</button>
                 </div>
 
             </form>

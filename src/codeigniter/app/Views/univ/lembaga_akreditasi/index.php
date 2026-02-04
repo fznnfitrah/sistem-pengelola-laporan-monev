@@ -8,12 +8,12 @@
         </div>
     <?php endif; ?>
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 gap-3 flex-column flex-md-row">
         <div>
             <h2 class="fw-bold text-dark mb-1">Master Lembaga Akreditasi</h2>
             <p class="text-muted small">Kelola daftar lembaga akreditasi Nasional maupun Internasional.</p>
         </div>
-        <button class="btn btn-success btn-rounded shadow-sm px-4" data-bs-toggle="modal" data-bs-target="#modalTambah" style="border-radius: 10px;">
+        <button class="btn btn-success rounded-pill shadow-sm px-3 px-md-4" data-bs-toggle="modal" data-bs-target="#modalTambah" style="border-radius: 10px; white-space: nowrap;">
             <i class="bi bi-plus-lg me-1"></i> Tambah Lembaga
         </button>
     </div>
@@ -21,35 +21,35 @@
     <div class="card border-0 shadow-sm" style="border-radius: 15px;">
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light text-center">
+                <table class="table table-hover align-middle mb-0" style="font-size: 0.8rem;">
+                    <thead class="table-light">
                         <tr>
-                            <th width="5%">No</th>
-                            <th class="text-start ps-4" width="20%">Nama Lembaga</th>
-                            <th width="10%">Jenis</th>
-                            <th width="15%">Biaya (Rp)</th>
-                            <th class="text-start" width="25%">Alamat</th>
-                            <th width="10%">Link</th>
-                            <th width="15%">Aksi</th>
+                            <th style="font-size: 0.75rem;">No</th>
+                            <th class="text-start ps-3 ps-md-4" style="font-size: 0.75rem;">Nama Lembaga</th>
+                            <th style="font-size: 0.75rem; display: none;">Jenis</th>
+                            <th style="font-size: 0.75rem; display: none;">Biaya (Rp)</th>
+                            <th class="text-start" style="font-size: 0.75rem; display: none;">Alamat</th>
+                            <th class="text-center" style="font-size: 0.75rem;">Link</th>
+                            <th class="text-center" style="font-size: 0.75rem;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php $no = 1; foreach($lembaga as $l): ?>
-                        <tr class="text-center">
+                        <tr>
                             <td><?= $no++ ?></td>
-                            <td class="text-start ps-4 fw-bold text-dark"><?= esc($l['nama_lembaga']) ?></td>
-                            <td>
-                                <span class="badge bg-light text-primary border px-3 py-2" style="border-radius: 8px;">
+                            <td class="text-start ps-3 ps-md-4 fw-bold text-dark"><?= esc($l['nama_lembaga']) ?></td>
+                            <td style="display: none;">
+                                <span class="badge bg-light text-primary border px-2 py-1" style="border-radius: 8px; font-size: 0.65rem;">
                                     <?= esc($l['jenis_lembaga']) ?>
                                 </span>
                             </td>
-                            <td class="fw-bold text-success">
+                            <td style="display: none;" class="fw-bold text-success">
                                 Rp <?= number_format($l['biaya'], 0, ',', '.') ?>
                             </td>
-                            <td class="text-start small text-muted">
+                            <td class="text-start small text-muted" style="display: none;">
                                 <?= esc($l['alamat']) ?: '-' ?>
                             </td>
-                            <td>
+                            <td class="text-center">
                                 <?php if($l['url']): ?>
                                     <a href="<?= esc($l['url']) ?>" target="_blank" class="btn btn-sm btn-light rounded-circle shadow-sm">
                                         <i class="bi bi-box-arrow-up-right text-primary"></i>
@@ -58,16 +58,17 @@
                                     <span class="text-muted small">-</span>
                                 <?php endif; ?>
                             </td>
-                            <td>
-                                <button type="button" class="btn btn-sm btn-outline-warning border-0" 
-                                    onclick='editLembaga(<?= json_encode($l) ?>)'
-                                    data-bs-toggle="modal" data-bs-target="#modalEdit">
-                                    <i class="bi bi-pencil-square"></i>
-                                </button>
-                                <a href="<?= base_url('univ/lembaga_akreditasi/hapus/'.$l['id']) ?>" 
-                                   class="btn btn-sm btn-outline-danger border-0" 
-                                   onclick="return confirm('Hapus lembaga ini?')">
-                                    <i class="bi bi-trash"></i>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-1">
+                                    <button type="button" class="btn btn-sm btn-outline-warning border-0" 
+                                        onclick='editLembaga(<?= json_encode($l) ?>)'
+                                        data-bs-toggle="modal" data-bs-target="#modalEdit">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    <a href="<?= base_url('univ/lembaga_akreditasi/hapus/'.$l['id']) ?>" 
+                                       class="btn btn-sm btn-outline-danger border-0" 
+                                       onclick="return confirm('Hapus lembaga ini?')">
+                                        <i class="bi bi-trash"></i>
                                 </a>
                             </td>
                         </tr>

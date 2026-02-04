@@ -6,7 +6,6 @@
 <style>
     .card-unit { border: none; border-radius: 15px; transition: 0.3s; }
     .table thead th { background-color: #f8f9fa; color: #495057; font-weight: 600; }
-    .btn-rounded { border-radius: 10px; padding: 8px 20px; }
     .badge-id { font-family: 'Courier New', Courier, monospace; letter-spacing: 1px; }
 </style>
 
@@ -21,7 +20,7 @@
     <div class="card card-unit shadow-sm">
         <div class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
             <h5 class="fw-bold mb-0"><i class="bi bi-building-gear me-2 text-success"></i>Daftar Unit</h5>
-            <button class="btn btn-success btn-sm btn-rounded shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">
+            <button class="btn btn-success btn-sm rounded-pill shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">
                 <i class="bi bi-plus-lg me-1"></i> Tambah Unit
             </button>
         </div>
@@ -76,7 +75,7 @@
                     </div>
                 </div>
                 <div class="modal-footer border-0 pb-4 px-4">
-                    <button type="submit" class="btn btn-success btn-rounded px-4">Simpan Unit</button>
+                    <button type="submit" class="btn btn-success rounded-pill px-4">Simpan Unit</button>
                 </div>
             </form>
         </div>
@@ -98,7 +97,7 @@
                         <label class="small fw-bold">NAMA UNIT</label>
                         <input type="text" name="nama_unit" id="e_nama" class="form-control border-2" required style="border-radius: 12px;">
                     </div>
-                    <button type="submit" class="btn btn-warning w-100 btn-rounded text-white mt-2">Update Perubahan</button>
+                    <button type="submit" class="btn btn-warning w-100 rounded-pill text-white mt-2">Update Perubahan</button>
                 </div>
             </form>
         </div>

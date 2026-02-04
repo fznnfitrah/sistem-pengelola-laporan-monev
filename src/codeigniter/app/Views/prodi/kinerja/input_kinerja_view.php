@@ -3,14 +3,14 @@
 <?= $this->section('content') ?>
 <div class="container-fluid py-4">
     <div class="card shadow-sm border-0 mb-4" style="border-radius: 15px;">
-        <div class="card-body d-flex justify-content-between align-items-center">
+        <div class="card-body d-flex justify-content-between align-items-start gap-3 flex-column flex-md-row">
             <div>
                 <h5 class="fw-bold text-success mb-0">Laporan Capaian Kinerja (<?= ucfirst($is_prodi ? 'Prodi' : 'Unit') ?>)</h5>
                 <p class="text-muted small mb-0">Data realisasi kinerja berdasarkan indikator yang telah ditetapkan.</p>
             </div>
             
-            <form action="" method="get" class="d-flex gap-2">
-                <select name="periode" class="form-select border-2" style="width: 300px; border-radius: 10px;">
+            <form action="" method="get" class="d-flex gap-2 flex-column flex-md-row" style="width: 100%; max-width: 500px;">
+                <select name="periode" class="form-select border-2 flex-grow-1" style="border-radius: 10px;">
                     <?php foreach ($semua_periode as $p) : ?>
                         <option value="<?= $p['id'] ?>" <?= ($p['id'] == $periode['id']) ? 'selected' : '' ?>>
                             <?= esc($p['tahun_akademik']) ?> - <?= esc($p['semester']) ?> 
@@ -18,7 +18,7 @@
                         </option>
                     <?php endforeach; ?>
                 </select>
-                <button type="submit" class="btn btn-success px-4" style="border-radius: 10px;">Pilih</button>
+                <button type="submit" class="btn btn-success px-3 px-md-4" style="border-radius: 10px; white-space: nowrap;">Pilih</button>
             </form>
         </div>
     </div>
@@ -48,15 +48,15 @@
                 <input type="hidden" name="fk_setting_periode" value="<?= $periode['id'] ?>">
 
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
+                    <table class="table table-hover align-middle mb-0" style="font-size: 0.75rem;">
                         <thead class="table-light">
                             <tr class="text-center">
-                                <th width="5%" class="ps-4">No</th>
-                                <th width="30%" class="text-start">Indikator Kinerja</th>
-                                <th width="10%">Standar Univ</th>
-                                <th width="12%">Realisasi</th>
-                                <th width="20%">Bukti Dukung (Link)</th>
-                                <th class="pe-4">Keterangan</th>
+                                <th class="ps-2 ps-md-4 text-center" style="font-size: 0.7rem;">No</th>
+                                <th class="text-start ps-2 ps-md-4" style="font-size: 0.7rem;">Indikator Kinerja</th>
+                                <th style="font-size: 0.7rem; display: none;" class="d-none d-md-table-cell">Standar</th>
+                                <th style="font-size: 0.7rem;">Realisasi</th>
+                                <th style="font-size: 0.7rem; display: none;" class="d-none d-lg-table-cell">Bukti Dukung</th>
+                                <th style="font-size: 0.7rem; display: none;" class="d-none d-xl-table-cell">Keterangan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -68,26 +68,26 @@
                                     $ketLama   = $val ? $val['keterangan'] : '';
                                 ?>
                                 <tr>
-                                    <td class="text-center ps-4"><?= $i + 1 ?></td>
-                                    <td>
-                                        <p class="fw-bold mb-0 text-dark"><?= esc($item['nama_kinerja']) ?></p>
+                                    <td class="text-center ps-2 ps-md-4"><?= $i + 1 ?></td>
+                                    <td class="ps-2 ps-md-4">
+                                        <p class="fw-bold mb-0 text-dark" style="font-size: 0.75rem;"><?= esc(substr($item['nama_kinerja'], 0, 30)) ?></p>
                                         <small class="text-muted">Satuan: <?= esc($item['satuan']) ?></small>
                                     </td>
-                                    <td class="text-center">
-                                        <span class="badge bg-light text-success border fw-bold" style="font-size: 0.9rem;">
+                                    <td style="display: none;" class="d-none d-md-table-cell">
+                                        <span class="badge bg-light text-success border fw-bold" style="font-size: 0.65rem;">
                                             <?= (int) $item['standar_nilai'] ?> </span>
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control text-center border-2 <?= $lockInput ? 'bg-light' : '' ?>" 
+                                        <input type="number" class="form-control form-control-sm border-2 text-center <?= $lockInput ? 'bg-light' : '' ?>" 
                                             name="data[<?= $item['id'] ?>][value]" 
                                             value="<?= esc($nilaiLama) ?>" 
                                             placeholder="0"
                                             <?= $lockInput ? 'readonly' : 'required' ?>> 
                                     </td>
-                                    <td>
+                                    <td style="display: none;" class="d-none d-lg-table-cell">
                                         <?php if($lockInput && !empty($linkLama)): ?>
-                                            <a href="<?= esc($linkLama) ?>" target="_blank" class="btn btn-sm btn-outline-success w-100">
-                                                <i class="bi bi-box-arrow-up-right me-1"></i> Lihat Bukti
+                                            <a href="<?= esc($linkLama) ?>" target="_blank" class="btn btn-sm btn-outline-success w-100" style="font-size: 0.6rem;">
+                                                <i class="bi bi-box-arrow-up-right me-1"></i> Lihat
                                             </a>
                                         <?php else: ?>
                                             <input type="url" class="form-control form-control-sm border-2 <?= $lockInput ? 'bg-light' : '' ?>" 
@@ -97,10 +97,10 @@
                                                    <?= $lockInput ? 'readonly' : '' ?>>
                                         <?php endif; ?>
                                     </td>
-                                    <td class="pe-4">
+                                    <td style="display: none;" class="d-none d-xl-table-cell">
                                         <input type="text" class="form-control form-control-sm border-2 <?= $lockInput ? 'bg-light' : '' ?>" 
                                                name="data[<?= $item['id'] ?>][keterangan]" 
-                                               value="<?= esc($ketLama) ?>" 
+                                               value="<?= esc(substr($ketLama, 0, 15)) ?>" 
                                                placeholder="Catatan..."
                                                <?= $lockInput ? 'readonly' : '' ?>>
                                     </td>

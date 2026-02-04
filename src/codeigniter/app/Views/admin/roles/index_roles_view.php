@@ -5,9 +5,9 @@
     <div class="row">
         <div class="col-12">
             <div class="card shadow-sm border-0" style="border-radius: 15px;">
-                <div class="card-header d-flex justify-content-between align-items-center bg-white py-3" style="border-radius: 15px 15px 0 0;">
+                <div class="card-header d-flex justify-content-between align-items-center bg-white py-3 flex-column flex-md-row gap-3" style="border-radius: 15px 15px 0 0;">
                     <h5 class="mb-0 fw-bold text-success"><i class="bi bi-shield-lock-fill me-2"></i>Daftar Roles Admin</h5>
-                    <button type="button" class="btn btn-success btn-sm px-3 rounded-pill shadow-sm" onclick="btnAddRole()">
+                    <button type="button" class="btn btn-success btn-sm px-3 px-md-4 rounded-pill shadow-sm" onclick="btnAddRole()" style="white-space: nowrap;">
                         <i class="bi bi-plus-lg me-1"></i> Tambah Role
                     </button>
                 </div>
@@ -30,24 +30,24 @@
                     <?php endif; ?>
 
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle">
+                        <table class="table table-hover align-middle" style="font-size: 0.8rem;">
                             <thead class="table-light text-uppercase small fw-bold">
                                 <tr>
-                                    <th class="text-center" width="5%">No</th>
-                                    <th width="25%">Nama Role</th>
-                                    <th>Deskripsi</th>
-                                    <th class="text-center" width="15%">Aksi</th>
+                                    <th class="text-center ps-2 ps-md-3" style="font-size: 0.75rem;">No</th>
+                                    <th class="ps-2 ps-md-3" style="font-size: 0.75rem;">Nama Role</th>
+                                    <th style="font-size: 0.75rem; display: none;" class="d-none d-md-table-cell">Deskripsi</th>
+                                    <th class="text-center" style="font-size: 0.75rem;">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php if (!empty($roles)) : $i = 1; foreach ($roles as $row) : ?>
                                     <tr>
-                                        <td class="text-center text-muted small"><?= $i++ ?></td>
-                                        <td><span class="fw-bold text-dark"><?= esc($row['nama_roles']) ?></span></td>
-                                        <td><span class="text-muted small"><?= esc($row['deskripsi'] ?: '-') ?></span></td>
+                                        <td class="text-center text-muted small ps-2 ps-md-3"><?= $i++ ?></td>
+                                        <td class="ps-2 ps-md-3"><span class="fw-bold text-dark"><?= esc($row['nama_roles']) ?></span></td>
+                                        <td style="display: none;" class="d-none d-md-table-cell"><span class="text-muted small"><?= esc(substr($row['deskripsi'] ?: '-', 0, 30)) ?></span></td>
                                         <td class="text-center">
-                                            <div class="d-flex justify-content-center gap-1">
-                                                <button type="button" class="btn btn-outline-warning btn-sm rounded-pill px-3" 
+                                            <div class="d-flex justify-content-center gap-1 flex-wrap">
+                                                <button type="button" class="btn btn-outline-warning btn-sm border-0" 
                                                     onclick='btnEditRole(<?= json_encode($row) ?>)'>
                                                     <i class="bi bi-pencil-square"></i>
                                                 </button>
@@ -56,7 +56,7 @@
                                                 <form action="<?= base_url('admin/roles/' . $row['id']) ?>" method="post" class="d-inline">
                                                     <?= csrf_field() ?>
                                                     <input type="hidden" name="_method" value="DELETE">
-                                                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3" onclick="return confirm('Hapus data role ini?')">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm border-0" onclick="return confirm('Hapus data role ini?')">
                                                         <i class="bi bi-trash"></i>
                                                     </button>
                                                 </form>

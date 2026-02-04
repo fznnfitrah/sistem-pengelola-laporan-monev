@@ -2,16 +2,16 @@
 
 <?= $this->section('content') ?>
 <div class="container-fluid py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4 text-start">
+    <div class="d-flex justify-content-between align-items-center mb-4 text-start gap-3 flex-column flex-md-row">
         <div>
             <h2 class="fw-bold text-dark mb-1">Master Item Monev Per Periode</h2>
             <p class="text-muted small">Atur dokumen wajib berdasarkan periode semester yang aktif.</p>
         </div>
-        <div class="d-flex gap-2">
-            <button class="btn btn-outline-success rounded-pill shadow-sm px-4 fw-bold small" data-bs-toggle="modal" data-bs-target="#modalCopy">
-                <i class="bi bi-layers me-1"></i> Salin dari Periode Lain
+        <div class="d-flex gap-2 flex-column flex-sm-row">
+            <button class="btn btn-outline-success rounded-pill shadow-sm px-3 px-md-4 fw-bold small" data-bs-toggle="modal" data-bs-target="#modalCopy" style="white-space: nowrap;">
+                <i class="bi bi-layers me-1"></i> Salin
             </button>
-            <button class="btn btn-success rounded-pill shadow-sm px-4 fw-bold small" onclick="btnAddItem()">
+            <button class="btn btn-success rounded-pill shadow-sm px-3 px-md-4 fw-bold small" onclick="btnAddItem()" style="white-space: nowrap;">
                 <i class="bi bi-file-earmark-plus me-1"></i> Tambah Item
             </button>
         </div>
@@ -48,35 +48,35 @@
             </div>
             <div class="card-body p-0 mt-2">
                 <div class="table-responsive text-start">
-                    <table class="table table-hover align-middle mb-0">
+                    <table class="table table-hover align-middle mb-0" style="font-size: 0.8rem;">
                         <thead class="table-light text-uppercase small fw-bold">
                             <tr>
-                                <th class="ps-4" width="5%">No</th>
-                                <th width="45%">Nama Item Monev</th>
-                                <th width="25%">Keterangan</th>
-                                <th class="text-center">Status</th>
-                                <th class="text-center">Aksi</th>
+                                <th class="ps-3 ps-md-4" style="font-size: 0.75rem;">No</th>
+                                <th style="font-size: 0.75rem;">Nama Item Monev</th>
+                                <th style="font-size: 0.75rem; display: none;">Keterangan</th>
+                                <th class="text-center" style="font-size: 0.75rem;">Status</th>
+                                <th class="text-center" style="font-size: 0.75rem;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                         <?php $no = 1; endif; ?>
 
                         <tr>
-                            <td class="ps-4 text-muted small"><?= $no++ ?></td>
+                            <td class="ps-3 ps-md-4 text-muted"><?= $no++ ?></td>
                             <td class="fw-bold text-dark"><?= esc($m['nama_monev']) ?></td>
-                            <td><small class="text-muted"><?= esc($m['keterangan']) ?: '-' ?></small></td>
+                            <td style="display: none;"><small class="text-muted"><?= esc($m['keterangan']) ?: '-' ?></small></td>
                             <td class="text-center">
-                                <span class="badge rounded-pill <?= $m['status'] == 1 ? 'bg-success' : 'bg-danger' ?> bg-opacity-10 text-<?= $m['status'] == 1 ? 'success' : 'danger' ?> border px-3 py-2 small">
+                                <span class="badge rounded-pill <?= $m['status'] == 1 ? 'bg-success' : 'bg-danger' ?> bg-opacity-10 text-<?= $m['status'] == 1 ? 'success' : 'danger' ?> border px-2 px-md-3 py-1 small">
                                     <?= $m['status'] == 1 ? 'Aktif' : 'Non-Aktif' ?>
                                 </span>
                             </td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-1">
-                                    <button class="btn btn-sm btn-outline-warning rounded-pill px-3" 
+                                    <button class="btn btn-sm btn-outline-warning border-0" 
                                             onclick='btnEdit(<?= json_encode($m) ?>)'>
                                         <i class="bi bi-pencil-square"></i>
                                     </button>
-                                    <a href="<?= base_url('univ/monev/hapus/'.$m['id']) ?>" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="return confirm('Hapus item ini?')">
+                                    <a href="<?= base_url('univ/monev/hapus/'.$m['id']) ?>" class="btn btn-sm btn-outline-danger border-0" onclick="return confirm('Hapus item ini?')">
                                         <i class="bi bi-trash"></i>
                                     </a>
                                 </div>

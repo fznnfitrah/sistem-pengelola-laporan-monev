@@ -8,12 +8,12 @@
         </div>
     <?php endif; ?>
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 gap-3 flex-column flex-md-row">
         <div>
             <h2 class="fw-bold text-dark mb-1">Master Jenjang</h2>
             <p class="text-muted small">Kelola data jenjang pendidikan program studi (S1, S2, S3, Profesi).</p>
         </div>
-        <button class="btn btn-success btn-rounded shadow-sm px-4" data-bs-toggle="modal" data-bs-target="#modalTambah" style="border-radius: 10px;">
+        <button class="btn btn-success rounded-pill shadow-sm px-3 px-md-4" data-bs-toggle="modal" data-bs-target="#modalTambah" style="border-radius: 10px; white-space: nowrap;">
             <i class="bi bi-plus-lg me-1"></i> Tambah Jenjang
         </button>
     </div>
@@ -24,18 +24,18 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th class="ps-4" width="10%">No</th>
-                            <th width="30%">Nama Jenjang</th>
-                            <th>Keterangan</th>
-                            <th class="text-center" width="15%">Aksi</th>
+                            <th class="ps-3 ps-md-4" style="font-size: 0.85rem;">No</th>
+                            <th style="font-size: 0.85rem;">Nama Jenjang</th>
+                            <th style="font-size: 0.85rem; display: none; display: none;">Keterangan</th>
+                            <th class="text-center" style="font-size: 0.85rem;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php $no = 1; foreach($jenjang as $j): ?>
                         <tr>
-                            <td class="ps-4 text-muted"><?= $no++ ?></td>
-                            <td class="fw-bold text-dark"><?= esc($j['jenjang']) ?></td>
-                            <td><?= esc($j['keterangan']) ?></td>
+                            <td class="ps-3 ps-md-4 text-muted" style="font-size: 0.8rem;"><?= $no++ ?></td>
+                            <td class="fw-bold text-dark" style="font-size: 0.85rem;"><?= esc($j['jenjang']) ?></td>
+                            <td style="font-size: 0.8rem; display: none;"><?= esc($j['keterangan']) ?></td>
                             <td class="text-center">
                                 <button type="button" class="btn btn-sm btn-outline-warning border-0" 
                                     onclick="editJenjang('<?= $j['id'] ?>', '<?= esc($j['jenjang']) ?>', '<?= esc($j['keterangan']) ?>')"

@@ -2,12 +2,12 @@
 
 <?= $this->section('content') ?>
 <div class="container-fluid py-4">
-    <div class="d-flex align-items-center justify-content-between mb-4">
+    <div class="d-flex align-items-center justify-content-between mb-4 flex-column flex-md-row gap-3">
         <div>
             <h4 class="fw-bold text-success mb-1">Riwayat Akreditasi Prodi</h4>
             <p class="text-muted small mb-0">Daftar riwayat akreditasi yang tercatat dalam sistem.</p>
         </div>
-        <a href="<?= base_url('prodi/akreditasi/new') ?>" class="btn btn-success shadow-sm">
+        <a href="<?= base_url('prodi/akreditasi/new') ?>" class="btn btn-success rounded-pill shadow-sm" style="white-space: nowrap;">
             <i class="bi bi-plus-lg me-2"></i> Tambah Data
         </a>
     </div>
@@ -22,16 +22,16 @@
     <div class="card border-0 shadow-sm" style="border-radius: 15px;">
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0 text-center">
+                <table class="table table-hover align-middle mb-0 text-center" style="font-size: 0.8rem;">
                     <thead class="table-light">
                         <tr>
-                            <th width="5%" class="ps-4">No</th>
-                            <th class="text-start">Lembaga & SK</th>
-                            <th>Peringkat</th>
-                            <th>Nilai</th>
-                            <th>Masa Berlaku</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
+                            <th class="ps-2 ps-md-4 text-center" style="font-size: 0.75rem;">No</th>
+                            <th class="text-start ps-2 ps-md-4" style="font-size: 0.75rem;">Lembaga & SK</th>
+                            <th style="font-size: 0.75rem; display: none;" class="d-none d-md-table-cell">Peringkat</th>
+                            <th style="font-size: 0.75rem; display: none;" class="d-none d-lg-table-cell">Nilai</th>
+                            <th style="font-size: 0.75rem;">Masa Berlaku</th>
+                            <th style="font-size: 0.75rem;">Status</th>
+                            <th style="font-size: 0.75rem;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,40 +76,43 @@
                             }
                         ?>
                             <tr>
-                                <td class="ps-4"><?= $no++ ?></td>
-                                <td class="text-start">
+                                <td class="ps-2 ps-md-4 text-center"><?= $no++ ?></td>
+                                <td class="text-start ps-2 ps-md-4">
                                     <div class="fw-bold text-dark"><?= esc($row['nama_lembaga']) ?></div>
-                                    <div class="small text-muted" style="font-size: 0.75rem;">
-                                        No SK: <?= esc($row['no_sk_akreditasi'] ?: '-') ?>
+                                    <div class="small text-muted" style="font-size: 0.65rem;">
+                                        No SK: <?= esc(substr($row['no_sk_akreditasi'] ?: '-', 0, 20)) ?>
+                                    </div>
+                                    <div style="font-size: 0.7rem; margin-top: 4px;" class="d-md-none">
+                                        <span class="badge bg-info bg-opacity-10 text-dark border px-1" style="font-size: 0.6rem;"><?= esc($row['peringkat'] ?? '-') ?></span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="display: none;" class="d-none d-md-table-cell">
                                     <?php if (!empty($row['peringkat'])): ?>
-                                        <span class="fw-bold text-primary"><?= esc($row['peringkat']) ?></span>
+                                        <span class="fw-bold text-primary" style="font-size: 0.75rem;"><?= esc($row['peringkat']) ?></span>
                                     <?php else: ?>
                                         <span class="text-muted">-</span>
                                     <?php endif; ?>
                                 </td>
-                                <td><?= esc($row['nilai'] ?? '-') ?></td>
+                                <td style="display: none;" class="d-none d-lg-table-cell"><?= esc($row['nilai'] ?? '-') ?></td>
 
                                 <td>
-                                    <div class="fw-bold text-dark">
+                                    <div class="fw-bold text-dark" style="font-size: 0.75rem;">
                                         <?= $formattedExpDate ?>
                                     </div>
                                     <?php if ($hasExpiration): ?>
-                                        <small class="<?= ($tglExp < $today) ? 'text-danger' : 'text-success' ?> fw-bold" style="font-size: 0.75rem;">
-                                            <i class="bi bi-clock me-1"></i> <?= $countdownText ?>
+                                        <small class="<?= ($tglExp < $today) ? 'text-danger' : 'text-success' ?> fw-bold" style="font-size: 0.6rem;">
+                                            <i class="bi bi-clock me-1"></i> <?= esc(substr($countdownText, 0, 15)) ?>
                                         </small>
                                     <?php endif; ?>
                                 </td>
 
                                 <td>
-                                    <span class="badge <?= $badgeColor ?> rounded-pill" style="font-size: 0.65rem;">
-                                        <?= $statusText ?>
+                                    <span class="badge <?= $badgeColor ?> rounded-pill" style="font-size: 0.6rem;">
+                                        <?= esc(substr($statusText, 0, 8)) ?>
                                     </span>
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-outline-success"
+                                    <button type="button" class="btn btn-sm btn-outline-success border-0"
                                         onclick="btnDetail(
                                             '<?= esc($row['nama_prodi']) ?>',
                                             '<?= esc($row['jenjang']) ?>',
@@ -131,7 +134,7 @@
                                         )"
                                         data-bs-toggle="modal"
                                         data-bs-target="#modalDetail">
-                                        <i class="bi bi-eye"></i> Detail
+                                        <i class="bi bi-search"></i>
                                     </button>
                                 </td>
                             </tr>

@@ -14,12 +14,12 @@
         </div>
     <?php endif; ?>
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-column flex-md-row gap-3">
         <div>
             <h2 class="fw-bold text-dark mb-1">Setting Periode</h2>
             <p class="text-muted small">Kelola masa aktif semester untuk pelaporan monev dan capaian kinerja.</p>
         </div>
-        <button class="btn btn-success btn-rounded shadow-sm px-4" data-bs-toggle="modal" data-bs-target="#modalTambah" style="border-radius: 10px;">
+        <button class="btn btn-success rounded-pill shadow-sm px-3 px-md-4" data-bs-toggle="modal" data-bs-target="#modalTambah" style="border-radius: 10px; white-space: nowrap;">
             <i class="bi bi-calendar-plus me-1"></i> Tambah Periode
         </button>
     </div>
@@ -30,27 +30,27 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th class="ps-4" width="30%">Tahun Akademik</th>
-                            <th>Semester</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-center">Aksi</th>
+                            <th class="ps-3 ps-md-4" style="font-size: 0.85rem;">Tahun Akademik</th>
+                            <th style="font-size: 0.85rem;">Semester</th>
+                            <th class="text-center" style="font-size: 0.85rem;">Status</th>
+                            <th class="text-center" style="font-size: 0.85rem;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach($periode as $p): ?>
                         <tr>
-                            <td class="ps-4 fw-bold text-dark"><?= esc($p['tahun_akademik']) ?></td>
-                            <td><?= esc($p['semester']) ?></td>
+                            <td class="ps-3 ps-md-4 fw-bold text-dark" style="font-size: 0.8rem;"><?= esc($p['tahun_akademik']) ?></td>
+                            <td style="font-size: 0.8rem;"><?= esc($p['semester']) ?></td>
                             <td class="text-center">
                                 <?php if($p['status_aktif'] == 1): ?>
-                                    <span class="badge bg-success px-3 py-2" style="border-radius: 8px;">Aktif (Default)</span>
+                                    <span class="badge bg-success px-2 px-md-3 py-1" style="border-radius: 8px; font-size: 0.7rem;">Aktif</span>
                                 <?php else: ?>
-                                    <span class="badge bg-light text-muted border px-3 py-2" style="border-radius: 8px;">Tidak Aktif</span>
+                                    <span class="badge bg-light text-muted border px-2 px-md-3 py-1" style="border-radius: 8px; font-size: 0.7rem;">Tidak Aktif</span>
                                 <?php endif; ?>
                             </td>
                             <td class="text-center">
                                 <?php if($p['status_aktif'] == 0): ?>
-                                    <a href="<?= base_url('univ/periode/setAktif/'.$p['id']) ?>" class="btn btn-sm btn-primary px-3 shadow-sm me-1" style="border-radius: 8px;">Aktifkan</a>
+                                    <a href="<?= base_url('univ/periode/setAktif/'.$p['id']) ?>" class="btn btn-sm btn-primary px-2 px-md-3 shadow-sm me-1" style="border-radius: 8px; font-size: 0.7rem; white-space: nowrap;">Aktif</a>
                                     
                                     <button type="button" class="btn btn-sm btn-outline-danger border-0" 
                                         onclick="konfirmasiHapus('<?= $p['id'] ?>', '<?= esc($p['tahun_akademik']) ?> - <?= esc($p['semester']) ?>')"
