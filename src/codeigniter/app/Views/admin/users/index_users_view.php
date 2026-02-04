@@ -43,7 +43,7 @@
                                         <td>
                                             <?php 
         
-                                                $st = esc($row['status']);
+                                                $st = (string)esc($row['status']);
                                                 $badgeClass = ($st == 'aktif') ? 'bg-success' : (($st == 'baru') ? 'bg-info' : 'bg-secondary');
                                             ?>
                                             <span class="badge rounded-pill <?= $badgeClass ?> bg-opacity-10 text-dark border px-3">

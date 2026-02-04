@@ -19,18 +19,22 @@ class Monev extends BaseController
 
     public function index()
     {
-        // Gabungkan tabel mMonev dengan setting_periode untuk mendapatkan teks Tahun & Semester
+        // Gabungkan tabel mMonev dengan setting_periode
+        // Diurutkan berdasarkan periode terbaru agar item monev yang aktif muncul di atas
         $db = \Config\Database::connect();
         $builder = $db->table('mMonev');
         $builder->select('mMonev.*, setting_periode.tahun_akademik, setting_periode.semester');
         $builder->join('setting_periode', 'setting_periode.id = mMonev.fk_setting_periode');
+        $builder->orderBy('setting_periode.tahun_akademik', 'DESC');
+        $builder->orderBy('setting_periode.semester', 'ASC');
         $query = $builder->get();
 
         $data = [
             'title'    => 'Master Item Monev',
             'username' => session()->get('username'),
             'monev'    => $query->getResultArray(),
-            'periode'  => $this->periodeModel->findAll() // Data untuk dropdown di modal tambah/edit
+            // DISESUAIKAN: Nama variabel disamakan dengan View (periodes)
+            'periodes' => $this->periodeModel->orderBy('tahun_akademik', 'DESC')->findAll() 
         ];
 
         return view('univ/monev/index', $data);
@@ -38,22 +42,20 @@ class Monev extends BaseController
 
     public function simpan()
     {
-        // Simpan data sesuai dengan kolom yang ada di database
         $this->monevModel->insert([
             'fk_setting_periode' => $this->request->getPost('fk_setting_periode'),
             'nama_monev'         => $this->request->getPost('nama_monev'),
             'keterangan'         => $this->request->getPost('keterangan'),
-            'status'             => 1 // Default langsung aktif
+            'status'             => 1 // Default aktif
         ]);
 
-        return redirect()->back()->with('success', 'Item Monev berhasil ditambahkan!');
+        return redirect()->back()->with('message', 'Item Monev berhasil ditambahkan!');
     }
 
-    public function edit()
+    public function update() // Nama method disamakan dengan form action di modal
     {
         $id = $this->request->getPost('id');
         
-        // Update data berdasarkan ID yang dikirim dari form
         $this->monevModel->update($id, [
             'fk_setting_periode' => $this->request->getPost('fk_setting_periode'),
             'nama_monev'         => $this->request->getPost('nama_monev'),
@@ -61,12 +63,12 @@ class Monev extends BaseController
             'status'             => $this->request->getPost('status')
         ]);
 
-        return redirect()->back()->with('success', 'Item Monev berhasil diperbarui!');
+        return redirect()->back()->with('message', 'Item Monev berhasil diperbarui!');
     }
 
     public function hapus($id)
     {
         $this->monevModel->delete($id);
-        return redirect()->back()->with('success', 'Item Monev berhasil dihapus!');
+        return redirect()->back()->with('message', 'Item Monev berhasil dihapus!');
     }
 }
