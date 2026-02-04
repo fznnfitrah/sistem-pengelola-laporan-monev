@@ -19,5 +19,15 @@ class ProdiModel extends Model
         'link_sk_pendirian',
     ];
 
+    public function getProdiByFakultas($idFakultas)
+    {
+        return $this->select('mProdi.*, mJenjang.jenjang') 
+            ->join('mJenjang', 'mJenjang.id = mProdi.fk_jenjang', 'left') 
+            ->where('mProdi.fk_fakultas', $idFakultas)
+            ->orderBy('mJenjang.id', 'ASC') 
+            ->orderBy('mProdi.nama_prodi', 'ASC') 
+            ->findAll();
+    }
+
     
 }

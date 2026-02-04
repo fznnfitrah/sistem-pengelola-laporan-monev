@@ -30,9 +30,19 @@ class LaporanMonevModel extends Model
         return $this->select('laporan_monev.*, mMonev.nama_monev, setting_periode.tahun_akademik, setting_periode.semester, mProdi.nama_prodi, mFakultas.nama_fakultas, mUnit.nama_unit')
             ->join('mMonev', 'mMonev.id = laporan_monev.fk_monev')
             ->join('setting_periode', 'setting_periode.id = laporan_monev.fk_setting_periode')
-            ->join('mFakultas', 'mFakultas.id = laporan_monev.fk_fakultas', 'left') // Join untuk Fakultas
+            ->join('mFakultas', 'mFakultas.id = laporan_monev.fk_fakultas', 'left') 
             ->join('mProdi', 'mProdi.id = laporan_monev.fk_prodi', 'left')
             ->join('mUnit', 'mUnit.id = laporan_monev.fk_unit', 'left');
+    }
+
+    public function getProdiByFakultas($idFakultas)
+    {
+        return $this->select('mProdi.*, mJenjang.jenjang') 
+            ->join('mJenjang', 'mJenjang.id = mProdi.fk_jenjang', 'left') 
+            ->where('mProdi.fk_fakultas', $idFakultas)
+            ->orderBy('mJenjang.id', 'ASC') // Opsional: Urutkan berdasarkan S1/D3 dst
+            ->orderBy('mProdi.nama_prodi', 'ASC') 
+            ->findAll();
     }
 
     public function getLaporanByProdi($kodeProdi)
@@ -64,4 +74,5 @@ class LaporanMonevModel extends Model
     {
         return $this->_getBaseQuery()->find($id);
     }
+    
 }

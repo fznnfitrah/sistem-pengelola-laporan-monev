@@ -117,7 +117,7 @@ class Users extends BaseController
         $newPassword = $this->request->getPost('password');
         if (!empty($newPassword)) {
             // Pilih salah satu:
-            $updateData['password'] = $newPassword; // <--- AKTIF (Plain Text)
+            $updateData['password'] = $newPassword; 
             // $updateData['password'] = password_hash($newPassword, PASSWORD_DEFAULT); // <--- NONAKTIF (Enkripsi)
         }
 

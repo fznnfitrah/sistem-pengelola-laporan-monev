@@ -13,7 +13,7 @@
         <div class="col-6 col-md-4">
             <div class="card shadow-sm border-0 bg-warning text-dark p-3 h-100" onclick="showDetail('akan_habis', <?= htmlspecialchars(json_encode($allData)) ?>)" style="border-radius: 15px;">
                 <h6 class="small fw-bold text-uppercase" style="font-size: 0.7rem;">Masa Berlaku < 6 bln</h6>
-                <h2 class="mb-0 fw-bold"><?= $stats['akan_habis'] ?></h2>
+                        <h2 class="mb-0 fw-bold"><?= $stats['akan_habis'] ?></h2>
             </div>
         </div>
         <div class="col-6 col-md-4">
@@ -135,7 +135,10 @@
                                                 '<?= esc($p['ts']) ?>',                
                                                 '<?= esc($p['ts-1']) ?>',              
                                                 '<?= esc($p['ts-2']) ?>',              
-                                                '<?= !empty($p['link_sertifikat']) ? $p['link_sertifikat'] : '#' ?>'
+                                                '<?= !empty($p['link_sertifikat']) ? $p['link_sertifikat'] : '#' ?>',
+                                                '<?= esc($p['penginput']) ?>',     // Param 16: Nama User
+                                                '<?= esc($p['create_at']) ?>'      // Param 17: Tanggal Pembuatan
+
                                             )"
                                             data-bs-toggle="modal"
                                             data-bs-target="#modalDetail">
@@ -254,6 +257,16 @@
                         </div>
                     </div>
                 </div>
+                <div class="mt-4 pt-3 border-top d-flex justify-content-between text-muted small">
+                    <div>
+                        <i class="bi bi-person-circle me-1"></i> Diinput oleh:
+                        <span class="fw-bold text-dark" id="d_penginput">-</span>
+                    </div>
+                    <div>
+                        <i class="bi bi-clock-history me-1"></i> Tgl Input:
+                        <span class="fw-bold text-dark" id="d_tgl_input">-</span>
+                    </div>
+                </div>
 
             </div>
 
@@ -270,6 +283,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="modalDetailStatistik" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content" style="border-radius: 15px;">
@@ -289,7 +303,7 @@
                             </tr>
                         </thead>
                         <tbody id="isiDetailTable">
-                            </tbody>
+                        </tbody>
                     </table>
                 </div>
             </div>
