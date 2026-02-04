@@ -10,8 +10,8 @@
     <div class="card shadow-sm border-0" style="border-radius: 15px;">
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-bordered table-sm align-middle text-center mb-0" style="font-size: 10px; min-width: 1600px;">
-                    <thead class="table-dark text-uppercase" style="font-size: 10px;">
+                <table class="table table-bordered table-sm align-middle text-center mb-0" style="font-size: 13px; min-width: 1800px;">
+                    <thead class="table-dark text-uppercase" style="font-size: 13px;">
                         <tr>
                             <th rowspan="2">No</th>
                             <th rowspan="2" class="text-start ps-3">Program Studi</th>

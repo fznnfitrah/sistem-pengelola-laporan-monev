@@ -1,4 +1,4 @@
-function btnDetail(nama, jenjang, status, lembaga, lembaga_inter, peringkat, nilai, no_sk, tgl_kadaluarsa, biaya, tahun, ts, ts1, ts2, link) {
+function btnDetail(nama, jenjang, status, lembaga, lembaga_inter, peringkat, nilai, no_sk, tgl_kadaluarsa, biaya, tahun, ts, ts1, ts2, link, penginput, tgl_input) {
     
     // 1. Isi Data Teks Dasar
     const elNama = document.getElementById('d_nama_prodi');
@@ -79,4 +79,78 @@ function btnDetail(nama, jenjang, status, lembaga, lembaga_inter, peringkat, nil
         if(btnLink) btnLink.classList.add('d-none');
         if(btnNoLink) btnNoLink.classList.remove('d-none');
     }
+
+    const elInputter = document.getElementById('d_penginput');
+    const elTglInput = document.getElementById('d_tgl_input');
+
+    if(elInputter) elInputter.innerText = penginput || '-';
+
+    if(elTglInput && tgl_input) {
+        const tglObj = new Date(tgl_input);
+        const optionsTgl = { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+        elTglInput.innerText = tglObj.toLocaleDateString('id-ID', optionsTgl);
+    } else if (elTglInput) {
+        elTglInput.innerText = '-';
+    }
+}
+
+// --- FUNGSI BARU (DETAIL LIST STATISTIK) ---
+function showDetail(tipe, dataRaw) {
+    let html = '';
+    let title = '';
+    const hariIni = new Date();
+    const enamBulanLagi = new Date();
+    enamBulanLagi.setMonth(enamBulanLagi.getMonth() + 6);
+
+    const filtered = dataRaw.filter(item => {
+        const tglK = item.tgl_kadaluarsa ? new Date(item.tgl_kadaluarsa) : null;
+        
+        if (tipe === 'kadaluarsa') {
+            title = 'Daftar Prodi Kadaluarsa';
+            return tglK && tglK < hariIni;
+        } else if (tipe === 'akan_habis') {
+            title = 'Masa Berlaku < 6 Bulan';
+            return tglK && tglK >= hariIni && tglK < enamBulanLagi;
+        } else if (tipe === 'persiapan') {
+            title = 'Tahap: Sedang Persiapan';
+            return item.tahap === 'Persiapan';
+        } else if (tipe === 'pengajuan') {
+            title = 'Tahap: Pengajuan Akreditasi';
+            return item.tahap === 'Pengajuan';
+        } else if (tipe === 'asesmen') {
+            title = 'Tahap: Asesmen Lapangan';
+            return item.tahap === 'Asesmen Lapangan';
+        } else if (tipe === 'total_prodi') {
+            title = 'Seluruh Prodi Terpantau';
+            return true;
+        }
+        return false;
+    });
+
+    if (filtered.length > 0) {
+        filtered.forEach((item, index) => {
+            let tglDisplay = (item.tgl_kadaluarsa && item.tgl_kadaluarsa !== '0000-00-00') ? item.tgl_kadaluarsa : '-';
+            html += `
+                <tr class="align-middle">
+                    <td class="text-center small">${index + 1}</td>
+                    <td class="text-start">
+                        <div class="fw-bold text-dark">${item.nama_prodi}</div>
+                        <span class="badge bg-light text-secondary border" style="font-size: 0.65rem;">${item.jenjang}</span>
+                    </td>
+                    <td class="text-center"><span class="badge bg-primary px-2 py-1">${item.peringkat || '-'}</span></td>
+                    <td class="text-center">
+                        <div class="small fw-bold ${tipe === 'kadaluarsa' ? 'text-danger' : 'text-dark'}">${tglDisplay}</div>
+                        <small class="text-muted" style="font-size: 0.7rem;">${item.tahap}</small>
+                    </td>
+                </tr>`;
+        });
+    } else {
+        html = '<tr><td colspan="4" class="text-center py-4 text-muted">Tidak ada data untuk kategori ini.</td></tr>';
+    }
+
+    document.getElementById('modalTitle').innerHTML = `<i class="bi bi-info-circle-fill me-2 text-primary"></i> ${title}`;
+    document.getElementById('isiDetailTable').innerHTML = html;
+    
+    var modalStat = new bootstrap.Modal(document.getElementById('modalDetailStatistik'));
+    modalStat.show();
 }

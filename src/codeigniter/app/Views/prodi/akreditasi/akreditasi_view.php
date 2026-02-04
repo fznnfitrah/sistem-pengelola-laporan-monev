@@ -125,7 +125,9 @@
                                             '<?= esc($row['ts']) ?>',                
                                             '<?= esc($row['ts-1']) ?>',              
                                             '<?= esc($row['ts-2']) ?>',              
-                                            '<?= !empty($row['link_sertifikat']) ? $row['link_sertifikat'] : '#' ?>'
+                                            '<?= !empty($row['link_sertifikat']) ? $row['link_sertifikat'] : '#' ?>',
+                                            '<?= esc($row['penginput']) ?>',    
+                                            '<?= esc($row['create_at']) ?>'   
                                         )"
                                         data-bs-toggle="modal"
                                         data-bs-target="#modalDetail">
@@ -250,6 +252,16 @@
                     </div>
                 </div>
 
+                <div class="mt-4 pt-3 border-top d-flex justify-content-between text-muted small">
+                    <div>
+                        <i class="bi bi-person-circle me-1"></i> Diinput oleh:
+                        <span class="fw-bold text-dark" id="d_penginput">-</span>
+                    </div>
+                    <div>
+                        <i class="bi bi-clock-history me-1"></i> Tgl Input:
+                        <span class="fw-bold text-dark" id="d_tgl_input">-</span>
+                    </div>
+                </div>
             </div>
 
             <div class="modal-footer border-0 justify-content-center pb-4">

@@ -51,7 +51,7 @@
 
         <?php if (session()->get('fk_roles') == 3) : ?>
             <li class="nav-item mt-3">
-                <small class="text-uppercase text-muted fw-bold" style="font-size: 0.7rem;">Menu Program Studi</small>
+                <small class="text-uppercase text-muted fw-bold" style="font-size: 0.7rem;">Input Menu Program Studi</small>
             </li>
             <li class="nav-item mt-2">
                 <a href="<?= base_url('prodi/laporan/input') ?>" class="nav-link <?= (uri_string() == 'prodi/laporan/input') ? 'active' : 'text-dark' ?>">
@@ -59,8 +59,8 @@
                 </a>
             </li>
             <li class="nav-item mt-2">
-                <a href="<?= base_url('prodi/laporan/history') ?>" class="nav-link <?= (uri_string() == 'prodi/laporan/history') ? 'active' : 'text-dark' ?>">
-                    <i class="bi bi-clock-history me-2"></i> History Laporan
+                <a href="<?= base_url('prodi/akreditasi/new') ?>" class="nav-link <?= (uri_string() == 'prodi/akreditasi/new') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-clipboard-plus me-2"></i> Input Akreditasi Prodi
                 </a>
             </li>
             <li class="nav-item mt-2">
@@ -68,16 +68,20 @@
                     <i class="bi bi-speedometer2 me-2"></i> Laporan Kinerja Prodi
                 </a>
             </li>
+            <li class="nav-item mt-3">
+                <small class="text-uppercase text-muted fw-bold" style="font-size: 0.7rem;">History Input Program Studi</small>
+            </li>
             <li class="nav-item mt-2">
                 <a href="<?= base_url('prodi/akreditasi/index') ?>" class="nav-link <?= (uri_string() == 'prodi/akreditasi/index') ? 'active' : 'text-dark' ?>">
-                    <i class="bi bi-patch-check me-2"></i> Akreditasi Prodi
+                    <i class="bi bi-patch-check me-2"></i> History Akreditasi Prodi
                 </a>
             </li>
             <li class="nav-item mt-2">
-                <a href="<?= base_url('prodi/akreditasi/new') ?>" class="nav-link <?= (uri_string() == 'prodi/akreditasi/new') ? 'active' : 'text-dark' ?>">
-                    <i class="bi bi-clipboard-plus me-2"></i> Input Akreditasi Prodi
+                <a href="<?= base_url('prodi/laporan/history') ?>" class="nav-link <?= (uri_string() == 'prodi/laporan/history') ? 'active' : 'text-dark' ?>">
+                    <i class="bi bi-clock-history me-2"></i> History Laporan
                 </a>
             </li>
+            
         <?php endif; ?>
 
         <?php if (session()->get('fk_roles') == 4) : ?>

@@ -31,7 +31,7 @@
                             </option>
                         <?php endforeach; ?>
                     </select>
-                    <div class="form-text">Pilih prodi yang datanya akan Anda inputkan (Wajib Diisi).</div>
+                    <div class="form-text">Pilih prodi yang datanya akan Anda inputkan.</div>
                 </div>
 
                 <div class="row">
@@ -50,7 +50,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Lembaga Akreditasi (Nasional)</label>
+                            <label class="form-label fw-bold">Lembaga Akreditasi Nasional</label>
                             <select name="fk_lembaga" id="fk_lembaga" class="form-select">
                                 <option value="" data-biaya="0">-- Pilih Lembaga Nasional --</option>
                                 <?php foreach ($lembaga as $l): ?>
@@ -65,10 +65,10 @@
 
                         <div class="mb-3">
                             <label class="form-label fw-bold text-primary">
-                                <i class="bi bi-globe me-1"></i> Lembaga Akreditasi Internasional (Opsional)
+                                <i class="bi bi-globe me-1"></i> Lembaga Akreditasi Internasional
                             </label>
-                            <select name="fk_lembaga_internasional" id="fk_lembaga_inter" class="form-select border-primary bg-primary bg-opacity-10">
-                                <option value="">-- Tidak Ada / Kosongkan --</option>
+                            <select name="fk_lembaga_interonasional" id="fk_lembaga_inter" class="form-select border-primary bg-primary bg-opacity-10">
+                                <option value="">-- Pilih Lembaga Internasional --</option>
                                 <?php foreach ($lembaga as $l): ?>
                                     <?php if ($l['jenis_lembaga'] == 'Internasional'): ?>
                                         <option value="<?= $l['id'] ?>" <?= (old('fk_lembaga_internasional') == $l['id']) ? 'selected' : '' ?>>
