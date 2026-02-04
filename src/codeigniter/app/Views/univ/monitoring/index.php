@@ -13,7 +13,7 @@
                 <select name="periode" class="form-select border-2" style="width: 250px; border-radius: 10px;">
                     <?php foreach($periode as $p): ?>
                         <option value="<?= $p['id'] ?>" <?= ($p['id'] == $selectedPeriode) ? 'selected' : '' ?>>
-                            <?= $p['tahun_akademik'] ?> - <?= $p['semester'] ?> 
+                            <?= esc($p['tahun_akademik']) ?> - <?= esc($p['semester']) ?> 
                             <?= ($p['status_aktif'] == 1) ? '(Aktif)' : '' ?>
                         </option>
                     <?php endforeach; ?>
@@ -34,14 +34,14 @@
                         <tr>
                             <th class="text-start ps-4">Nama Fakultas</th>
                             <?php foreach($tagihan as $t): ?>
-                                <th style="font-size: 0.7rem;"><?= $t['nama_monev'] ?></th>
+                                <th style="font-size: 0.7rem;"><?= esc($t['nama_monev']) ?></th>
                             <?php endforeach; ?>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach($fakultas as $f): ?>
                         <tr>
-                            <td class="text-start ps-4 fw-bold text-dark"><?= $f['nama_fakultas'] ?></td>
+                            <td class="text-start ps-4 fw-bold text-dark"><?= esc($f['nama_fakultas']) ?></td>
                             <?php foreach($tagihan as $t): 
                                 $key = 'FAK_' . trim($f['id']) . '_' . $t['id'];
                                 $ada = isset($statusLaporan[$key]);
@@ -65,12 +65,16 @@
     </div>
 
     <h5 class="fw-bold text-primary mb-3"><i class="bi bi-mortarboard me-2"></i>Monitoring Level Program Studi</h5>
+    
     <?php foreach($fakultas as $f): 
-        $prodis = $db->table('mProdi')->where('fk_fakultas', $f['id'])->get()->getResultArray();
+        // [PERUBAHAN PENTING DISINI]
+        // Jangan pakai query $db->table() lagi. Ambil dari array Controller.
+        $prodis = $groupedProdi[$f['id']] ?? []; 
     ?>
+    
     <div class="card border-0 shadow-sm mb-4" style="border-radius: 15px;">
         <div class="card-header bg-white py-3 border-bottom">
-            <h6 class="mb-0 fw-bold text-secondary">Fakultas: <?= $f['nama_fakultas'] ?></h6>
+            <h6 class="mb-0 fw-bold text-secondary">Fakultas: <?= esc($f['nama_fakultas']) ?></h6>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -79,30 +83,43 @@
                         <tr>
                             <th class="text-start ps-4" width="25%">Program Studi</th>
                             <?php foreach($tagihan as $t): ?>
-                                <th style="font-size: 0.65rem;"><?= $t['nama_monev'] ?></th>
+                                <th style="font-size: 0.65rem;"><?= esc($t['nama_monev']) ?></th>
                             <?php endforeach; ?>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach($prodis as $pr): ?>
-                        <tr>
-                            <td class="text-start ps-4 small text-dark"><?= $pr['nama_prodi'] ?></td>
-                            <?php foreach($tagihan as $t): 
-                                $key = 'PRO_' . trim($pr['id']) . '_' . $t['id'];
-                                $ada = isset($statusLaporan[$key]);
-                            ?>
-                                <td>
-                                    <?php if($ada): ?>
-                                        <a href="<?= $statusLaporan[$key]['link_bukti'] ?>" target="_blank" class="badge bg-success text-decoration-none shadow-sm px-2 py-2" style="font-size: 0.75rem;">
-                                            Sudah <i class="bi bi-box-arrow-up-right ms-1" style="font-size: 0.65rem;"></i>
-                                        </a>
-                                    <?php else: ?>
-                                        <span class="badge bg-danger px-2 py-2" style="font-size: 0.75rem;">Belum</span>
-                                    <?php endif; ?>
+                        <?php if(empty($prodis)): ?>
+                            <tr>
+                                <td colspan="<?= count($tagihan) + 1 ?>" class="text-muted fst-italic py-3">Tidak ada data prodi di fakultas ini.</td>
+                            </tr>
+                        <?php else: ?>
+                            <?php foreach($prodis as $pr): ?>
+                            <tr>
+                                <td class="text-start ps-4 small text-dark">
+                                    <div class="d-flex align-items-center">
+                                        <span class="fw-bold me-2"><?= esc($pr['nama_prodi']) ?></span>
+                                        <span class="badge bg-secondary bg-opacity-10 text-secondary border">
+                                            <?= esc($pr['jenjang'] ?? '-') ?>
+                                        </span>
+                                    </div>
                                 </td>
+                                <?php foreach($tagihan as $t): 
+                                    $key = 'PRO_' . trim($pr['id']) . '_' . $t['id'];
+                                    $ada = isset($statusLaporan[$key]);
+                                ?>
+                                    <td>
+                                        <?php if($ada): ?>
+                                            <a href="<?= $statusLaporan[$key]['link_bukti'] ?>" target="_blank" class="badge bg-success text-decoration-none shadow-sm px-2 py-2" style="font-size: 0.75rem;">
+                                                Sudah <i class="bi bi-box-arrow-up-right ms-1" style="font-size: 0.65rem;"></i>
+                                            </a>
+                                        <?php else: ?>
+                                            <span class="badge bg-danger px-2 py-2" style="font-size: 0.75rem;">Belum</span>
+                                        <?php endif; ?>
+                                    </td>
+                                <?php endforeach; ?>
+                            </tr>
                             <?php endforeach; ?>
-                        </tr>
-                        <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -119,14 +136,14 @@
                         <tr>
                             <th class="text-start ps-4" width="25%">Nama Unit / Lembaga</th>
                             <?php foreach($tagihan as $t): ?>
-                                <th style="font-size: 0.65rem;"><?= $t['nama_monev'] ?></th>
+                                <th style="font-size: 0.65rem;"><?= esc($t['nama_monev']) ?></th>
                             <?php endforeach; ?>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach($unit as $u): ?>
                         <tr>
-                            <td class="text-start ps-4 small text-dark fw-bold"><?= $u['nama_unit'] ?></td>
+                            <td class="text-start ps-4 small text-dark fw-bold"><?= esc($u['nama_unit']) ?></td>
                             <?php foreach($tagihan as $t): 
                                 $key = 'UNIT_' . trim($u['id']) . '_' . $t['id'];
                                 $ada = isset($statusLaporan[$key]);
