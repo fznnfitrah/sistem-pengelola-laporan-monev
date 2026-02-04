@@ -33,47 +33,49 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php if (!empty($users)) : $i = 1; foreach ($users as $row) : ?>
-                                    <tr>
-                                        <td class="text-center text-muted small"><?= $i++ ?></td>
-                                        <td>
-                                            <div class="fw-bold text-dark"><?= esc($row['username']) ?></div>
-                                            <small class="text-muted"><i class="bi bi-envelope me-1"></i><?= esc($row['email'] ?: '-') ?></small>
-                                        </td>
-                                        <td>
-                                            <?php 
-        
-                                                $st = esc($row['status']);
-                                                $badgeClass = ($st == 'aktif') ? 'bg-success' : (($st == 'baru') ? 'bg-info' : 'bg-secondary');
-                                            ?>
-                                            <span class="badge rounded-pill <?= $badgeClass ?> bg-opacity-10 text-dark border px-3">
-                                                <?= ucfirst($st) ?>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div class="badge bg-primary bg-opacity-10 text-primary border border-primary mb-1">
-                                                <?= esc($row['nama_roles']) ?>
-                                            </div><br>
-                                            
-                                        </td>
-                                        <td class="text-center">
-                                            <div class="d-flex justify-content-center gap-1">
-                                                <button type="button" class="btn btn-outline-warning btn-sm rounded-pill px-3" 
-                                                    onclick='btnEditUser(<?= json_encode($row) ?>)'>
-                                                    <i class="bi bi-pencil-square"></i>
-                                                </button>
+                                <?php if (!empty($users)) : $i = 1;
+                                    foreach ($users as $row) : ?>
+                                        <tr>
+                                            <td class="text-center text-muted small"><?= $i++ ?></td>
+                                            <td>
+                                                <div class="fw-bold text-dark"><?= esc($row['username']) ?></div>
+                                                <small class="text-muted"><i class="bi bi-envelope me-1"></i><?= esc($row['email'] ?: '-') ?></small>
+                                            </td>
+                                            <td>
+                                                <?php
 
-                                                <form action="<?= base_url('admin/users/' . $row['id']) ?>" method="post" class="d-inline">
-                                                    <?= csrf_field() ?>
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3" onclick="return confirm('Hapus user ini?')">
-                                                        <i class="bi bi-trash"></i>
+                                                $st = (string)esc($row['status']);
+                                                $badgeClass = ($st == 'aktif') ? 'bg-success' : (($st == 'baru') ? 'bg-info' : 'bg-secondary');
+                                                ?>
+                                                <span class="badge rounded-pill <?= $badgeClass ?> bg-opacity-10 text-dark border px-3">
+                                                    <?= ucfirst($st) ?>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="badge bg-primary bg-opacity-10 text-primary border border-primary mb-1">
+                                                    <?= esc($row['nama_roles']) ?>
+                                                </div><br>
+
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="d-flex justify-content-center gap-1">
+                                                    <button type="button" class="btn btn-outline-warning btn-sm rounded-pill px-3"
+                                                        onclick='btnEditUser(<?= json_encode($row) ?>)'>
+                                                        <i class="bi bi-pencil-square"></i>
                                                     </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; else : ?>
+
+                                                    <form action="<?= base_url('admin/users/' . $row['id']) ?>" method="post" class="d-inline">
+                                                        <?= csrf_field() ?>
+                                                        <input type="hidden" name="_method" value="DELETE">
+                                                        <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3" onclick="return confirm('Hapus user ini?')">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach;
+                                else : ?>
                                     <tr>
                                         <td colspan="5" class="text-center py-5 text-muted small">Belum ada data pengguna.</td>
                                     </tr>
@@ -96,11 +98,11 @@
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            
+
             <form id="formUser" action="" method="post">
                 <?= csrf_field() ?>
                 <input type="hidden" name="_method" id="formMethod" value="POST">
-                
+
                 <div class="modal-body p-4">
                     <div class="row g-4">
                         <div class="col-md-6 border-end">
@@ -185,10 +187,10 @@
 <script>
     // Inisialisasi modal menggunakan vanilla JS agar lebih stabil
     let userModal;
-    
+
     document.addEventListener('DOMContentLoaded', function() {
         userModal = new bootstrap.Modal(document.getElementById('modalUser'));
-        
+
         // Munculkan kembali jika ada error validasi dari server
         <?php if (session()->getFlashdata('errors')) : ?>
             userModal.show();
@@ -201,11 +203,11 @@
         form.action = "<?= base_url('admin/users/save') ?>";
         document.getElementById('formMethod').value = "POST";
         form.reset();
-        
+
         document.getElementById('passHelp').style.display = "none";
         document.getElementById('labelPass').innerHTML = 'Password <span class="text-danger">*</span>';
         document.getElementById('u_password').required = true;
-        
+
         userModal.show();
     }
 
@@ -214,11 +216,11 @@
         document.querySelector('#modalTitle span').innerText = "Edit Data User";
         form.action = "<?= base_url('admin/users') ?>/" + data.id;
         document.getElementById('formMethod').value = "PUT";
-        
+
         document.getElementById('passHelp').style.display = "block";
-        document.getElementById('labelPass').innerHTML = 'Password'; 
+        document.getElementById('labelPass').innerHTML = 'Password';
         document.getElementById('u_password').required = false;
-        document.getElementById('u_password').value = ""; 
+        document.getElementById('u_password').value = "";
 
         // Pemetaan data ke ID form
         document.getElementById('u_username').value = data.username;
@@ -228,7 +230,7 @@
         document.getElementById('u_fakultas').value = data.fk_fakultas || "";
         document.getElementById('u_prodi').value = data.fk_prodi || "";
         document.getElementById('u_unit').value = data.fk_unit || "";
-        
+
         userModal.show();
     }
 </script>

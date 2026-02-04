@@ -52,6 +52,8 @@ class MonitoringAkreditasi extends BaseController
             }
         }
 
+
+
         return view('univ/monitoring/akreditasi_view', [
             'title'       => 'Monitoring Akreditasi Prodi',
             'groupedData' => $groupedData,

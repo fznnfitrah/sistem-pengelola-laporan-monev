@@ -1,4 +1,4 @@
-function btnDetail(nama, jenjang, status, lembaga, lembaga_inter, peringkat, nilai, no_sk, tgl_kadaluarsa, biaya, tahun, ts, ts1, ts2, link) {
+function btnDetail(nama, jenjang, status, lembaga, lembaga_inter, peringkat, nilai, no_sk, tgl_kadaluarsa, biaya, tahun, ts, ts1, ts2, link, penginput, tgl_input) {
     
     // 1. Isi Data Teks Dasar
     const elNama = document.getElementById('d_nama_prodi');
@@ -78,6 +78,19 @@ function btnDetail(nama, jenjang, status, lembaga, lembaga_inter, peringkat, nil
     } else {
         if(btnLink) btnLink.classList.add('d-none');
         if(btnNoLink) btnNoLink.classList.remove('d-none');
+    }
+
+    const elInputter = document.getElementById('d_penginput');
+    const elTglInput = document.getElementById('d_tgl_input');
+
+    if(elInputter) elInputter.innerText = penginput || '-';
+
+    if(elTglInput && tgl_input) {
+        const tglObj = new Date(tgl_input);
+        const optionsTgl = { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+        elTglInput.innerText = tglObj.toLocaleDateString('id-ID', optionsTgl);
+    } else if (elTglInput) {
+        elTglInput.innerText = '-';
     }
 }
 
