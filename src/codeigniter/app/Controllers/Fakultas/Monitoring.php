@@ -43,7 +43,9 @@ class Monitoring extends BaseController
 
         $data = [
             'title'           => 'Monitoring Progres Prodi',
-            'semua_periode'   => $periodeModel->findAll(), // Untuk dropdown filter
+            'semua_periode'   => $periodeModel->orderBy('tahun_akademik', 'DESC')
+                ->orderBy('semester', 'DESC')
+                ->findAll(),
             'selectedPeriode' => $periodeId,
             'tagihan'         => $tagihanMonev,
             'prodi'           => $listProdi,

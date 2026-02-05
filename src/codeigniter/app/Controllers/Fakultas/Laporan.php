@@ -37,11 +37,10 @@ class Laporan extends BaseController
         $myLaporan = $this->laporanModel->where([
             'fk_fakultas'        => $myFakultas,
             'fk_setting_periode' => $periodeId,
-            'fk_prodi'           => null, // PENTING: Filter agar laporan prodi tidak muncul di sini
-            'fk_unit'            => null  // Tambahkan ini juga agar laporan unit tidak nyasar
+            'fk_prodi'           => null, 
+            'fk_unit'            => null  
         ])->findAll();
 
-        // Map laporan ke ID Monev agar mudah dicek di View
         $sudahIsi = [];
         foreach ($myLaporan as $lp) {
             $sudahIsi[$lp['fk_monev']] = $lp;
@@ -49,7 +48,9 @@ class Laporan extends BaseController
 
         $data = [
             'title'     => 'Input Laporan Monev',
-            'periode'   => $this->periodeModel->findAll(),
+            'periode'   => $this->periodeModel->orderBy('tahun_akademik', 'DESC')
+                                      ->orderBy('semester', 'DESC')
+                                      ->findAll(),
             'selectedPeriode' => $periodeId,
             'items'     => $items,
             'laporan'   => $sudahIsi
@@ -85,12 +86,12 @@ class Laporan extends BaseController
             'fk_monev'           => $fk_monev,
             'link_bukti'         => $this->request->getPost('link_bukti'),
             'keterangan'         => $this->request->getPost('keterangan'),
-            'fk_prodi'           => null, // Paksa NULL agar tidak dianggap laporan Prodi
+            'fk_prodi'           => null, 
             'fk_unit'            => null
         ];
 
         if ($cekLaporan) {
-            // Update jika sudah ada
+    
             $this->laporanModel->update($cekLaporan['id'], $dataStore);
             $pesan = 'Laporan berhasil diperbarui!';
         } else {

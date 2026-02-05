@@ -1,6 +1,7 @@
 <?= $this->extend('layouts/template') ?>
 
 <?= $this->section('content') ?>
+
 <div class="container-fluid py-4">
     <div class="card shadow-sm border-0 mb-4" style="border-radius: 15px;">
         <div class="card-body d-flex justify-content-between align-items-start gap-3 flex-column flex-md-row">
@@ -31,7 +32,11 @@
                         <tr>
                             <th class="text-start ps-2 ps-md-4" style="font-size: 0.7rem; min-width: 150px;">Nama Program Studi</th>
                             <?php foreach ($tagihan as $t): ?>
-                                <th style="font-size: 0.65rem; min-width: 80px; padding: 0.4rem 0.2rem;"><?= esc(substr($t['nama_monev'], 0, 15)) ?></th>
+                                <th style="font-size: 0.65rem; min-width: 120px; vertical-align: middle; padding: 0.5rem 0.2rem;">
+                                    <div style="line-height: 1.2;">
+                                        <?= esc($t['nama_monev']) ?>
+                                    </div>
+                                </th>
                             <?php endforeach; ?>
                         </tr>
                     </thead>
