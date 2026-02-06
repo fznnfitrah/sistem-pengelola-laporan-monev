@@ -7,6 +7,7 @@
   <title><?= $title ?? 'App Dashboard' ?></title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <link rel="icon" type="image/png" href="<?= base_url('image/logoLPMPP.png') ?>">
   <link rel="stylesheet" href="<?= base_url('css/layout.css') ?>">
   <link rel="stylesheet" href="<?= base_url('css/dashboard.css') ?>">
   

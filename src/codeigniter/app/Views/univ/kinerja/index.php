@@ -2,28 +2,28 @@
 
 <?= $this->section('content') ?>
 <div class="container-fluid py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 gap-3 flex-column flex-md-row">
         <div>
             <h2 class="fw-bold text-dark mb-1">Master Kinerja</h2>
-            <p class="text-muted">Kelola indikator profil dan standar minimal capaian target unit dan prodi.</p>
+            <p class="text-muted small">Kelola indikator profil dan standar minimal capaian target unit dan prodi.</p>
         </div>
-        <button class="btn btn-success btn-rounded shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">
+        <button class="btn btn-success rounded-pill shadow-sm px-3 px-md-4" data-bs-toggle="modal" data-bs-target="#modalTambah" style="white-space: nowrap;">
             <i class="bi bi-trophy me-1"></i> Tambah Indikator
         </button>
     </div>
 
     <div class="card border-0 shadow-sm" style="border-radius: 15px;">
-        <div class="card-body p-4">
+        <div class="card-body p-3 p-md-4">
             <div class="table-responsive">
-                <table class="table table-hover align-middle">
+                <table class="table table-hover align-middle" style="font-size: 0.8rem;">
                     <thead>
                         <tr>
-                            <th>Nama Indikator Kinerja</th>
-                            <th class="text-center">Peruntukan</th>
-                            <th class="text-center">Satuan</th>
-                            <th class="text-center">Standar Univ</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-center">Aksi</th>
+                            <th style="font-size: 0.75rem;">Nama Indikator</th>
+                            <th class="text-center" style="font-size: 0.75rem;">Peruntukan</th>
+                            <th class="text-center" style="font-size: 0.75rem; display: none; display: none;">Satuan</th>
+                            <th class="text-center" style="font-size: 0.75rem; display: none; display: none;">Standar</th>
+                            <th class="text-center" style="font-size: 0.75rem;">Status</th>
+                            <th class="text-center" style="font-size: 0.75rem;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -32,29 +32,31 @@
                             <td class="fw-bold text-secondary"><?= esc($k['nama_kinerja']) ?></td>
                             <td class="text-center">
                                 <?php if($k['jenis'] == 'prodi'): ?>
-                                    <span class="badge bg-primary px-3 text-white">Khusus Prodi</span>
+                                    <span class="badge bg-primary px-2 py-1 text-white" style="font-size: 0.65rem;">Prodi</span>
                                 <?php else: ?>
-                                    <span class="badge bg-info text-dark px-3">Khusus Unit</span>
+                                    <span class="badge bg-info text-dark px-2 py-1" style="font-size: 0.65rem;">Unit</span>
                                 <?php endif; ?>
                             </td>
-                            <td class="text-center"><span class="text-muted"><?= esc($k['satuan']) ?></span></td>
-                            <td class="text-center"><span class="fw-bold text-success"><?= (int)$k['standar_nilai'] ?></span></td>
+                            <td class="text-center" style="display: none;"><span class="text-muted"><?= esc($k['satuan']) ?></span></td>
+                            <td class="text-center" style="display: none;"><span class="fw-bold text-success"><?= (int)$k['standar_nilai'] ?></span></td>
                             <td class="text-center">
                                 <?php if($k['status'] == 1): ?>
-                                    <span class="badge bg-success shadow-sm" style="font-size: 0.7rem;">Aktif</span>
+                                    <span class="badge bg-success shadow-sm" style="font-size: 0.65rem;">Aktif</span>
                                 <?php else: ?>
-                                    <span class="badge bg-secondary shadow-sm" style="font-size: 0.7rem;">Non-Aktif</span>
+                                    <span class="badge bg-secondary shadow-sm" style="font-size: 0.65rem;">Non-Aktif</span>
                                 <?php endif; ?>
                             </td>
                             <td class="text-center">
-                                <button class="btn btn-sm btn-outline-warning border-0" 
-                                        onclick="btnEdit('<?= $k['id'] ?>', '<?= addslashes($k['nama_kinerja']) ?>', '<?= $k['jenis'] ?>', '<?= $k['satuan'] ?>', '<?= (int)$k['standar_nilai'] ?>', '<?= $k['status'] ?>')" 
-                                        data-bs-toggle="modal" data-bs-target="#modalEdit">
-                                    <i class="bi bi-pencil-square"></i>
-                                </button>
-                                <a href="<?= base_url('univ/kinerja/hapus/'.$k['id']) ?>" class="btn btn-sm btn-outline-danger border-0" onclick="return confirm('Hapus indikator ini?')">
-                                    <i class="bi bi-trash"></i>
-                                </a>
+                                <div class="d-flex justify-content-center gap-1">
+                                    <button class="btn btn-sm btn-outline-warning border-0" 
+                                            onclick="btnEdit('<?= $k['id'] ?>', '<?= addslashes($k['nama_kinerja']) ?>', '<?= $k['jenis'] ?>', '<?= $k['satuan'] ?>', '<?= (int)$k['standar_nilai'] ?>', '<?= $k['status'] ?>')" 
+                                            data-bs-toggle="modal" data-bs-target="#modalEdit">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    <a href="<?= base_url('univ/kinerja/hapus/'.$k['id']) ?>" class="btn btn-sm btn-outline-danger border-0" onclick="return confirm('Hapus indikator ini?')">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -97,7 +99,7 @@
                     </div>
                 </div>
                 <div class="modal-footer border-0 pb-4 px-4">
-                    <button type="submit" class="btn btn-success btn-rounded w-100 shadow-sm">Simpan Indikator</button>
+                    <button type="submit" class="btn btn-success rounded-pill w-100 shadow-sm">Simpan Indikator</button>
                 </div>
             </form>
         </div>
@@ -139,7 +141,7 @@
                             <option value="0">Non-Aktif (Sembunyikan)</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-warning w-100 btn-rounded text-white mt-2 shadow-sm">Update Perubahan</button>
+                    <button type="submit" class="btn btn-warning rounded-pill w-100 text-white mt-2 shadow-sm">Update Perubahan</button>
                 </div>
             </form>
         </div>

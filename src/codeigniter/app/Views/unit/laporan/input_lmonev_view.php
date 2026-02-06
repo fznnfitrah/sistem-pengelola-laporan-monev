@@ -3,13 +3,13 @@
 <?= $this->section('content') ?>
 <div class="container-fluid py-4">
     <div class="card shadow-sm border-0 mb-4" style="border-radius: 15px;">
-        <div class="card-body d-flex justify-content-between align-items-center">
+        <div class="card-body d-flex justify-content-between align-items-start gap-3 flex-column flex-md-row">
             <div>
                 <h5 class="fw-bold text-success mb-0">Tagihan Laporan Monev Unit</h5>
                 <p class="text-muted small mb-0">Silakan pilih periode untuk mengisi atau memperbarui laporan.</p>
             </div>
-            <form action="" method="get" class="d-flex gap-2">
-                <select name="periode" class="form-select border-2" style="width: 280px; border-radius: 10px;">
+            <form action="" method="get" class="d-flex gap-2 flex-column flex-md-row" style="width: 100%; max-width: 400px;">
+                <select name="periode" class="form-select border-2 flex-grow-1" style="border-radius: 10px;">
                     <?php foreach ($semua_periode as $p) : ?>
                         <option value="<?= $p['id'] ?>" <?= ($p['id'] == $periode_pilih['id']) ? 'selected' : '' ?>>
                             <?= esc($p['tahun_akademik']) ?> - <?= esc($p['semester']) ?>
@@ -17,7 +17,7 @@
                         </option>
                     <?php endforeach; ?>
                 </select>
-                <button type="submit" class="btn btn-success px-4" style="border-radius: 10px;">Pilih</button>
+                <button type="submit" class="btn btn-success px-3 px-md-4" style="border-radius: 10px; white-space: nowrap;">Pilih</button>
             </form>
         </div>
     </div>
@@ -25,12 +25,12 @@
     <div class="card border-0 shadow-sm" style="border-radius: 15px;">
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+                <table class="table table-hover align-middle mb-0" style="font-size: 0.8rem;">
                     <thead class="table-light">
                         <tr>
-                            <th width="5%" class="ps-4 text-center">No</th>
-                            <th width="35%">Item Monev</th>
-                            <th>Form Pengisian / Status</th>
+                            <th class="ps-2 ps-md-4 text-center" style="font-size: 0.75rem;">No</th>
+                            <th class="ps-2 ps-md-4" style="font-size: 0.75rem;">Item Monev</th>
+                            <th style="font-size: 0.75rem;">Form Pengisian / Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -49,26 +49,26 @@
                             $dataLaporan = $sudahLapor ? $laporan_unit[$item['id']] : null;
                             ?>
                             <tr>
-                                <td class="ps-4 text-center"><?= $no++ ?></td>
-                                <td>
-                                    <p class="fw-bold mb-1 text-dark"><?= esc($item['nama_monev']) ?></p>
-                                    <small class="text-muted italic"><?= esc($item['keterangan']) ?></small>
+                                <td class="ps-2 ps-md-4 text-center"><?= $no++ ?></td>
+                                <td class="ps-2 ps-md-4">
+                                    <p class="fw-bold mb-1 text-dark" style="font-size: 0.75rem;"><?= esc(substr($item['nama_monev'], 0, 25)) ?></p>
+                                    <small class="text-muted italic"><?= esc(substr($item['keterangan'], 0, 30)) ?></small>
                                 </td>
                                 <td>
                                     <?php if ($sudahLapor) : ?>
-                                        <div class="p-3 bg-light rounded-3 border-start border-success border-4 shadow-sm">
-                                            <div class="d-flex justify-content-between align-items-start">
+                                        <div class="p-2 p-md-3 bg-light rounded-3 border-start border-success border-4 shadow-sm" style="font-size: 0.75rem;">
+                                            <div class="d-flex justify-content-between align-items-start gap-2 flex-column flex-md-row">
                                                 <div>
                                                     <span class="badge bg-success mb-2"><i class="bi bi-check-circle me-1"></i> Sudah Dikirim</span><br>
                                                     <a href="<?= esc($dataLaporan['link_bukti']) ?>" target="_blank" class="small text-decoration-none text-success fw-bold">
-                                                        <i class="bi bi-link-45deg"></i> Lihat Dokumen Saat Ini
+                                                        <i class="bi bi-link-45deg"></i> Lihat Dokumen
                                                     </a>
                                                 </div>
                                                 <button class="btn btn-sm btn-outline-success border-0" type="button" data-bs-toggle="collapse" data-bs-target="#editForm<?= $item['id'] ?>">
-                                                    <i class="bi bi-pencil-square"></i> Edit
+                                                    <i class="bi bi-pencil-square"></i>
                                                 </button>
                                             </div>
-                                            <p class="small text-muted mb-0 mt-1 italic">"<?= esc($dataLaporan['keterangan']) ?>"</p>
+                                            <p class="small text-muted mb-0 mt-1 italic">"<?= esc(substr($dataLaporan['keterangan'], 0, 30)) ?>"</p>
                                         </div>
 
                                         <div class="collapse mt-2" id="editForm<?= $item['id'] ?>">
@@ -76,13 +76,13 @@
                                                 <?= csrf_field() ?>
                                                 <input type="hidden" name="fk_monev" value="<?= $item['id'] ?>">
                                                 <input type="hidden" name="fk_setting_periode" value="<?= $periode_pilih['id'] ?>">
-                                                <div class="col-md-5">
+                                                <div class="col-12 col-md-5">
                                                     <input type="url" name="link_bukti" class="form-control form-control-sm border-2" value="<?= esc($dataLaporan['link_bukti']) ?>" required>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-12 col-md-4">
                                                     <input type="text" name="keterangan" class="form-control form-control-sm border-2" value="<?= esc($dataLaporan['keterangan']) ?>">
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-12 col-md-3">
                                                     <button type="submit" class="btn btn-success btn-sm w-100 shadow-sm"><i class="bi bi-arrow-repeat me-1"></i> Perbarui</button>
                                                 </div>
                                             </form>
@@ -94,13 +94,13 @@
                                             <input type="hidden" name="fk_monev" value="<?= $item['id'] ?>">
                                             <input type="hidden" name="fk_setting_periode" value="<?= $periode_pilih['id'] ?>">
 
-                                            <div class="col-md-5">
-                                                <input type="url" name="link_bukti" class="form-control form-control-sm border-2" placeholder="Link G-Drive/Dokumen..." required style="border-radius: 8px;">
+                                            <div class="col-12 col-md-5">
+                                                <input type="url" name="link_bukti" class="form-control form-control-sm border-2" placeholder="Link G-Drive..." required style="border-radius: 8px; font-size: 0.75rem;">
                                             </div>
-                                            <div class="col-md-5">
-                                                <input type="text" name="keterangan" class="form-control form-control-sm border-2" placeholder="Keterangan singkat..." required style="border-radius: 8px;">
+                                            <div class="col-12 col-md-4">
+                                                <input type="text" name="keterangan" class="form-control form-control-sm border-2" placeholder="Keterangan..." required style="border-radius: 8px; font-size: 0.75rem;">
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-12 col-md-3">
                                                 <button type="submit" class="btn btn-success btn-sm w-100 shadow-sm" style="border-radius: 8px;">
                                                     <i class="bi bi-send me-1"></i> Simpan
                                                 </button>

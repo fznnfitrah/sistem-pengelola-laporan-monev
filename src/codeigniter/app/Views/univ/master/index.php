@@ -6,17 +6,17 @@
 
 
 <div class="container-fluid py-4">
-    <div class="d-flex justify-content-between align-items-center section-header">
+    <div class="d-flex justify-content-between align-items-center section-header gap-3 flex-column flex-md-row">
         <div>
             <h2 class="fw-bold text-dark mb-1">Data Akademik</h2>
             <p class="text-muted mb-0">Manajemen Fakultas & Program Studi</p>
         </div>
-        <div class="d-flex gap-2">
-            <button class="btn btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambahFakultas">
+        <div class="d-flex gap-2 flex-column flex-sm-row w-100 w-md-auto">
+            <button class="btn btn-success rounded-pill shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambahFakultas" style="font-size: 0.85rem;">
                 <i class="bi bi-building-add me-2"></i>Tambah Fakultas
             </button>
 
-            <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambahProdi">
+            <button class="btn btn-primary rounded-pill shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambahProdi" style="font-size: 0.85rem;">
                 <i class="bi bi-plus-lg me-2"></i>Tambah Prodi
             </button>
         </div>
@@ -123,25 +123,22 @@
                                                     </td>
 
                                                     <td class="text-end pe-4">
-                                                        <div class="btn-group shadow-sm" role="group">
-                                                            <button class="btn btn-sm btn-white border text-warning"
-                                                                onclick="btnEditProdi(
-                                                                    '<?= $p['id'] ?>', 
-                                                                    '<?= $p['fk_fakultas'] ?>', 
-                                                                    '<?= $p['nama_prodi'] ?>',
-                                                                    '<?= $p['fk_jenjang'] ?>',
-                                                                    '<?= $p['no_sk_pendirian'] ?>',
-                                                                    '<?= (!empty($p['tgl_sk_pendirian']) && $p['tgl_sk_pendirian'] != '0000-00-00') ? date('Y-m-d', strtotime($p['tgl_sk_pendirian'])) : '' ?>',
-                                                                    '<?= $p['link_sk_pendirian'] ?>'
-                                                                )"
-                                                                data-bs-toggle="modal" data-bs-target="#modalEditProdi" title="Edit Data">
-                                                                <i class="bi bi-pencil-fill"></i>
-                                                            </button>
-                                                            <button class="btn btn-sm btn-white border text-danger"
-                                                                onclick="konfirmasiHapus('<?= base_url('univ/master/hapusProdi/' . $p['id']) ?>')" title="Hapus Data">
-                                                                <i class="bi bi-trash-fill"></i>
-                                                            </button>
-                                                        </div>
+                                                        <button type="button" class="btn btn-sm btn-outline-warning border-0"
+                                                            onclick="btnEditProdi(
+                                                                '<?= $p['id'] ?>', 
+                                                                '<?= $p['fk_fakultas'] ?>', 
+                                                                '<?= $p['nama_prodi'] ?>',
+                                                                '<?= $p['fk_jenjang'] ?>',
+                                                                '<?= $p['no_sk_pendirian'] ?>',
+                                                                '<?= (!empty($p['tgl_sk_pendirian']) && $p['tgl_sk_pendirian'] != '0000-00-00') ? date('Y-m-d', strtotime($p['tgl_sk_pendirian'])) : '' ?>',
+                                                                '<?= $p['link_sk_pendirian'] ?>'
+                                                            )"
+                                                            data-bs-toggle="modal" data-bs-target="#modalEditProdi">
+                                                            <i class="bi bi-pencil-square"></i>
+                                                        </button>
+                                                        <a href="<?= base_url('univ/master/hapusProdi/' . $p['id']) ?>" class="btn btn-sm btn-outline-danger border-0" onclick="return confirm('Hapus data program studi ini?')">
+                                                            <i class="bi bi-trash"></i>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
@@ -176,8 +173,8 @@
                     </div>
                 </div>
                 <div class="modal-footer border-0 pb-4 px-4">
-                    <button type="button" class="btn btn-light btn-rounded" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success btn-rounded px-4">Simpan Data</button>
+                    <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success rounded-pill px-4">Simpan Data</button>
                 </div>
             </form>
         </div>
@@ -204,8 +201,8 @@
                     </div>
                 </div>
                 <div class="modal-footer border-0 pb-4 px-4">
-                    <button type="button" class="btn btn-light btn-rounded" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-warning btn-rounded px-4">Update Data</button>
+                    <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-warning rounded-pill px-4">Update Data</button>
                 </div>
             </form>
         </div>
@@ -274,8 +271,8 @@
 
                 </div>
                 <div class="modal-footer border-0 pb-4 px-4">
-                    <button type="button" class="btn btn-light btn-rounded" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary btn-rounded px-4">Simpan Prodi</button>
+                    <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">Simpan Prodi</button>
                 </div>
             </form>
 
@@ -342,8 +339,8 @@
 
                 </div>
                 <div class="modal-footer border-0 pb-4 px-4">
-                    <button type="button" class="btn btn-light btn-rounded" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-warning btn-rounded px-4">Update Prodi</button>
+                    <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-warning rounded-pill px-4">Update Prodi</button>
                 </div>
             </form>
         </div>

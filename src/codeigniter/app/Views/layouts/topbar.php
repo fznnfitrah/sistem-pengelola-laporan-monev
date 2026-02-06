@@ -4,6 +4,7 @@
             <button id="sidebarToggle" class="btn btn-link text-dark d-md-none me-2 shadow-none">
                 <i class="bi bi-list fs-4"></i>
             </button>
+            <img src="<?= base_url('image/logoUTM.png') ?>" alt="Logo UTM" width="40" height="40" class="me-2">
             <div class="d-flex flex-column">
                 <span class="brand-uni">UNIVERSITAS TRUNODJOYO MADURA</span>
                 <span class="brand-sub">Sistem Pengelola Laporan Monitoring dan Evaluasi</span>

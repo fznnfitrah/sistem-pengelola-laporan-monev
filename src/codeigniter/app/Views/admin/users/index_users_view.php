@@ -5,11 +5,11 @@
     <div class="row">
         <div class="col-12">
             <div class="card shadow-sm border-0" style="border-radius: 15px;">
-                <div class="card-header d-flex justify-content-between align-items-center bg-white py-3" style="border-radius: 15px 15px 0 0;">
+                <div class="card-header d-flex justify-content-between align-items-center bg-white py-3 flex-column flex-md-row gap-3" style="border-radius: 15px 15px 0 0;">
                     <h5 class="mb-0 fw-bold text-success">
                         <i class="bi bi-people-fill me-2"></i>Manajemen Pengguna
                     </h5>
-                    <button type="button" class="btn btn-success btn-sm px-3 rounded-pill" onclick="btnAddUser()">
+                    <button type="button" class="btn btn-success btn-sm px-3 px-md-4 rounded-pill" onclick="btnAddUser()" style="white-space: nowrap;">
                         <i class="bi bi-person-plus-fill me-1"></i> Tambah User
                     </button>
                 </div>
@@ -22,44 +22,45 @@
                     <?php endif; ?>
 
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle">
+                        <table class="table table-hover align-middle" style="font-size: 0.8rem;">
                             <thead class="table-light text-uppercase small fw-bold">
                                 <tr>
-                                    <th class="text-center" width="5%">No</th>
-                                    <th>Informasi Pengguna</th>
-                                    <th>Status</th>
-                                    <th>Role</th>
-                                    <th class="text-center" width="15%">Aksi</th>
+                                    <th class="text-center ps-2 ps-md-3" style="font-size: 0.75rem;">No</th>
+                                    <th class="ps-2 ps-md-3" style="font-size: 0.75rem;">Info Pengguna</th>
+                                    <th style="font-size: 0.75rem; display: none;" class="d-none d-md-table-cell">Status</th>
+                                    <th style="font-size: 0.75rem; display: none;" class="d-none d-lg-table-cell">Role</th>
+                                    <th class="text-center" style="font-size: 0.75rem;">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php if (!empty($users)) : $i = 1;
                                     foreach ($users as $row) : ?>
                                         <tr>
-                                            <td class="text-center text-muted small"><?= $i++ ?></td>
-                                            <td>
-                                                <div class="fw-bold text-dark"><?= esc($row['username']) ?></div>
-                                                <small class="text-muted"><i class="bi bi-envelope me-1"></i><?= esc($row['email'] ?: '-') ?></small>
+                                            <td class="text-center text-muted small ps-2 ps-md-3"><?= $i++ ?></td>
+                                            <td class="ps-2 ps-md-3">
+                                                <div class="fw-bold text-dark" style="font-size: 0.8rem;"><?= esc($row['username']) ?></div>
+                                                <small class="text-muted"><i class="bi bi-envelope me-1"></i><?= esc(substr($row['email'] ?: '-', 0, 20)) ?></small>
+                                                <div style="font-size: 0.7rem; margin-top: 4px;" class="d-md-none">
+                                                    <span class="badge rounded-pill bg-success bg-opacity-10 text-dark border px-2 py-1" style="font-size: 0.65rem;"><?php $st = (string)esc($row['status']); echo ucfirst($st); ?></span>
+                                                </div>
                                             </td>
-                                            <td>
+                                            <td style="display: none;" class="d-none d-md-table-cell">
                                                 <?php
-
                                                 $st = (string)esc($row['status']);
                                                 $badgeClass = ($st == 'aktif') ? 'bg-success' : (($st == 'baru') ? 'bg-info' : 'bg-secondary');
                                                 ?>
-                                                <span class="badge rounded-pill <?= $badgeClass ?> bg-opacity-10 text-dark border px-3">
+                                                <span class="badge rounded-pill <?= $badgeClass ?> bg-opacity-10 text-dark border px-2" style="font-size: 0.7rem;">
                                                     <?= ucfirst($st) ?>
                                                 </span>
                                             </td>
-                                            <td>
-                                                <div class="badge bg-primary bg-opacity-10 text-primary border border-primary mb-1">
+                                            <td style="display: none;" class="d-none d-lg-table-cell">
+                                                <div class="badge bg-primary bg-opacity-10 text-primary border border-primary" style="font-size: 0.7rem;">
                                                     <?= esc($row['nama_roles']) ?>
-                                                </div><br>
-
+                                                </div>
                                             </td>
                                             <td class="text-center">
-                                                <div class="d-flex justify-content-center gap-1">
-                                                    <button type="button" class="btn btn-outline-warning btn-sm rounded-pill px-3"
+                                                <div class="d-flex justify-content-center gap-1 flex-wrap">
+                                                    <button type="button" class="btn btn-outline-warning btn-sm border-0"
                                                         onclick='btnEditUser(<?= json_encode($row) ?>)'>
                                                         <i class="bi bi-pencil-square"></i>
                                                     </button>
@@ -67,7 +68,7 @@
                                                     <form action="<?= base_url('admin/users/' . $row['id']) ?>" method="post" class="d-inline">
                                                         <?= csrf_field() ?>
                                                         <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3" onclick="return confirm('Hapus user ini?')">
+                                                        <button type="submit" class="btn btn-outline-danger btn-sm border-0" onclick="return confirm('Hapus user ini?')">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
                                                     </form>

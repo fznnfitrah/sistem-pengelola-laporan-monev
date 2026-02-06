@@ -10,33 +10,39 @@
     <div class="card border-0 shadow-sm" style="border-radius: 15px;">
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+                <table class="table table-hover align-middle mb-0" style="font-size: 0.8rem;">
                     <thead class="table-light">
                         <tr>
-                            <th width="5%" class="ps-4 text-center">No</th>
-                            <th width="15%">Tanggal</th>
-                            <th>Item Monev</th>
-                            <th>Periode</th>
-                            <th class="text-center" width="15%">Aksi</th>
+                            <th class="ps-2 ps-md-4 text-center" style="font-size: 0.75rem;">No</th>
+                            <th style="font-size: 0.75rem; display: none;" class="d-none d-md-table-cell">Tanggal</th>
+                            <th class="ps-2 ps-md-4" style="font-size: 0.75rem;">Item Monev</th>
+                            <th style="font-size: 0.75rem; display: none;" class="d-none d-lg-table-cell">Periode</th>
+                            <th class="text-center" style="font-size: 0.75rem;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php $no = 1; foreach($history as $h): ?>
                         <tr>
-                            <td class="ps-4 text-center"><?= $no++ ?></td>
-                            <td><?= date('d/m/Y', strtotime($h['create_at'])) ?></td>
-                            <td><span class="fw-bold text-dark"><?= $h['nama_monev'] ?></span></td>
-                            <td>
-                                <span class="badge bg-light text-success border">
+                            <td class="ps-2 ps-md-4 text-center"><?= $no++ ?></td>
+                            <td style="display: none;" class="d-none d-md-table-cell"><?= date('d/m/Y', strtotime($h['create_at'])) ?></td>
+                            <td class="ps-2 ps-md-4">
+                                <span class="fw-bold text-dark"><?= $h['nama_monev'] ?></span>
+                                <div style="font-size: 0.7rem; margin-top: 4px;" class="d-md-none">
+                                    <span class="badge bg-light text-success border px-1" style="font-size: 0.65rem;"><?= $h['tahun_akademik'] ?> - <?= $h['semester'] ?></span>
+                                    <br><small class="text-muted"><?= date('d/m/Y', strtotime($h['create_at'])) ?></small>
+                                </div>
+                            </td>
+                            <td style="display: none;" class="d-none d-lg-table-cell">
+                                <span class="badge bg-light text-success border px-2" style="font-size: 0.7rem;">
                                     <?= $h['tahun_akademik'] ?> - <?= $h['semester'] ?>
                                 </span>
                             </td>
                             <td class="text-center">
-                                <button class="btn btn-sm btn-success px-3 shadow-sm" 
-                                    style="border-radius: 8px;"
+                                <button class="btn btn-sm btn-success px-2 px-md-3 shadow-sm" 
+                                    style="border-radius: 8px; font-size: 0.7rem; white-space: nowrap;"
                                     onclick="showDetail('<?= date('d/m/Y', strtotime($h['create_at'])) ?>', '<?= addslashes($h['nama_monev']) ?>', '<?= $h['tahun_akademik'] ?> - <?= $h['semester'] ?>', '<?= addslashes($h['nama_fakultas']) ?>', '<?= $h['link_bukti'] ?>', '<?= addslashes($h['keterangan']) ?>')"
                                     data-bs-toggle="modal" data-bs-target="#modalDetail">
-                                    <i class="bi bi-search me-1"></i> Detail
+                                    <i class="bi bi-search me-1" style="font-size: 0.65rem;"></i> Detail
                                 </button>
                             </td>
                         </tr>

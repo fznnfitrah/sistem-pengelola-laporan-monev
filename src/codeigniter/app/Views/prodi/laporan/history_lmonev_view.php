@@ -10,51 +10,54 @@
     <div class="card border-0 shadow-sm" style="border-radius: 15px;">
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0 text-center">
+                <table class="table table-hover align-middle mb-0 text-center" style="font-size: 0.8rem;">
                     <thead class="table-light">
                         <tr>
-                            <th width="5%" class="ps-4">No</th>
-                            <th width="15%">Waktu Upload</th>
-                            <th class="text-start">Item Monev</th>
-                            <th>Periode</th>
-                            <th width="15%">Aksi</th>
+                            <th class="ps-2 ps-md-4 text-center" style="font-size: 0.75rem;">No</th>
+                            <th style="font-size: 0.75rem; display: none;" class="d-none d-md-table-cell">Waktu Upload</th>
+                            <th class="text-start ps-2 ps-md-4" style="font-size: 0.75rem;">Item Monev</th>
+                            <th style="font-size: 0.75rem; display: none;" class="d-none d-lg-table-cell">Periode</th>
+                            <th style="font-size: 0.75rem;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php $no = 1;
                         foreach ($laporan as $row): ?>
                             <tr>
-                                <td class="ps-4"><?= $no++ ?></td>
+                                <td class="ps-2 ps-md-4 text-center"><?= $no++ ?></td>
 
-                                <td>
-                                    <div class="fw-bold text-dark">
+                                <td style="display: none;" class="d-none d-md-table-cell">
+                                    <div class="fw-bold text-dark" style="font-size: 0.75rem;">
                                         <?= date('d/m/Y', strtotime($row['create_at'])) ?>
                                     </div>
-                                    <small class="text-muted" style="font-size: 0.75rem;">
+                                    <small class="text-muted" style="font-size: 0.65rem;">
                                         <i class="bi bi-clock me-1"></i>
                                         <?= date('H:i', strtotime($row['create_at'])) ?> WIB
                                     </small>
 
                                     <?php if (!empty($row['update_at']) && $row['update_at'] != $row['create_at']): ?>
                                         <div class="mt-1 border-top pt-1">
-                                            <small class="text-warning fst-italic" style="font-size: 0.7rem;">
-                                                <i class="bi bi-pencil-fill"></i> Diedit: <br>
-                                                <?= date('d/m H:i', strtotime($row['update_at'])) ?>
+                                            <small class="text-warning fst-italic" style="font-size: 0.6rem;">
+                                                <i class="bi bi-pencil-fill"></i> Diedit
                                             </small>
                                         </div>
                                     <?php endif; ?>
                                 </td>
-                                <td class="text-start">
-                                    <span class="fw-bold text-dark"><?= esc($row['nama_monev']) ?></span>
+                                <td class="text-start ps-2 ps-md-4">
+                                    <span class="fw-bold text-dark" style="font-size: 0.75rem;"><?= esc(substr($row['nama_monev'], 0, 25)) ?></span>
+                                    <div style="font-size: 0.7rem; margin-top: 4px;" class="d-md-none">
+                                        <span class="badge bg-light text-success border px-1" style="font-size: 0.6rem;"><?= esc($row['tahun_akademik']) ?> - <?= esc($row['semester']) ?></span>
+                                        <br><small class="text-muted"><?= date('d/m/Y H:i', strtotime($row['create_at'])) ?></small>
+                                    </div>
                                 </td>
-                                <td>
-                                    <span class="badge bg-light text-success border">
+                                <td style="display: none;" class="d-none d-lg-table-cell">
+                                    <span class="badge bg-light text-success border" style="font-size: 0.7rem;">
                                         <?= esc($row['tahun_akademik']) ?> - <?= esc($row['semester']) ?>
                                     </span>
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-success px-3 shadow-sm"
-                                        style="border-radius: 8px;"
+                                    <button type="button" class="btn btn-sm btn-outline-success border-0"
+                                        style="border-radius: 8px; font-size: 0.7rem;"
                                         data-bs-toggle="modal"
                                         data-bs-target="#modalDetail"
 
@@ -67,7 +70,7 @@
                                         data-link="<?= esc($row['link_bukti']) ?>"
                                         data-keterangan="<?= esc($row['keterangan'] ?? '-') ?>">
 
-                                        <i class="bi bi-search me-1"></i> Detail
+                                        <i class="bi bi-search"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -75,7 +78,7 @@
 
                         <?php if (empty($laporan)): ?>
                             <tr>
-                                <td colspan="5" class="py-5 text-muted italic">Belum ada riwayat pengiriman laporan.</td>
+                                <td colspan="5" class="py-5 text-muted italic" style="font-size: 0.8rem;">Belum ada riwayat pengiriman laporan.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>

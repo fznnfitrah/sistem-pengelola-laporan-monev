@@ -52,6 +52,35 @@ class Monev extends BaseController
         return redirect()->back()->with('message', 'Item Monev berhasil ditambahkan!');
     }
 
+    public function copy()
+    {
+        $dariPeriode = $this->request->getPost('dari_periode');
+        $kePeriode   = $this->request->getPost('ke_periode');
+
+        if ($dariPeriode == $kePeriode) {
+            return redirect()->back()->with('message', 'Gagal: Periode asal dan tujuan tidak boleh sama!');
+        }
+
+        // Ambil semua item dari periode asal
+        $items = $this->monevModel->where('fk_setting_periode', $dariPeriode)->findAll();
+
+        if (empty($items)) {
+            return redirect()->back()->with('message', 'Gagal: Tidak ada data item di periode asal.');
+        }
+
+        // Proses Duplikasi
+        foreach ($items as $item) {
+            $this->monevModel->insert([
+                'fk_setting_periode' => $kePeriode,
+                'nama_monev'         => $item['nama_monev'],
+                'keterangan'         => $item['keterangan'],
+                'status'             => 1 // Otomatis aktif di periode baru
+            ]);
+        }
+
+        return redirect()->back()->with('message', 'Sukses! ' . count($items) . ' item monev telah disalin.');
+    }
+
     public function update() // Nama method disamakan dengan form action di modal
     {
         $id = $this->request->getPost('id');
